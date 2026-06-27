@@ -1,0 +1,48 @@
+<form class="arma-sheet" autocomplete="off">
+
+  <header class="sheet-header flexrow">
+    <img class="item-img" src="{{item.img}}" data-edit="img" height="64" width="64"/>
+
+    <h1>
+      <input name="name" type="text" value="{{item.name}}" />
+    </h1>
+  </header>
+
+  <section>
+    <!-- <label>Nome
+      <input type="text" name="system.name" value="{{system.name}}">
+    </label> -->
+
+    <section>
+      <label>Dano</label>
+      <input type="text" name="system.dano" value="{{system.dano}}">
+    </section>
+
+    <section>
+      <label>Munição</label>
+      <input type="number" name="system.ammo" value="{{system.ammo}}" min="0">
+    </section>
+
+    <label>Tipo
+      <input type="text" name="system.tipo" value="{{system.tipo}}">
+    </label>
+
+    <label>Conceito
+      <input type="text" name="system.conceito" value="{{system.conceito}}">
+    </label>
+
+    <label>V/T
+      <input type="number" name="system.vt" value="{{system.vt}}">
+    </label>
+
+    <label>Peso
+      <input type="number" name="system.peso" value="{{system.peso}}">
+    </label>
+
+    <label>Preço Base
+      <input type="number" name="system.preco" value="{{system.preco}}">
+    </label>
+  </section>
+  
+
+</form>

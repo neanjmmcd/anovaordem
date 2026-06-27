@@ -1,0 +1,262 @@
+body {
+  background-color: #1b1b1b;
+}
+
+.aonovaordem-sheet {
+  background: #363636;
+  color: #e0d8b0;
+  font-family: serif;
+  padding: 8px;
+}
+
+/* TOPO */
+.topo {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 10px;
+}
+
+.foto img {
+  width: 200px;
+  height: auto;
+  max-height: 250px;
+  border: 2px solid #7a5c2e;
+}
+
+/* INPUTS */
+input, textarea {
+  background: #1f1f1f;
+  color: #e0d8b0;
+  border: 1px solid #7a5c2e;
+  text-align: center;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+}
+
+/* RECURSOS */
+.recursos {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.recursos label {
+  align-items: center;
+}
+
+/* ATRIBUTOS */
+.atributos {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+  text-align: center;
+}
+/* PENALIDADES */
+.penalidades {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+  text-align: center;
+}
+/* .pentexto:hover{color: #1f1f1f;background-color: #e0d8b0;} */
+/* PERÍCIAS */
+.pericias {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.pericia {
+  display: grid;
+  grid-template-columns: 1fr 50px 40px;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background: #1f1f1f;
+  border: 1px solid #7a5c2e;
+}
+.pericias-grid {
+  /* display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px; */
+  column-count: 3;           /* número de colunas */
+  column-gap: 16px;          /* espaço entre colunas */
+  width: 100%;
+  
+}
+.pericia-grupo {
+  break-inside: avoid;       /* NÃO quebrar grupo no meio */
+  margin-bottom: 12px;
+}
+
+.grupo-pericias h3 {
+  border-bottom: 1px solid #555;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+/* BOTÕES */
+button {
+  background: #7a5c2e;
+  color: black;
+  cursor: pointer;
+  border: none;
+  height: 24px;
+}
+
+button.rolar-pericia {
+  width: 40px;
+}
+.anotacoes {
+  margin-top: 10px;
+}
+
+.anotacoes textarea {
+  width: 100%;
+  min-height: 150px;
+  resize: vertical;
+  background: #1f1f1f;
+  color: #e0d8b0;
+  border: 1px solid #7a5c2e;
+  padding: 6px;
+  font-family: inherit;
+  font-size: 14px;
+
+  text-align: left;
+  text-align-last: left;
+}
+
+.flavor-text{
+  text-align: center;
+  align-items:center;
+  background: #e0d8b0;
+  color: #1f1f1f;
+  border: solid #3b301e 2px;
+  font-size: larger;
+}
+
+.armadura-box {
+  margin-top: 20px;
+}
+
+.armadura-tabela table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.armadura-tabela th,
+.armadura-tabela td {
+  border: 1px solid #7a5c2e;
+  padding: 6px;
+  text-align: left;
+  max-width: 100px;
+  min-width: 25px;
+  text-align: center;
+}
+.armadura-tabela th {
+  background: #1f1f1f;
+}
+.armadura-tabela td {
+  background: #c2bb99;
+  color: #1f1f1f;
+}
+.armadura-tabela td button{
+  color: white ;
+  width: 30px;
+}
+.img_tb{
+  filter: invert(100);
+  align-items: center;
+  text-align: center;
+}
+.mostrar-arma:hover{color: #e0d8b0;background-color: #1f1f1f;}
+.mostrar-armadura:hover{color: #e0d8b0;background-color: #1f1f1f;}
+.mostrar-item:hover{color: #e0d8b0;background-color: #1f1f1f;}
+.mostrar-alquimico:hover{color: #e0d8b0;background-color: #1f1f1f;}
+.mostrar-drogas:hover{color: #e0d8b0;background-color: #1f1f1f;}
+.mostrar-implantes:hover{color: #e0d8b0;background-color: #1f1f1f;}
+.mostrar-magias:hover{color: #e0d8b0;background-color: #1f1f1f;}
+.mostrar-rituais:hover{color: #e0d8b0;background-color: #1f1f1f;}
+.mostrar-veiculo:hover{color: #e0d8b0;background-color: #1f1f1f;}
+.mostrar-mecha:hover{color: #e0d8b0;background-color: #1f1f1f;}
+.mostrar-alquimia:hover{color: #e0d8b0;background-color: #1f1f1f;}
+.mostrar-veneno:hover{color: #e0d8b0;background-color: #1f1f1f;}
+.mostrar-elixir:hover{color: #e0d8b0;background-color: #1f1f1f;}
+.mostrar-mutagenico:hover{color: #e0d8b0;background-color: #1f1f1f;}
+.mostrar-injecao:hover{color: #e0d8b0;background-color: #1f1f1f;}
+.mostrar-acido:hover{color: #e0d8b0;background-color: #1f1f1f;}
+.rolar-dano:hover{color: red;background-color: #1f1f1f;}
+.rolar-alquimico:hover{color: red;background-color: #1f1f1f;}
+.rolar-pericia:hover,.rolar-atributo:hover{color: #1f1f1f;background-color: #e0d8b0;}
+.chat-item{
+  text-align: center;
+  align-items:center;
+  background: #e0d8b0;
+  color: #1f1f1f;
+  border: solid #1f1f1f 2px;
+
+}
+.chat-item h2 {
+  margin: 0 0 5px;
+  border-bottom: 1px solid #999;
+}
+
+.chat-item ul {
+  list-style: none;
+  padding: 0;
+}
+
+.chat-item li {
+  margin: 2px 0;
+}
+
+.chat-item img {
+  width: 60px;
+  border: solid #1f1f1f 2px;
+  box-shadow: #4d4d4d8e 2px 4px;
+  margin-left: 40%;
+}
+.aplicar-dano{
+  margin-left: 10px;
+  margin-bottom: 5px;
+  width:  30p;
+  font-size: larger;
+  float: inline-start;
+  color: red;
+  background-color: #e0d8b0;
+  border: #1f1f1f 2px solid;
+  box-shadow: #1f1f1f62 5px 2px;
+}
+.aplicar-cura:hover{color: #e0d8b0;background-color: green;}
+.aplicar-dano:hover{color: #e0d8b0;background-color: red;}
+.aplicar-cura{
+  margin-right: 10px;
+  width:  30p;
+  font-size: larger;
+  float: inline-end;
+  margin-bottom: 5px;
+  color: green;
+  background-color: #e0d8b0;
+  border: #1f1f1f 2px solid;
+  box-shadow: #1f1f1f62 5px 2px;
+}
+
+@media (max-width: 900px) {
+  .pericias-grid {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .pericias-grid {
+    column-count: 1;
+  }
+}

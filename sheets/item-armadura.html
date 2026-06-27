@@ -1,0 +1,35 @@
+<form class="armadura-sheet" autocomplete="off">
+
+  <header class="sheet-header flexrow">
+    <img class="item-img" src="{{item.img}}" data-edit="img" height="64" width="64"/>
+
+    <h1>
+      <input name="name" type="text" value="{{item.name}}" />
+    </h1>
+  </header>
+
+  <section>
+    <!-- <label>Tipo
+      <input type="text" name="system.tipo" value="{{system.tipo}}">
+    </label> -->
+
+    <label>RD Extra
+      <input type="number" name="system.rd" value="{{system.rd}}">
+    </label>
+
+    <label>Peso
+      <input type="number" name="system.peso" value="{{system.peso}}">
+    </label>
+
+    <label>Preço Base
+      <input type="number" name="system.preco" value="{{system.preco}}">
+    </label>
+
+    <label>Penalidades</label>
+    <textarea name="system.penalidades">{{system.penalidades}}</textarea>
+
+    <label>Conceito</label>
+    <textarea name="system.conceito">{{system.conceito}}</textarea>
+  </section>
+
+</form>
