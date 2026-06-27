@@ -1,0 +1,643 @@
+<form class="aonovaordem-sheet" autocomplete="off">
+
+  <!-- TOPO -->
+  <header class="topo">
+    <div class="foto">
+      <img src="{{actor.img}}" data-edit="img" title="{{actor.name}}">
+      <h1>
+        <input name="name" type="text" value="{{actor.name}}" />
+      </h1>
+    </div>
+
+    <div class="dados-narrativos">
+      <label>Codinome
+        <input type="text" name="system.codinome" value="{{system.codinome}}">
+      </label>
+
+      <label>Idade
+        <input type="number" name="system.idade" value="{{system.idade}}">
+      </label>
+
+      <label>Pele
+        <input type="text" name="system.pele" value="{{system.pele}}">
+      </label>
+
+      <label>Olhos
+        <input type="text" name="system.olhos" value="{{system.olhos}}">
+      </label>
+
+      <label>Peso
+        <input type="number" name="system.peso" value="{{system.peso}}">
+      </label>
+    </div>
+  </header>
+  <br>
+  <!-- RECURSOS -->
+  <h3 style="text-align: center;">RECURSOS</h3>
+  <section class="recursos">
+    <label>RD <input type="number" name="system.rd" value="{{system.rd}}"></label>
+    <label>Saúde <input type="number" name="system.saude" value="{{system.saude}}" max="100" min="0"></label>
+    <label>Sanidade <input type="number" name="system.sanidade" value="{{system.sanidade}}"  max="100" min="0"></label>
+    <label>Essência <input type="number" name="system.essencia" value="{{system.essencia}}"></label>
+    <label>Peso/Unit <input type="number" name="system.pesoUnit" value="{{system.pesoUnit}}"></label>
+    <label>¢RD <input type="number" name="system.creditoRd" value="{{system.creditoRd}}"></label>
+  </section>
+  <br>
+  
+  <!-- ATRIBUTOS -->
+  <h3 style="text-align: center;">ATRIBUTOS</h3>
+  <section class="atributos">
+    {{#each atributos}}
+      <div class="atributo">
+        <span class="nome rolar-atributo" data-atributo="{{key}}">{{label}}</span>
+
+        <input
+          type="number"
+          name="system.atributos.{{key}}"
+          value="{{valor}}"
+          data-dtype="Number">
+
+        <button hidden
+          type="button"
+          class="rolar-atributo"
+          data-atributo="{{key}}">
+          🎲
+        </button>
+      </div>
+    {{/each}}
+  </section>
+  <br>
+  <!-- PPENALIDADES -->
+  <h3 style="text-align: center;">PENALIDADES</h3>
+  <section class="penalidades">
+    <div><label class="pentexto">Físicas </label><input type="number" name="system.penalidades.penfisica" value="{{system.penalidades.penfisica}}" max="100" min="0"></div>
+    <div><label class="pentexto">Sociais </label><input type="number" name="system.penalidades.pensociais" value="{{system.penalidades.pensociais}}" max="100" min="0"></div>
+    <div><label class="pentexto">Mentais </label><input type="number" name="system.penalidades.penmentais" value="{{system.penalidades.penmentais}}"  max="100" min="0"></div>
+    <div><label class="pentexto">Técnológicas </label><input type="number" name="system.penalidades.pentecnicologica" value="{{system.penalidades.pentecnicologica}}" max="100" min="0"></div>
+    <div><label class="pentexto">Alquimica </label><input type="number" name="system.penalidades.penaquimica" value="{{system.penalidades.penaquimica}}" max="100" min="0"></div>
+    <div><label class="pentexto">Mágicas </label><input type="number" name="system.penalidades.penmagica" value="{{system.penalidades.penmagica}}" max="100" min="0"></div>
+    <div><label class="pentexto">Sobrevivências </label><input type="number" name="system.penalidades.pensobrevivencia" value="{{system.penalidades.pensobrevivencia}}" max="100" min="0"></div>   
+  </section>
+  <br>
+  <!-- PERÍCIAS -->
+  <h3 style="text-align: center;">PERÍCIAS</h3>
+  <!-- <div class="pericias-grid">
+    
+    {{#each periciasPorGrupo as |lista grupo|}}
+      <section class="grupo-pericias">
+        <h3>{{grupo}}</h3>
+
+        {{#each lista}}
+          <div class="pericia">
+            <span class="nome rolar-pericia" data-pericia="{{key}}">{{label}}</span>
+            <input type="number"
+                  name="system.pericias.{{key}}.valor"
+                  value="{{valor}}" 
+                  hidden/>
+            <input type="number"
+                  name="system.pericias.{{key}}.bonus"
+                  value="{{bonus}}" />
+            <button class="rolar-pericia" data-pericia="{{key}}" hidden>🎲</button>
+          </div>
+        {{/each}}
+      </section>
+    {{/each}}
+  </div> -->
+  <section class="pericias-grid">
+    {{#each periciasPorGrupo}}
+      <div class="pericia-grupo">
+        <h3>{{@key}}</h3>
+
+        {{#each this}}
+          <div class="pericia" >
+            <span class="nome rolar-pericia" data-pericia="{{key}}">{{label}}</span>
+            <input type="number" name="system.pericias.{{key}}.valor" value="{{valor}}"  hidden disabled/>
+            <input type="number" name="system.pericias.{{key}}.bonus" value="{{bonus}}">
+            <button class="rolar-pericia" data-pericia="{{key}}" hidden>🎲</button>
+          </div>
+        {{/each}}
+      </div>
+    {{/each}}
+  </section>
+
+  <br>
+
+  <!-- Texto livre -->
+  <!-- ANOTAÇÕES -->
+  <section class="anotacoes">
+    <h3>Anotações</h3>
+
+    <textarea
+      name="system.anotacoes"
+      rows="6"
+      placeholder="Anote aqui tudo que for importante para o personagem...">{{system.anotacoes}}</textarea>
+  </section>
+
+  <!-- armas -->
+  <div class="armadura-box">
+    <h3>Armas</h3>
+    <table class="armadura-tabela">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Dano</th>
+          <th style="width: 50px; padding: 0 10px 0 10px;"><img class="img_tb" src="https://cdn-icons-png.flaticon.com/512/2646/2646768.png" alt="" width="100%" height="20px"></th>
+          <th>Tipo</th>
+          <th title="Vezes por Turno">V/T</th>
+          <th>Peso</th>
+          <th> 🗑</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each arma}}
+        <tr  data-item-id="{{id}}">
+           <td class="mostrar-arma" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
+          <td class="rolar-dano" title="{{dano}}">{{dano}}</td>
+          <td  style="width: 60px;"><input type="number" data-item-id="{{id}}" class="ammo-input" value="{{ammo}}" min="0"/></td>
+          <td>{{tipo}}</td>
+          <td>{{vt}}</td>
+          <td>{{peso}}</td>
+          <td>
+            <button class="remover-arma" title="Remover Arma">🗑</button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- Armadura -->
+  <div class="armadura-box">
+    <h3>Armadura</h3>
+    <table class="armadura-tabela">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Tipo</th>
+          <th>RD</th>
+          <th>Peso</th>
+          <th>Penalidades</th>
+          <th> 🗑</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each armaduras}}
+        <tr  data-item-id="{{id}}">
+          <td class="mostrar-armadura" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
+          <td title="{{tipo}}">{{tipo}}</td>
+          <td>{{rd}}</td>
+          <td>{{peso}}</td>
+          <td title="{{penalidades}}">{{penalidades}}</td>
+          <td class="tb-bt">
+            <button class="remover-armadura" title="Remover Armadura">🗑</button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- item -->
+  <div class="armadura-box">
+    <h3>Itens</h3>
+    <table class="armadura-tabela">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Uso</th>
+          <th>Efeito</th>
+          <th>Peso</th>
+          <th> 🗑</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each items}}
+        <tr  data-item-id="{{id}}">
+           <td class="mostrar-item" data-item-id="{{id}}" title="{{tipo}}">{{tipo}}</td>
+          <td>{{uso}}</td>
+          <td title="{{efeito}}">{{efeito}}</td>
+          <td>{{peso}}</td>
+          <td>
+            <button class="remover-item" title="Remover Item">🗑</button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- Técnicas alquimicas -->
+  <div class="armadura-box">
+    <h3>Técnicas Alquímicas</h3>
+    <table class="armadura-tabela">
+      <thead>
+        <tr>
+          <th>Pedra</th>
+          <th title="Nível">N</th>
+          <th>Técnica</th>
+          <th >Tipo</th>
+          <th >Alvo / Efeito</th>
+          <th >Efeitos Secundários</th>
+          <th>Dano</th>
+          <th> 🗑</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each alquimico}}
+        <tr  data-item-id="{{id}}">
+           <td class="mostrar-alquimico" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
+           <td>{{nivel}}</td>
+           <td>{{tecnica}}</td>
+           <td>{{tipo}}</td>
+           <td>{{alvo}}</td>
+           <td>{{efeito}}</td>
+           <td class="rolar-alquimico" title="{{dano}}">{{dano}}</td>
+           <td>
+            <button class="remover-alquimico" title="Remover Alquimico">🗑</button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- Drogasss -->
+  <div class="armadura-box">
+    <h3>Drogas</h3>
+    <table class="armadura-tabela">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th >Tipo</th>
+          <th >Efeito</th>
+          <th >Colateral</th>
+          <th> 🗑</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each drogas}}
+        <tr  data-item-id="{{id}}">
+           <td class="mostrar-drogas" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
+           <td>{{tipo}}</td>
+           <td>{{efeito}}</td>
+           <td>{{colateral}}</td>
+           <td>
+            <button class="remover-drogas" title="Remover drogas">🗑</button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- Impplantes -->
+  <div class="armadura-box">
+    <h3>Implantes</h3>
+    <table class="armadura-tabela">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th >Efeito</th>
+          <th >Essência</th>
+          <th >Conceito</th>
+          <th> 🗑</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each implantes}}
+        <tr  data-item-id="{{id}}">
+           <td class="mostrar-implantes" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
+           <td>{{efeito}}</td>
+           <td>{{essencia}}</td>
+           <td>{{conceito}}</td>
+           <td>
+            <button class="remover-implantes" title="Remover implantes">🗑</button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <!-- Magias -->
+  <div class="armadura-box">
+    <h3>Magias</h3>
+    <table class="armadura-tabela">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th >Conceito</th>
+          <th >Esssencia</th>
+          <th >Efeito</th>
+          <th title="Dano a Sanidade">DS</th>
+          <th >C</th>
+          <th> 🗑</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each magias}}
+        <tr  data-item-id="{{id}}">
+           <td class="mostrar-magias" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
+           <td>{{conceito}}</td>
+           <td>{{essencia}}</td>
+           <td>{{efeito}}</td>
+           <td class="rolar-magias" title="Dano a sanindade">{{dano}}</td>
+           <td>{{circulo}}</td>
+           <td>
+            <button class="remover-magias" title="Remover magias">🗑</button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+     <!-- Rituais -->
+  <div class="armadura-box">
+    <h3>Rituais</h3>
+    <table class="armadura-tabela">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th >Conceito</th>
+          <th >Esssencia</th>
+          <th >Efeito</th>
+          <th >Tempo</th>
+          <th> 🗑</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each rituais}}
+        <tr  data-item-id="{{id}}">
+           <td class="mostrar-rituais" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
+           <td>{{conceito}}</td>
+           <td>{{essencia}}</td>
+           <td>{{efeito}}</td>
+           <td>{{tempo}}</td>
+           <td>
+            <button class="remover-rituais" title="Remover rituais">🗑</button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+     <!-- Veicuulo -->
+  <div class="armadura-box">
+    <h3>Veiculos</h3>
+    <table class="armadura-tabela">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th >Exemplo</th>
+          <th >VEL</th>
+          <th >EST</th>
+          <th >BLD</th>
+          <th >POT</th>
+          <th> 🗑</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each veiculo}}
+        <tr  data-item-id="{{id}}">
+           <td class="mostrar-veiculo" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
+           <td>{{ex}}</td>
+           <td>{{vel}}</td>
+           <td>{{est}}</td>
+           <td>{{bld}}</td>
+           <td>{{pot}}</td>
+           <td>
+            <button class="remover-veiculo" title="Remover veiculo">🗑</button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <!-- Mechass -->
+    <div class="armadura-box">
+      <h3>Mechas</h3>
+      <table class="armadura-tabela">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th >TIPO</th>
+            <th >VEL</th>
+            <th >EST</th>
+            <th >BLD</th>
+            <th >MOB</th>
+            <th >PRE</th>
+            <th >POT</th>
+            <th> 🗑</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {{#each mecha}}
+          <tr  data-item-id="{{id}}">
+            <td class="mostrar-mecha" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
+            <td>{{tipo}}</td>
+            <td>{{vel}}</td>
+            <td>{{est}}</td>
+            <td>{{bld}}</td>
+            <td>{{mob}}</td>
+            <td>{{pre}}</td>
+            <td>{{pot}}</td>
+            <td>
+              <button class="remover-mecha" title="Remover mecha">🗑</button>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+    </div>
+    <!-- alquimia -->
+    <div class="armadura-box">
+      <h3>Alquimia</h3>
+      <table class="armadura-tabela">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th >Efeito</th>
+            <th >Conceito</th>
+            <th >Tempo</th>
+            <th> 🗑</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {{#each alquimia}}
+          <tr  data-item-id="{{id}}">
+            <td class="mostrar-alquimia" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
+            <td>{{efeito}}</td>
+            <td>{{conceito}}</td>
+            <td>{{tempo}}</td>
+            <td>
+              <button class="remover-alquimia" title="Remover Alquimia">🗑</button>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+    </div>
+    <!-- Elixir -->
+    <div class="armadura-box">
+      <h3>Elixires</h3>
+      <table class="armadura-tabela">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th >Efeito</th>
+            <th >Colateral</th>
+            <th >Conceito</th>
+            <th> 🗑</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {{#each elixires}}
+          <tr  data-item-id="{{id}}">
+            <td class="mostrar-elixir" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
+            <td>{{efeito}}</td>
+            <td>{{colateral}}</td>
+            <td>{{conceito}}</td>
+            <td>
+              <button class="remover-elixir" title="Remover Elixir">🗑</button>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+    </div>
+    <!-- Veneno -->
+    <div class="armadura-box">
+      <h3>Venenos</h3>
+      <table class="armadura-tabela">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th >TIPO</th>
+            <th >Efeito</th>
+            <th >Conceito</th>
+            <th> 🗑</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {{#each venenos}}
+          <tr  data-item-id="{{id}}">
+            <td class="mostrar-veneno" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
+            <td>{{tipo}}</td>
+            <td>{{efeito}}</td>
+            <td>{{conceito}}</td>
+            <td>
+              <button class="remover-veneno" title="Remover Veneno">🗑</button>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+    </div>
+    <!-- INjeções -->
+    <div class="armadura-box">
+      <h3>Injeções</h3>
+      <table class="armadura-tabela">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th >Efeito</th>
+            <th >Colateral</th>
+            <th >Conceito</th>
+            <th> 🗑</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {{#each injecoes}}
+          <tr  data-item-id="{{id}}">
+            <td class="mostrar-injecao" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
+            <td>{{efeito}}</td>
+            <td>{{colateral}}</td>
+            <td>{{conceito}}</td>
+            <td>
+              <button class="remover-injecao" title="Remover Injecao">🗑</button>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    <!-- Mutagênicos -->
+    <div class="armadura-box">
+      <h3>Mutagênicos</h3>
+      <table class="armadura-tabela">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th >Efeito</th>
+            <th >Mutação</th>
+            <th >Conceito</th>
+            <th> 🗑</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {{#each mutagenicos}}
+          <tr  data-item-id="{{id}}">
+            <td class="mostrar-mutagenico" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
+            <td>{{efeito}}</td>
+            <td>{{mutacao}}</td>
+            <td>{{conceito}}</td>
+            <td>
+              <button class="remover-mutagenico" title="Remover Mutagenicos">🗑</button>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    <!-- Acidos -->
+    <div class="armadura-box">
+      <h3>Ácidos</h3>
+      <table class="armadura-tabela">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th >Tipo</th>
+            <th >Efeito</th>
+            <th >Conceito</th>
+            <th> 🗑</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {{#each acidos}}
+          <tr  data-item-id="{{id}}">
+            <td class="mostrar-acido" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
+            <td>{{tipo}}</td>
+            <td>{{efeito}}</td>
+            <td>{{conceito}}</td>
+            <td>
+              <button class="remover-acido" title="Remover Ácido">🗑</button>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+     
+
+
+</form>

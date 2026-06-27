@@ -1,0 +1,102 @@
+{
+  "id": "a-nova-ordem",
+  "title": "A Nova Ordem",
+  "description": "Sistema dieselpunk 1975 criado por Alê Gomes e programado por NeaN Word",
+  "version": "0.3.1",
+
+  "authors": [
+    { "name": "Alê Gomes", "role": "Criador do Sistema" },
+    { "name": "NeaN Word", "role": "Programador" }
+  ],
+
+  "esmodules": [
+    "scripts/init.js",
+    "scripts/sheet.js",
+    "scripts/rolls.js"
+  ],
+
+  "styles": [
+    "styles/anovaordem.css"
+  ],
+
+  "languages": [
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "lang/pt-BR.json"
+    }
+  ],
+
+  "grid": {
+    "distance": 1,
+    "units": "m"
+  },
+  "media": [
+    {
+      "type": "setup",
+      "url": "systems/a-nova-ordem/assets/background.png",
+      "thumbnail": "systems/a-nova-ordem/assets/background.png",
+      "loop": false,
+      "flags": {}
+    }
+  ],
+
+  "initiative": "1d100",
+
+  "documentTypes": {
+    "Actor": {
+      "personagem": {}
+    },
+    "Item": {
+      "armadura": {
+        "label": "Armadura"
+      },
+      "items": {
+        "label": "Items"
+      },
+      "arma": {
+        "label": "Arma"
+      },
+      "alquimico": {
+        "label": "Alquimico"
+      },
+      "drogas": {
+        "label": "Drogas"
+      },
+      "magias": {
+        "label": "Magias"
+      },
+      "rituais": {
+        "label": "Rituais"
+      },
+      "implantes": {
+        "label": "Implantes"
+      },
+      "mecha": {
+        "label": "Mecha"
+      },
+      "veiculo": {
+        "label": "Veículo"
+      },
+      "alquimia": {
+        "label": "Alquimia"
+      },
+      "acidos": {
+        "label": "Ácidos"
+      },
+      "venenos": {
+        "label": "Venenos"
+      },
+      "injecoes": {
+        "label": "Injeções"
+      },
+      "elixires": {
+        "label": "Elixires"
+      },
+      "mutagenicos": {
+        "label": "Mutagênicos"
+      }
+    }
+  }
+
+}

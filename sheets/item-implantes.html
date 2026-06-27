@@ -1,0 +1,29 @@
+<form class="item-sheet" autocomplete="off">
+
+  <header class="sheet-header flexrow">
+    <img class="item-img" src="{{item.img}}" data-edit="img" height="64" width="64"/>
+
+    <h1>
+      <input name="name" type="text" value="{{item.name}}" />
+    </h1>
+  </header>
+
+  <section>
+    <!-- <label>Nome
+      <input type="text" name="system.name" value="{{system.name}}">
+    </label> -->
+  
+    <label>Efeito</label>
+    <input type="text" name="system.efeito" value="{{system.efeito}}">
+ 
+    <label>Esssência</label>
+    <input type="number" name="system.essencia" value="{{system.essencia}}">
+  
+    <label>Conceito</label>
+    <textarea name="system.conceito">{{system.conceito}}</textarea>
+  
+    <label>Preço Base
+      <input type="number" name="system.preco" value="{{system.preco}}">
+    </label>
+  </section>
+</form>
