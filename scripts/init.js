@@ -2,6 +2,7 @@ import { AONovaOrdemActorSheet } from "./sheet.js";
 import { AONovaOrdemPersonagemModel } from "./actor-model.js";
 import { AONOVAORDEM } from "./config.js";
 import * as Rolls from "./rolls.js";
+import { status } from "./rolls.js";
 import { AONovaOrdemArmaduraModel } from "./item-armadura-model.js";
 import { AONovaOrdemArmaduraSheet } from "./item-armadura-sheet.js";
 import { AONovaOrdemItemsModel } from "./item-items-model.js";
@@ -212,30 +213,6 @@ Hooks.on("deleteItem", async (item, options, userId) => {
 
   
 });
-function status (saudeAtual){
-    let tx = '';
-    let p = 0;
-    if (saudeAtual > 75) {
-        tx = 'Operacional';
-        p = 0
-    } else if (saudeAtual > 50) {
-        tx = 'Ferido';
-        p = 10;
-    } else if (saudeAtual > 25) {
-        tx = 'Gravemente Ferido';
-        p = 10;
-    } else if (saudeAtual > 2) {
-        tx = 'À Beira do Colapso';
-        p = 10;
-    }else if (saudeAtual > 0) {
-        tx = 'Incapacitado';
-        p = 70;
-    } else {
-        tx = 'Morto';
-        p = 100;
-    }
-    return [tx,p];
-};
 Hooks.on("renderChatMessage", (message, html, data) => {
 
   html.find(".aplicar-dano").on("click", async ev => {
@@ -260,13 +237,13 @@ Hooks.on("renderChatMessage", (message, html, data) => {
 
     await actor.update({
       "system.saude": saudeNova,
-      "system.penalidades.penfisica": actor.system.penalidades.penfisica + Number(resutado[1]?? 0),
-      "system.penalidades.pensociais": actor.system.penalidades.pensociais + Number(resutado[1]?? 0),
-      "system.penalidades.penmentais": actor.system.penalidades.penmentais + Number(resutado[1]?? 0),
-      "system.penalidades.pentecnicologica": actor.system.penalidades.pentecnicologica + Number(resutado[1]?? 0),
-      "system.penalidades.penaquimica": actor.system.penalidades.penaquimica + Number(resutado[1]?? 0),
-      "system.penalidades.penmagica": actor.system.penalidades.penmagica + Number(resutado[1]?? 0),
-      "system.penalidades.pensobrevivencia": actor.system.penalidades.pensobrevivencia + Number(resutado[1]?? 0)
+      "system.penalidades.penfisica":        Number(resutado[1] ?? 0),
+      "system.penalidades.pensociais":       Number(resutado[1] ?? 0),
+      "system.penalidades.penmentais":       Number(resutado[1] ?? 0),
+      "system.penalidades.pentecnicologica": Number(resutado[1] ?? 0),
+      "system.penalidades.penaquimica":      Number(resutado[1] ?? 0),
+      "system.penalidades.penmagica":        Number(resutado[1] ?? 0),
+      "system.penalidades.pensobrevivencia": Number(resutado[1] ?? 0)
     });
 
     
@@ -310,13 +287,13 @@ Hooks.on("renderChatMessage", (message, html, data) => {
     let resutado = status(saudeNova);
     await actor.update({
       "system.saude": saudeNova,
-      "system.penalidades.penfisica": actor.system.penalidades.penfisica - Number(resutado[1]?? 0),
-      "system.penalidades.pensociais": actor.system.penalidades.pensociais - Number(resutado[1]?? 0),
-      "system.penalidades.penmentais": actor.system.penalidades.penmentais - Number(resutado[1]?? 0),
-      "system.penalidades.pentecnicologica": actor.system.penalidades.pentecnicologica - Number(resutado[1]?? 0),
-      "system.penalidades.penaquimica": actor.system.penalidades.penaquimica - Number(resutado[1]?? 0),
-      "system.penalidades.penmagica": actor.system.penalidades.penmagica - Number(resutado[1]?? 0),
-      "system.penalidades.pensobrevivencia": actor.system.penalidades.pensobrevivencia - Number(resutado[1]?? 0)
+      "system.penalidades.penfisica":        Number(resutado[1] ?? 0),
+      "system.penalidades.pensociais":       Number(resutado[1] ?? 0),
+      "system.penalidades.penmentais":       Number(resutado[1] ?? 0),
+      "system.penalidades.pentecnicologica": Number(resutado[1] ?? 0),
+      "system.penalidades.penaquimica":      Number(resutado[1] ?? 0),
+      "system.penalidades.penmagica":        Number(resutado[1] ?? 0),
+      "system.penalidades.pensobrevivencia": Number(resutado[1] ?? 0)
     });
 
     ui.notifications.info(

@@ -82,17 +82,51 @@ export async function rolarDano({actor, itemName, formula, atributo, atributoVal
 }) {
   let rolagem = ``;
   const roll = await new Roll(formula).roll({ async: true });
-  // // 🎲 MOSTRA OS DADOS 3D NA MESA
-  // if (game.dice3d) {
-  //   await game.dice3d.showForRoll(roll, game.user, true);
-  // }
   const total = roll.total + atributoValor;
   if (atributo != "") {
     rolagem = `${formula} + ${atributo} (${atributoValor})`;
-  }else{
+  } else {
     rolagem = `${formula}`;
   }
 
+  // Token selecionado → aplicar dano com RD automaticamente
+  const token = canvas.tokens?.controlled[0];
+  if (token) {
+    const alvo = token.actor;
+    const rd = alvo.system.rd ?? 0;
+    const danoEfetivo = Math.max(0, total - rd);
+    const saudeAtual = alvo.system.saude ?? 0;
+    const saudeNova = Math.max(0, saudeAtual - danoEfetivo);
+    const [statusTxt, penalidade] = status(saudeNova);
+
+    if (danoEfetivo > 0) {
+      await alvo.update({
+        "system.saude": saudeNova,
+        "system.penalidades.penfisica":        penalidade,
+        "system.penalidades.pensociais":       penalidade,
+        "system.penalidades.penmentais":       penalidade,
+        "system.penalidades.pentecnicologica": penalidade,
+        "system.penalidades.penaquimica":      penalidade,
+        "system.penalidades.penmagica":        penalidade,
+        "system.penalidades.pensobrevivencia": penalidade
+      });
+    }
+
+    roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      flavor: `
+        <b>${itemName}</b><br>
+        <b>Dano:</b> ${textoOriginal}<br>
+        ${rolagem} = <b>${total}</b><br>
+        ${total} − RD ${rd} = <b style="color:red">${danoEfetivo}</b><br><br>
+        <img src="${alvo.img}" width="36" height="36" style="border:0;border-radius:4px;vertical-align:middle">
+        <b>${alvo.name}</b> — Saúde: ${saudeNova}/100 — <b>${statusTxt}</b>
+      `
+    });
+    return;
+  }
+
+  // Sem token → exibir botões no chat
   roll.toMessage({
     speaker: ChatMessage.getSpeaker({ actor }),
     flavor: `
@@ -100,11 +134,11 @@ export async function rolarDano({actor, itemName, formula, atributo, atributoVal
       <b>Dano:</b> ${textoOriginal}<br>
       ${rolagem}<br><br>
       <p>
-      <button class="aplicar-dano" data-dano="${total}" title="Apicar Dano">
+      <button class="aplicar-dano" data-dano="${total}" title="Aplicar Dano">
         <b>-</b>
       </button>
       <b>Total: ${total}</b>
-      <button class="aplicar-cura" data-cura="${total}" title="Apicar Cura">
+      <button class="aplicar-cura" data-cura="${total}" title="Aplicar Cura">
         <b>+</b>
       </button></p>
     `
@@ -145,6 +179,18 @@ export async function rolarAlquimico({actor, alquimico}) {
 
 
 /* ========================= */
+
+/* =========================
+ * STATUS DE SAÚDE
+ * ========================= */
+export function status(saudeAtual) {
+  if (saudeAtual > 75) return ['Operacional',        0];
+  if (saudeAtual > 50) return ['Ferido',              5];
+  if (saudeAtual > 25) return ['Gravemente Ferido',  10];
+  if (saudeAtual > 2)  return ['À Beira do Colapso', 15];
+  if (saudeAtual > 0)  return ['Incapacitado',       20];
+  return                      ['Morto',             100];
+}
 
 function escolherAtributo(lista) {
   return new Promise(resolve => {
