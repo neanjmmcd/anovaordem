@@ -1,6 +1,6 @@
 # Dieselpunk — A Nova Ordem
 
-> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.3.1` · Em desenvolvimento
+> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.3.1` · Funcional e jogável
 
 Um sistema percentual de RPG ambientado em um mundo dieselpunk alternativo, onde o Eixo venceu a Segunda Guerra Mundial. O ano é 1975. Três impérios totalitários dividem o planeta — e você é um Libertário operando nas sombras, tentando mudar o curso da história.
 
@@ -61,13 +61,13 @@ Distribuídas em 7 categorias com **250 pontos base** para alocação:
 ### Recursos do Personagem
 
 **Saúde (100 pts)**
-| Estado | Saúde | Penalidade |
-|--------|-------|------------|
+| Estado | Saúde | Penalidade em todas as perícias |
+|--------|-------|--------------------------------|
 | Operacional | 76–100 | Nenhuma |
-| Ferido | 51–75 | –10% |
+| Ferido | 51–75 | –5% |
 | Gravemente Ferido | 26–50 | –10% |
-| À Beira do Colapso | 2–25 | –10% |
-| Incapacitado | 1 | –70% |
+| À Beira do Colapso | 3–25 | –15% |
+| Incapacitado | 1–2 | –20% |
 | Morto | 0 | — |
 
 **Sanidade (100 pts)** — degrada permanentemente. Não pode ser recuperada; apenas suprimida temporariamente com psicotrópicos.
@@ -111,6 +111,19 @@ Distribuídas em 7 categorias com **250 pontos base** para alocação:
 
 ---
 
+## Compêndio de Itens (opcional)
+
+O arquivo **`compedium.rar`** contém uma coleção de itens prontos (armas, armaduras, alquímicos, implantes, etc.) para usar no seu mundo.
+
+O conteúdo do `.rar` corresponde à pasta `packs` do mundo. Para instalar:
+
+1. Extraia o arquivo `compedium.rar`
+2. Copie o conteúdo extraído para `Data/worlds/<nome-do-seu-mundo>/packs/`
+
+> **Atenção:** Se o seu mundo já possui uma pasta `packs` com conteúdo próprio, **não substitua a pasta inteira** — copie apenas os arquivos novos para dentro dela, para não perder itens que você já tenha criado.
+
+---
+
 ## Regras Completas
 
 As regras completas do sistema estão disponíveis no arquivo **`Dieselpunk - A Nova Ordem.pdf`** incluído neste repositório.
@@ -119,8 +132,8 @@ As regras completas do sistema estão disponíveis no arquivo **`Dieselpunk - A 
 
 ## Status do Projeto
 
-> **Versão `0.3.1` — Em desenvolvimento ativo**
-> O sistema está sujeito a alterações. Críticas, comentários e sugestões são bem-vindos.
+> **Versão `0.3.1` — Funcional e jogável**
+> O sistema está em desenvolvimento contínuo e pode receber melhorias. Críticas, comentários e sugestões são bem-vindos.
 
 ---
 
