@@ -89,8 +89,8 @@ export async function rolarDano({actor, itemName, formula, atributo, atributoVal
     rolagem = `${formula}`;
   }
 
-  // Token selecionado → aplicar dano com RD automaticamente
-  const token = canvas.tokens?.controlled[0];
+  // Token marcado como alvo (mira) → aplicar dano com RD automaticamente
+  const token = [...(game.user?.targets ?? [])][0];
   if (token) {
     const alvo = token.actor;
     const rd = alvo.system.rd ?? 0;
