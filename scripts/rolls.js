@@ -84,7 +84,7 @@ export async function rolarDano({actor, itemName, formula, atributo, atributoVal
   const roll = await new Roll(formula).roll({ async: true });
   const total = roll.total + atributoValor;
   if (atributo != "") {
-    rolagem = `${formula} + ${atributo} (${atributoValor})`;
+    rolagem = `${formula} + ${atributo.toUpperCase()} (${atributoValor})`;
   } else {
     rolagem = `${formula}`;
   }
@@ -120,7 +120,7 @@ export async function rolarDano({actor, itemName, formula, atributo, atributoVal
         ${rolagem} = <b>${total}</b><br>
         ${total} − RD ${rd} = <b style="color:red">${danoEfetivo}</b><br><br>
         <img src="${alvo.img}" width="36" height="36" style="border:0;border-radius:4px;vertical-align:middle">
-        <b>${alvo.name}</b> — Saúde: ${saudeNova}/100 — <b>${statusTxt}</b>
+        <b>${alvo.name}</b> — <b>${statusTxt}</b>
       `
     });
     return;

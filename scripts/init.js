@@ -230,8 +230,10 @@ Hooks.on("renderChatMessage", (message, html, data) => {
     const actor = token.actor;
     if (!actor) return;
 
+    const rd = actor.system.rd ?? 0;
+    const danoEfetivo = Math.max(0, dano - rd);
     const saudeAtual = Number(actor.system.saude ?? 0);
-    const saudeNova = Math.max(0, saudeAtual - dano);
+    const saudeNova = Math.max(0, saudeAtual - danoEfetivo);
 
     let resutado = status(saudeNova);
 
@@ -257,7 +259,8 @@ Hooks.on("renderChatMessage", (message, html, data) => {
           <div style="align-items:center;">
             <img src="${actor.img}" width="40" height="40" style="border:0; border-radius:4px;margin: 10px 0 10px 40%"></img>
             <div style="background-color:#363636; border-radius:10px;color:#e0d8b0">
-              Reduziu <b style="color:red">${dano}</b> na sua Saúde.
+              Reduziu <b style="color:red">${danoEfetivo}</b> na sua Saúde.
+              ${rd > 0 ? `<br><small>(${dano} − RD ${rd})</small>` : ''}
             </div>
           </div>
           <hr style="background-color:red">
