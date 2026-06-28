@@ -260,7 +260,6 @@ Hooks.on("renderChatMessage", (message, html, data) => {
             <img src="${actor.img}" width="40" height="40" style="border:0; border-radius:4px;margin: 10px 0 10px 40%"></img>
             <div style="background-color:#363636; border-radius:10px;color:#e0d8b0">
               Reduziu <b style="color:red">${danoEfetivo}</b> na sua Saúde.
-              ${rd > 0 ? `<br><small>(${dano} − RD ${rd})</small>` : ''}
             </div>
           </div>
           <hr style="background-color:red">
