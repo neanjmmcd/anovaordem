@@ -312,7 +312,7 @@
       <thead>
         <tr>
           <th title="Ativo">At.</th>
-          <th title="Rodadas restantes">⏳</th>
+          <th title="Turnos restantes">⏳</th>
           <th>Nome</th>
           <th >Tipo</th>
           <th >Efeito</th>
@@ -325,7 +325,7 @@
         {{#each drogas}}
         <tr  data-item-id="{{id}}">
            <td class="aon-toggle"><input type="checkbox" class="toggle-item" data-item-id="{{id}}" data-campo="system.ativo" title="Ativo (aplica os modificadores)" {{checked ativo}}></td>
-           <td class="aon-restante" title="Rodadas restantes">{{#if ativo}}{{#if duracao}}{{restante}}{{/if}}{{/if}}</td>
+           <td class="aon-restante" title="Turnos restantes">{{#if ativo}}{{#if duracao}}{{restante}}{{/if}}{{/if}}</td>
            <td class="mostrar-drogas" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
            <td>{{tipo}}</td>
            <td>{{efeito}}</td>
@@ -539,7 +539,7 @@
         <thead>
           <tr>
             <th title="Ativo">At.</th>
-            <th title="Rodadas restantes">⏳</th>
+            <th title="Turnos restantes">⏳</th>
             <th>Nome</th>
             <th >Efeito</th>
             <th >Colateral</th>
@@ -552,7 +552,7 @@
           {{#each elixires}}
           <tr  data-item-id="{{id}}">
            <td class="aon-toggle"><input type="checkbox" class="toggle-item" data-item-id="{{id}}" data-campo="system.ativo" title="Ativo (aplica os modificadores)" {{checked ativo}}></td>
-           <td class="aon-restante" title="Rodadas restantes">{{#if ativo}}{{#if duracao}}{{restante}}{{/if}}{{/if}}</td>
+           <td class="aon-restante" title="Turnos restantes">{{#if ativo}}{{#if duracao}}{{restante}}{{/if}}{{/if}}</td>
             <td class="mostrar-elixir" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
             <td>{{efeito}}</td>
             <td>{{colateral}}</td>
@@ -603,7 +603,7 @@
         <thead>
           <tr>
             <th title="Ativo">At.</th>
-            <th title="Rodadas restantes">⏳</th>
+            <th title="Turnos restantes">⏳</th>
             <th>Nome</th>
             <th >Efeito</th>
             <th >Colateral</th>
@@ -616,7 +616,7 @@
           {{#each injecoes}}
           <tr  data-item-id="{{id}}">
            <td class="aon-toggle"><input type="checkbox" class="toggle-item" data-item-id="{{id}}" data-campo="system.ativo" title="Ativo (aplica os modificadores)" {{checked ativo}}></td>
-           <td class="aon-restante" title="Rodadas restantes">{{#if ativo}}{{#if duracao}}{{restante}}{{/if}}{{/if}}</td>
+           <td class="aon-restante" title="Turnos restantes">{{#if ativo}}{{#if duracao}}{{restante}}{{/if}}{{/if}}</td>
             <td class="mostrar-injecao" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
             <td>{{efeito}}</td>
             <td>{{colateral}}</td>

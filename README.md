@@ -115,9 +115,13 @@ Os valores abaixo são **calculados automaticamente** a partir dos itens na fich
 | **Penalidades** | Saúde + armadura (testes físicos) + Estado Mental (Mentais/Sociais) + itens |
 
 - **Armaduras:** só contam quando marcadas como *Equipada*. Armaduras da mesma categoria somam RD com penalidade proporcional (2 Leves = Média); categorias diferentes acumulam e dobram as penalidades.
-- **Consumíveis** (elixires, injeções, drogas): só valem quando marcados como *Ativo*. Com duração definida, se desligam sozinhos ao fim das rodadas de combate.
+- **Consumíveis** (elixires, injeções, drogas): só valem quando marcados como *Ativo*. Com duração definida, contam nos turnos do próprio personagem no combate e se desligam sozinhos ao terminar.
 - **Dreno de Essência:** em 30% ou menos, Resistência Mental −20%; em 20% ou menos, CAR e Perícias Sociais pela metade.
 - Os modificadores de cada item são editados na própria ficha do item, em *Modificadores na ficha*. O mestre ainda pode usar os campos de *Ajuste* para RD, Essência e Deslocamento.
+
+### Animações (opcional)
+
+Com o módulo **[Automated Animations](https://foundryvtt.com/packages/autoanimations)** ativo (e suas dependências *Sequencer*, *socketlib* e um pacote JB2A), o sistema toca a animação ao rolar dano de armas e alquímicos e ao ativar consumíveis. A animação é escolhida pelo **nome do item** no menu *Global Automatic Recognition* do Automated Animations — cadastre lá os nomes em português (ex.: "Pistola", "Lâmina", "Voltaic"). O módulo *Automated Animations For All* não é necessário.
 
 ---
 
@@ -131,7 +135,7 @@ Os valores abaixo são **calculados automaticamente** a partir dos itens na fich
 
 ## Compêndio de Itens (opcional)
 
-O arquivo **`compedium.rar`** contém uma coleção de itens prontos (armas, armaduras, alquímicos, implantes, etc.) para usar no seu mundo.
+O arquivo **`compedium.rar`** contém uma coleção de itens prontos (armas, armaduras, alquímicos, implantes, etc.) para usar no seu mundo. As imagens dos itens já vêm com o sistema, em `assets/itens`.
 
 O conteúdo do `.rar` corresponde à pasta `packs` do mundo. Para instalar:
 

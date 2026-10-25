@@ -60,6 +60,7 @@ Hooks.once("init", () => {
   window.rolarAtributo = Rolls.rolarAtributo;
   window.rolarDano = Rolls.rolarDano;
   window.rolarAlquimico = Rolls.rolarAlquimico;
+  window.tocarAnimacao = Rolls.tocarAnimacao;
   
   //Carregaar armaduras e items
   CONFIG.Item.dataModels = {
@@ -156,13 +157,6 @@ Hooks.once("init", () => {
 
 
 /* =========================
- * DURAÇÃO DOS CONSUMÍVEIS
- * RD, peso, essência e atributos agora são calculados no modelo do
- * personagem (actor-model.js) — não é mais preciso somar/subtrair aqui.
- * A cada nova rodada de combate, consumíveis ativos com duração
- * perdem 1 rodada e se desligam ao chegar a 0.
- * ========================= */
-/* =========================
  * SANIDADE NO CHAT
  * Toda alteração de Sanidade anuncia o estado mental atual,
  * sem revelar o valor. Só o usuário que fez a alteração envia.
@@ -203,7 +197,16 @@ Hooks.on("updateActor", (actor, changes, options, userId) => {
   });
 });
 
-// Ao ativar um consumível, reinicia a contagem de rodadas
+/* =========================
+ * DURAÇÃO DOS CONSUMÍVEIS
+ * RD, peso, essência e atributos são calculados no modelo do
+ * personagem (actor-model.js) — não é preciso somar/subtrair aqui.
+ * A duração conta nos turnos do próprio personagem: cada vez que o
+ * turno volta para ele, os consumíveis ativos perdem 1 turno e se
+ * desligam ao chegar a 0.
+ * ========================= */
+
+// Ao ativar um consumível, reinicia a contagem de turnos
 Hooks.on("preUpdateItem", (item, changes) => {
   const ativo = foundry.utils.getProperty(changes, "system.ativo");
   if (ativo === true && !item.system.ativo) {
@@ -213,13 +216,13 @@ Hooks.on("preUpdateItem", (item, changes) => {
 
 Hooks.on("updateCombat", async (combat, changed, options) => {
   if (!game.user.isGM) return;
-  // Rodada 1 = início do combate: não consome duração
-  if (!("round" in changed) || changed.round <= 1 || (options?.direction ?? 1) < 0) return;
+  if (!("turn" in changed || "round" in changed)) return;
+  if ((options?.direction ?? 1) < 0) return;                 // voltar turno não consome
+  if (combat.round <= 1 && combat.turn === 0 && "round" in changed) return; // início do combate
 
-  for (const combatant of combat.combatants) {
-    const actor = combatant.actor;
-    if (!actor) continue;
-
+  // Só o personagem cujo turno começou agora
+  const actor = combat.combatant?.actor;
+  if (actor) {
     const updates = [];
     const encerrados = [];
     for (const item of actor.items) {
