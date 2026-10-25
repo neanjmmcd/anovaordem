@@ -20,13 +20,13 @@ AONOVAORDEM.atributos = {
   car: { label: "CARISMA" }
 };
 AONOVAORDEM.penalidades = {
-  penfisica: {label:"penfisica"},
-  pensociais: {label:"pensociais"},
-  penmentais: {label:"penmentais"},
-  pentecnicologica: {label:"pentecnicologica"},
-  penaquimica: {label:"penaquimica"},
-  penmagica: {label:"penmagica"},
-  pensobrevivencia: {label:"pensobrevivencia"}
+  penfisica: {label:"Físicas"},
+  pensociais: {label:"Sociais"},
+  penmentais: {label:"Mentais"},
+  pentecnicologica: {label:"Tecnológicas"},
+  penaquimica: {label:"Alquímicas"},
+  penmagica: {label:"Mágicas"},
+  pensobrevivencia: {label:"Sobrevivência"}
 };
 AONOVAORDEM.pericias = {
 
@@ -286,3 +286,14 @@ AONOVAORDEM.pericias = {
   
 };
 
+
+/* Opções dos seletores de modificadores nas fichas de item */
+AONOVAORDEM.periciaOptions = Object.fromEntries(
+  Object.entries(AONOVAORDEM.pericias)
+    .map(([key, p]) => [key, p.label])
+    .sort((a, b) => a[1].localeCompare(b[1], "pt-BR"))
+);
+AONOVAORDEM.penGrupoOptions = {
+  todas: "Todas",
+  ...Object.fromEntries(Object.entries(AONOVAORDEM.penalidades).map(([key, p]) => [key, p.label]))
+};

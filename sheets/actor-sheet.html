@@ -35,13 +35,45 @@
   <!-- RECURSOS -->
   <h3 style="text-align: center;">RECURSOS</h3>
   <section class="recursos">
-    <label>RD <input type="number" name="system.rd" value="{{system.rd}}"></label>
+    <!-- RD e Peso são calculados a partir dos itens (actor-model.js) -->
+    <label title="{{system.rdDetalhe}}">RD <input type="number" class="aon-derivado" value="{{system.rd}}" readonly></label>
     <label>Saúde <input type="number" name="system.saude" value="{{system.saude}}" max="100" min="0"></label>
     <label>Sanidade <input type="number" name="system.sanidade" value="{{system.sanidade}}"  max="100" min="0"></label>
-    <label>Essência <input type="number" name="system.essencia" value="{{system.essencia}}"></label>
-    <label>Peso/Unit <input type="number" name="system.pesoUnit" value="{{system.pesoUnit}}"></label>
+    <label title="Atual / Máxima (PSI x2, reduzida pelo dreno dos implantes)">Essência
+      <span class="aon-essencia">
+        <input type="number" name="system.essencia" value="{{system.essencia}}">
+        <span class="aon-max">/ {{system.essenciaMax}}</span>
+      </span>
+    </label>
+    <label title="Soma do peso de todos os itens{{#if system.cargaExtra}} · Carga extra +{{system.cargaExtra}}un.{{/if}}">Peso/Unit <input type="number" class="aon-derivado" value="{{system.pesoUnit}}" readonly></label>
     <label>¢RD <input type="number" name="system.creditoRd" value="{{system.creditoRd}}"></label>
   </section>
+  <section class="recursos aon-recursos-extra">
+    <label title="Base 7m + armadura + Saúde + itens">Deslocamento <input type="text" class="aon-derivado" value="{{system.deslocamento}}m" readonly></label>
+    <label title="100% − dreno de Essência dos implantes">Humanidade <input type="text" class="aon-derivado" value="{{system.humanidade}}%" readonly></label>
+    <label title="Carga extra de itens (mochila, compartimentos)">Carga Extra <input type="text" class="aon-derivado" value="+{{system.cargaExtra}}un." readonly></label>
+    <label title="Ajuste manual do mestre somado à RD">Ajuste RD <input type="number" name="system.ajustes.rd" value="{{system.ajustes.rd}}"></label>
+    <label title="Ajuste manual do mestre somado à Essência máxima">Ajuste Ess. <input type="number" name="system.ajustes.essencia" value="{{system.ajustes.essencia}}"></label>
+    <label title="Ajuste manual do mestre somado ao Deslocamento">Ajuste Desl. <input type="number" name="system.ajustes.deslocamento" value="{{system.ajustes.deslocamento}}"></label>
+  </section>
+
+  <!-- MODIFICADORES ATIVOS -->
+  {{#if (or system.fontesModificadores.length (or system.avisosEssencia.length system.anulaPenalidades))}}
+  <section class="aon-modificadores-ativos">
+    <h4>Modificadores ativos</h4>
+    <ul>
+      {{#each system.fontesModificadores}}
+        <li><b>{{nome}}:</b> {{texto}}</li>
+      {{/each}}
+      {{#if system.anulaPenalidades}}
+        <li class="aon-aviso"><b>Penalidades anuladas</b> enquanto o efeito durar.</li>
+      {{/if}}
+      {{#each system.avisosEssencia}}
+        <li class="aon-aviso"><b>Dreno de Essência</b> {{this}}</li>
+      {{/each}}
+    </ul>
+  </section>
+  {{/if}}
   <br>
   
   <!-- ATRIBUTOS -->
@@ -56,6 +88,7 @@
           name="system.atributos.{{key}}"
           value="{{valor}}"
           data-dtype="Number">
+        {{#if modificado}}<span class="aon-total" title="Valor efetivo com itens">= {{total}}</span>{{/if}}
 
         <button hidden
           type="button"
@@ -70,13 +103,13 @@
   <!-- PPENALIDADES -->
   <h3 style="text-align: center;">PENALIDADES</h3>
   <section class="penalidades">
-    <div><label class="pentexto">Físicas </label><input type="number" name="system.penalidades.penfisica" value="{{system.penalidades.penfisica}}" max="100" min="0"></div>
-    <div><label class="pentexto">Sociais </label><input type="number" name="system.penalidades.pensociais" value="{{system.penalidades.pensociais}}" max="100" min="0"></div>
-    <div><label class="pentexto">Mentais </label><input type="number" name="system.penalidades.penmentais" value="{{system.penalidades.penmentais}}"  max="100" min="0"></div>
-    <div><label class="pentexto">Técnológicas </label><input type="number" name="system.penalidades.pentecnicologica" value="{{system.penalidades.pentecnicologica}}" max="100" min="0"></div>
-    <div><label class="pentexto">Alquimica </label><input type="number" name="system.penalidades.penaquimica" value="{{system.penalidades.penaquimica}}" max="100" min="0"></div>
-    <div><label class="pentexto">Mágicas </label><input type="number" name="system.penalidades.penmagica" value="{{system.penalidades.penmagica}}" max="100" min="0"></div>
-    <div><label class="pentexto">Sobrevivências </label><input type="number" name="system.penalidades.pensobrevivencia" value="{{system.penalidades.pensobrevivencia}}" max="100" min="0"></div>   
+    <div><label class="pentexto">Físicas </label><input type="number" name="system.penalidades.penfisica" value="{{system.penalidades.penfisica}}" max="100" min="0">{{#if (ne system.penalidadesTotais.penfisica system.penalidades.penfisica)}}<span class="aon-total" title="Total com armadura e itens">= {{system.penalidadesTotais.penfisica}}</span>{{/if}}</div>
+    <div><label class="pentexto">Sociais </label><input type="number" name="system.penalidades.pensociais" value="{{system.penalidades.pensociais}}" max="100" min="0">{{#if (ne system.penalidadesTotais.pensociais system.penalidades.pensociais)}}<span class="aon-total" title="Total com armadura e itens">= {{system.penalidadesTotais.pensociais}}</span>{{/if}}</div>
+    <div><label class="pentexto">Mentais </label><input type="number" name="system.penalidades.penmentais" value="{{system.penalidades.penmentais}}"  max="100" min="0">{{#if (ne system.penalidadesTotais.penmentais system.penalidades.penmentais)}}<span class="aon-total" title="Total com armadura e itens">= {{system.penalidadesTotais.penmentais}}</span>{{/if}}</div>
+    <div><label class="pentexto">Técnológicas </label><input type="number" name="system.penalidades.pentecnicologica" value="{{system.penalidades.pentecnicologica}}" max="100" min="0">{{#if (ne system.penalidadesTotais.pentecnicologica system.penalidades.pentecnicologica)}}<span class="aon-total" title="Total com armadura e itens">= {{system.penalidadesTotais.pentecnicologica}}</span>{{/if}}</div>
+    <div><label class="pentexto">Alquimica </label><input type="number" name="system.penalidades.penaquimica" value="{{system.penalidades.penaquimica}}" max="100" min="0">{{#if (ne system.penalidadesTotais.penaquimica system.penalidades.penaquimica)}}<span class="aon-total" title="Total com armadura e itens">= {{system.penalidadesTotais.penaquimica}}</span>{{/if}}</div>
+    <div><label class="pentexto">Mágicas </label><input type="number" name="system.penalidades.penmagica" value="{{system.penalidades.penmagica}}" max="100" min="0">{{#if (ne system.penalidadesTotais.penmagica system.penalidades.penmagica)}}<span class="aon-total" title="Total com armadura e itens">= {{system.penalidadesTotais.penmagica}}</span>{{/if}}</div>
+    <div><label class="pentexto">Sobrevivências </label><input type="number" name="system.penalidades.pensobrevivencia" value="{{system.penalidades.pensobrevivencia}}" max="100" min="0">{{#if (ne system.penalidadesTotais.pensobrevivencia system.penalidades.pensobrevivencia)}}<span class="aon-total" title="Total com armadura e itens">= {{system.penalidadesTotais.pensobrevivencia}}</span>{{/if}}</div>   
   </section>
   <br>
   <!-- PERÍCIAS -->
@@ -113,6 +146,7 @@
             <span class="nome rolar-pericia" data-pericia="{{key}}">{{label}}</span>
             <input type="number" name="system.pericias.{{key}}.valor" value="{{valor}}"  hidden disabled/>
             <input type="number" name="system.pericias.{{key}}.bonus" value="{{bonus}}">
+            {{#if bonusItens}}<span class="aon-total" title="Bônus de itens">{{bonusItensTexto}}</span>{{/if}}
             <button class="rolar-pericia" data-pericia="{{key}}" hidden>🎲</button>
           </div>
         {{/each}}
@@ -174,6 +208,7 @@
     <table class="armadura-tabela">
       <thead>
         <tr>
+          <th title="Equipada">Eq.</th>
           <th>Nome</th>
           <th>Tipo</th>
           <th>RD</th>
@@ -186,6 +221,7 @@
       <tbody>
         {{#each armaduras}}
         <tr  data-item-id="{{id}}">
+          <td class="aon-toggle"><input type="checkbox" class="toggle-item" data-item-id="{{id}}" data-campo="system.equipado" title="Equipada (conta para RD e penalidades)" {{checked equipado}}></td>
           <td class="mostrar-armadura" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
           <td title="{{tipo}}">{{tipo}}</td>
           <td>{{rd}}</td>
@@ -275,6 +311,8 @@
     <table class="armadura-tabela">
       <thead>
         <tr>
+          <th title="Ativo">At.</th>
+          <th title="Rodadas restantes">⏳</th>
           <th>Nome</th>
           <th >Tipo</th>
           <th >Efeito</th>
@@ -286,6 +324,8 @@
       <tbody>
         {{#each drogas}}
         <tr  data-item-id="{{id}}">
+           <td class="aon-toggle"><input type="checkbox" class="toggle-item" data-item-id="{{id}}" data-campo="system.ativo" title="Ativo (aplica os modificadores)" {{checked ativo}}></td>
+           <td class="aon-restante" title="Rodadas restantes">{{#if ativo}}{{#if duracao}}{{restante}}{{/if}}{{/if}}</td>
            <td class="mostrar-drogas" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
            <td>{{tipo}}</td>
            <td>{{efeito}}</td>
@@ -498,6 +538,8 @@
       <table class="armadura-tabela">
         <thead>
           <tr>
+            <th title="Ativo">At.</th>
+            <th title="Rodadas restantes">⏳</th>
             <th>Nome</th>
             <th >Efeito</th>
             <th >Colateral</th>
@@ -509,6 +551,8 @@
         <tbody>
           {{#each elixires}}
           <tr  data-item-id="{{id}}">
+           <td class="aon-toggle"><input type="checkbox" class="toggle-item" data-item-id="{{id}}" data-campo="system.ativo" title="Ativo (aplica os modificadores)" {{checked ativo}}></td>
+           <td class="aon-restante" title="Rodadas restantes">{{#if ativo}}{{#if duracao}}{{restante}}{{/if}}{{/if}}</td>
             <td class="mostrar-elixir" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
             <td>{{efeito}}</td>
             <td>{{colateral}}</td>
@@ -558,6 +602,8 @@
       <table class="armadura-tabela">
         <thead>
           <tr>
+            <th title="Ativo">At.</th>
+            <th title="Rodadas restantes">⏳</th>
             <th>Nome</th>
             <th >Efeito</th>
             <th >Colateral</th>
@@ -569,6 +615,8 @@
         <tbody>
           {{#each injecoes}}
           <tr  data-item-id="{{id}}">
+           <td class="aon-toggle"><input type="checkbox" class="toggle-item" data-item-id="{{id}}" data-campo="system.ativo" title="Ativo (aplica os modificadores)" {{checked ativo}}></td>
+           <td class="aon-restante" title="Rodadas restantes">{{#if ativo}}{{#if duracao}}{{restante}}{{/if}}{{/if}}</td>
             <td class="mostrar-injecao" data-item-id="{{id}}" title="{{nome}}">{{nome}}</td>
             <td>{{efeito}}</td>
             <td>{{colateral}}</td>

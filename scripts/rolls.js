@@ -19,14 +19,19 @@ export async function rolarPericia(actor, periciaKey) {
     if (!atributoEscolhido) return;
   }
 
-  const atributoValor = Number(actor.system.atributos[atributoEscolhido] ?? 0);
+  // Valores efetivos (com modificadores de itens) calculados em actor-model.js
+  const sys = actor.system;
+  const atributoValor = Number(sys.atributosTotais?.[atributoEscolhido] ?? sys.atributos[atributoEscolhido] ?? 0);
   const valorPericia = Number(periciaData.valor ?? 0);
-  const bonusPericia = Number(periciaData.bonus ?? 0);
+  const bonusPericia = Number(periciaData.bonus ?? 0) + Number(sys.periciasItens?.[periciaKey] ?? 0);
   const base = Number(periciaCfg.base ?? 0);
   const grupopen = (periciaCfg.penalidade ?? '');
-  const pen = Number(actor.system.penalidades[grupopen] ?? 0);
-  
-  const alvo = atributoValor + valorPericia + bonusPericia + base - pen;
+  const pen = Number(sys.penalidadesTotais?.[grupopen] ?? sys.penalidades[grupopen] ?? 0);
+
+  let alvo = atributoValor + valorPericia + bonusPericia + base - pen;
+  // Dreno de Essência ≤20%: Perícias Sociais pela metade
+  const metade = sys.metadeSociais && grupopen === "pensociais";
+  if (metade) alvo = Math.floor(alvo / 2);
 
   const roll = await new Roll("1d100").roll({ async: true });
   const resultado = roll.total;
@@ -41,7 +46,7 @@ export async function rolarPericia(actor, periciaKey) {
     flavor: `
       <b>${periciaCfg.label}</b><br>
       ${atributoEscolhido.toUpperCase()} + Perícia(Base + Bonus) - penalidade:<br>
-      ${atributoValor} + (${valorPericia} + ${bonusPericia}) - ${pen}) = <b>${alvo}</b><br><br>
+      ${atributoValor} + (${valorPericia} + ${bonusPericia}) - ${pen}) = <b>${alvo}</b>${metade ? " (½ Dreno de Essência)" : ""}<br><br>
       <b>${grau}</b>
     `
   });
@@ -56,7 +61,7 @@ export async function rolarPericia(actor, periciaKey) {
  * ========================= */
 export async function rolarAtributo(actor, atributoKey) {
 
-  const valor = Number(actor.system.atributos[atributoKey] ?? 0);
+  const valor = Number(actor.system.atributosTotais?.[atributoKey] ?? actor.system.atributos[atributoKey] ?? 0);
   const roll = await new Roll("1d100").roll({ async: true });
   const resultado = roll.total;
   
@@ -190,6 +195,19 @@ export function status(saudeAtual) {
   if (saudeAtual > 2)  return ['À Beira do Colapso', 15];
   if (saudeAtual > 0)  return ['Incapacitado',       20];
   return                      ['Morto',             100];
+}
+
+/* =========================
+ * ESTADO MENTAL (SANIDADE)
+ * Retorna [estado, efeito] conforme a tabela de Estados Mentais do manual
+ * ========================= */
+export function statusSanidade(sanidade) {
+  if (sanidade > 80) return ['Mente Sã',       'Nenhuma penalidade.'];
+  if (sanidade > 60) return ['Mente Abalada',  '−10% em perícias Mentais.'];
+  if (sanidade > 40) return ['Mente Fraturada','−20% em perícias Mentais; −10% em perícias Sociais. Ilusões inofensivas.'];
+  if (sanidade > 20) return ['Colapso Mental', '−50% em perícias Mentais; −30% em perícias Sociais. Feitiços exigem teste de Resistência Mental. Ilusões significativas e pequenos rompantes.'];
+  if (sanidade > 0)  return ['Ruína Mental',   '−60% em perícias Mentais; −40% em perícias Sociais. Falhas em testes Mentais podem impor comportamento compulsivo. Ilusões agressivas causam terror ou fúria.'];
+  return                    ['Mente Vazia',    'Incapacitado mentalmente: não conjura feitiços, não realiza testes Mentais ou Sociais. Morto por dentro.'];
 }
 
 function escolherAtributo(lista) {

@@ -260,3 +260,61 @@ button.rolar-pericia {
     column-count: 1;
   }
 }
+
+/* =========================
+ * MODIFICADORES DE ITENS
+ * ========================= */
+.aon-recursos-extra { margin-top: 4px; }
+.aon-derivado {
+  background: #2a2a2a;
+  color: #c2bb99;
+  cursor: default;
+}
+.aon-essencia { display: flex; align-items: center; gap: 4px; }
+.aon-essencia input { flex: 1; min-width: 0; }
+.aon-max { white-space: nowrap; color: #c2bb99; }
+.aon-total {
+  font-size: 11px;
+  font-weight: bold;
+  color: #e0b050;
+  white-space: nowrap;
+}
+.aon-modificadores-ativos {
+  margin: 8px 0;
+  padding: 6px 10px;
+  background: #1f1f1f;
+  border: 1px solid #7a5c2e;
+  color: #e0d8b0;
+}
+.aon-modificadores-ativos h4 { margin: 0 0 4px; border: none; }
+.aon-modificadores-ativos ul { margin: 0; padding-left: 18px; }
+.aon-aviso { color: #e07050; }
+.aon-toggle, .aon-restante { width: 28px; text-align: center; }
+
+/* Ficha de item */
+.aon-mods {
+  margin-top: 10px;
+  border: 1px solid #7a5c2e;
+  padding: 6px 8px;
+}
+.aon-mods legend { padding: 0 4px; font-weight: bold; }
+.aon-mods label { display: flex; flex-direction: column; font-size: 12px; }
+.aon-mods-atributos {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 6px;
+}
+.aon-mods-linha {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  margin-bottom: 6px;
+}
+.aon-mods-linha label { flex: 1; }
+.aon-mods-pericias {
+  display: grid;
+  grid-template-columns: 1fr 60px;
+  gap: 4px 8px;
+  margin-bottom: 6px;
+}
