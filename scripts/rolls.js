@@ -198,6 +198,27 @@ export function status(saudeAtual) {
 }
 
 /* =========================
+ * ANIMAÇÕES (módulo Automated Animations, opcional)
+ * Toca a animação configurada para o item no menu de Reconhecimento
+ * Automático do Automated Animations (pelo nome do item).
+ * Sem o módulo ativo, não faz nada.
+ * ========================= */
+export function tocarAnimacao(actor, item, { noProprio = false } = {}) {
+  const aa = globalThis.AutomatedAnimations;
+  if (!game.modules.get("autoanimations")?.active || typeof aa?.playAnimation !== "function") return;
+
+  const token = actor?.getActiveTokens?.()[0] ?? canvas.tokens.controlled[0];
+  if (!token) return;
+
+  const alvos = noProprio ? [token] : [...game.user.targets];
+  try {
+    aa.playAnimation(token, item, { targets: alvos, hitTargets: alvos });
+  } catch (err) {
+    console.warn("A Nova Ordem | Falha ao tocar animação:", err);
+  }
+}
+
+/* =========================
  * ESTADO MENTAL (SANIDADE)
  * Retorna [estado, efeito] conforme a tabela de Estados Mentais do manual
  * ========================= */

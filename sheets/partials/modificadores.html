@@ -6,7 +6,7 @@
   {{#if consumivel}}
   <div class="aon-mods-linha">
     <label><input type="checkbox" name="system.ativo" {{checked system.ativo}}> Ativo</label>
-    <label title="0 = sem duração (desligar manualmente)">Duração (rodadas)
+    <label title="0 = sem duração (desligar manualmente)">Duração (turnos)
       <input type="number" name="system.duracao" value="{{system.duracao}}" min="0">
     </label>
     {{#if system.ativo}}{{#if system.duracao}}<span>Restam {{system.restante}}</span>{{/if}}{{/if}}

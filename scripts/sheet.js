@@ -345,6 +345,10 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
       const item = this.actor.items.get(input.dataset.itemId);
       if (!item) return;
       item.update({ [input.dataset.campo]: input.checked });
+      // Consumível ativado: animação no próprio personagem
+      if (input.dataset.campo === "system.ativo" && input.checked) {
+        window.tocarAnimacao(this.actor, item, { noProprio: true });
+      }
     });
 
     html.find(".rolar-atributo").on("click", ev => {
@@ -401,6 +405,7 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
         atributoValor: resultado.atributoValor,
         textoOriginal: danoTexto
       });
+      window.tocarAnimacao(this.actor, item);
     });
     function prepararDano(texto, actor) {
       if (!texto) return null;
@@ -450,6 +455,7 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
         actor: this.actor,
         alquimico: al
       });
+      window.tocarAnimacao(this.actor, item);
     });
     //REMOVER ITEMS EM GERAL ************************************
     html.find(".remover-alquimico").on("click", ev => {
