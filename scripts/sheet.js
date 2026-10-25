@@ -373,8 +373,9 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
       // Divide pelo "/"
       const [partePrincipal] = texto.split("/");
 
-      /// 1️⃣ Sempre tenta pegar XdY
-      const formulaMatch = partePrincipal.match(/(\d+d\d+)/i);
+      /// 1️⃣ Sempre tenta pegar XdY (ou um número fixo, ex: "0")
+      const formulaMatch = partePrincipal.match(/(\d+d\d+)/i)
+        ?? partePrincipal.match(/^\s*(\d+)\s*$/);
       if (!formulaMatch) return null;
 
       const formulaBase = formulaMatch[1]; // ex: 2d6 ou 4d6
@@ -383,7 +384,7 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
       const atributoMatch = partePrincipal.match(/\+\s*(\w+)/i);
 
       let atributoKey = "";
-      let atributoValor = "";
+      let atributoValor = 0;
 
       if (atributoMatch) {
         atributoKey = atributoMatch[1].toLowerCase();
