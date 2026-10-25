@@ -1,12 +1,12 @@
 {
   "id": "a-nova-ordem",
   "title": "A Nova Ordem",
-  "description": "Sistema dieselpunk 1975 criado por Alê Gomes e programado por NeaN Word",
+  "description": "Sistema dieselpunk 1975 criado por Alê Gomes e programado por NeaN World",
   "version": "0.3.1",
 
   "authors": [
     { "name": "Alê Gomes", "role": "Criador do Sistema" },
-    { "name": "NeaN Word", "role": "Programador" }
+    { "name": "NeaN World", "role": "Programador" }
   ],
 
   "esmodules": [

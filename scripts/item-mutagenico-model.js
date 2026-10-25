@@ -5,7 +5,7 @@ export class AONovaOrdemMutagenicoModel extends foundry.abstract.DataModel {
 
     return {
 
-      nome: new f.StringField({ initial: "Nenhuma" }),
+      name: new f.StringField({ initial: "Nenhuma" }),
 
       efeito: new f.StringField({ initial: "" }),
 

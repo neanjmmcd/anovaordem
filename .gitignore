@@ -19,3 +19,7 @@ package-lock.json
 # Arquivos temporários
 *.tmp
 *.bak
+
+# Manual editável (Word) — usado só para gerar o PDF
+*.docx
+~$*
