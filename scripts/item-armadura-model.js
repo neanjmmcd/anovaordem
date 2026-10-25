@@ -4,6 +4,7 @@ export class AONovaOrdemArmaduraModel extends foundry.abstract.DataModel {
     const f = foundry.data.fields;
 
     return {
+      equipado: new f.BooleanField({ initial: true }),
 
       tipo: new f.StringField({ initial: "Nenhuma" }),
 

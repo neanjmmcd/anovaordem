@@ -1,0 +1,54 @@
+<!-- MODIFICADORES: alteram a ficha do personagem enquanto o item estiver nela
+     (consumíveis só quando marcados como ativos) -->
+<fieldset class="aon-mods">
+  <legend>Modificadores na ficha</legend>
+
+  {{#if consumivel}}
+  <div class="aon-mods-linha">
+    <label><input type="checkbox" name="system.ativo" {{checked system.ativo}}> Ativo</label>
+    <label title="0 = sem duração (desligar manualmente)">Duração (rodadas)
+      <input type="number" name="system.duracao" value="{{system.duracao}}" min="0">
+    </label>
+    {{#if system.ativo}}{{#if system.duracao}}<span>Restam {{system.restante}}</span>{{/if}}{{/if}}
+  </div>
+  {{/if}}
+
+  <div class="aon-mods-atributos">
+    <label>FOR <input type="number" name="system.modificadores.for" value="{{system.modificadores.for}}"></label>
+    <label>DES <input type="number" name="system.modificadores.des" value="{{system.modificadores.des}}"></label>
+    <label>CON <input type="number" name="system.modificadores.con" value="{{system.modificadores.con}}"></label>
+    <label>INT <input type="number" name="system.modificadores.int" value="{{system.modificadores.int}}"></label>
+    <label>SAB <input type="number" name="system.modificadores.sab" value="{{system.modificadores.sab}}"></label>
+    <label>PSI <input type="number" name="system.modificadores.psi" value="{{system.modificadores.psi}}"></label>
+    <label>CAR <input type="number" name="system.modificadores.car" value="{{system.modificadores.car}}"></label>
+  </div>
+
+  <div class="aon-mods-linha">
+    <label>RD <input type="number" name="system.modificadores.rd" value="{{system.modificadores.rd}}"></label>
+    <label>Deslocamento (m) <input type="number" name="system.modificadores.deslocamento" value="{{system.modificadores.deslocamento}}"></label>
+    <label>Carga (un.) <input type="number" name="system.modificadores.carga" value="{{system.modificadores.carga}}"></label>
+  </div>
+
+  <div class="aon-mods-pericias">
+    <label>Perícia
+      <select name="system.modificadores.pericia1">{{selectOptions config.periciaOptions selected=system.modificadores.pericia1 blank="—"}}</select>
+    </label>
+    <label>% <input type="number" name="system.modificadores.valor1" value="{{system.modificadores.valor1}}"></label>
+    <label>Perícia
+      <select name="system.modificadores.pericia2">{{selectOptions config.periciaOptions selected=system.modificadores.pericia2 blank="—"}}</select>
+    </label>
+    <label>% <input type="number" name="system.modificadores.valor2" value="{{system.modificadores.valor2}}"></label>
+    <label>Perícia
+      <select name="system.modificadores.pericia3">{{selectOptions config.periciaOptions selected=system.modificadores.pericia3 blank="—"}}</select>
+    </label>
+    <label>% <input type="number" name="system.modificadores.valor3" value="{{system.modificadores.valor3}}"></label>
+  </div>
+
+  <div class="aon-mods-linha">
+    <label title="Penalidade aplicada a um grupo de perícias (valor positivo = penalidade)">Penalidade em
+      <select name="system.modificadores.penGrupo">{{selectOptions config.penGrupoOptions selected=system.modificadores.penGrupo blank="—"}}</select>
+    </label>
+    <label>% <input type="number" name="system.modificadores.penValor" value="{{system.modificadores.penValor}}"></label>
+    <label><input type="checkbox" name="system.modificadores.anulaPenalidades" {{checked system.modificadores.anulaPenalidades}}> Anula penalidades</label>
+  </div>
+</fieldset>

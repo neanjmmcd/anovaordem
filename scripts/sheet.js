@@ -1,4 +1,13 @@
 
+/* Estado de ativação dos consumíveis (elixires, injeções, drogas) */
+function estadoConsumivel(i) {
+  return {
+    ativo: !!i.system.ativo,
+    duracao: Number(i.system.duracao ?? 0),
+    restante: Number(i.system.restante ?? 0)
+  };
+}
+
 export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
 
   static get defaultOptions() {
@@ -18,13 +27,16 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
 
     function montarPericia(key, config, system) {
       const data = system.pericias?.[key] ?? { valor: 0, bonus: 0 };
-      
+      const bonusItens = Number(system.periciasItens?.[key] ?? 0);
+
       return {
         key,
         label: config.label,
         base: Number(config.base ?? 0),
         valor: Number(data.valor ?? 0),
         bonus: Number(data.bonus ?? 0),
+        bonusItens,
+        bonusItensTexto: bonusItens > 0 ? `+${bonusItens}` : `${bonusItens}`,
         total:
           Number(config.base ?? 0) +
           Number(data.valor ?? 0) +
@@ -34,19 +46,29 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
 
     /* ATRIBUTOS */
     context.atributos = Object.entries(system.atributos).map(
-      ([key, valor]) => ({
-        key,
-        valor,
-        label: CONFIG.AONOVAORDEM.atributos[key]?.label ?? key.toUpperCase()
-      })
+      ([key, valor]) => {
+        const total = system.atributosTotais?.[key] ?? valor;
+        return {
+          key,
+          valor,
+          total,
+          modificado: total !== valor,
+          label: CONFIG.AONOVAORDEM.atributos[key]?.label ?? key.toUpperCase()
+        };
+      }
     );
     /* PPENALIDADES */
     context.penalidades = Object.entries(system.penalidades).map(
-      ([key, valor]) => ({
-        key,
-        valor,
-        label: CONFIG.AONOVAORDEM.penalidades[key]?.label ?? key
-      })
+      ([key, valor]) => {
+        const total = system.penalidadesTotais?.[key] ?? valor;
+        return {
+          key,
+          valor,
+          total,
+          modificado: total !== valor,
+          label: CONFIG.AONOVAORDEM.penalidades[key]?.label ?? key
+        };
+      }
     );
     
     
@@ -80,7 +102,8 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
         tipo: i.system.tipo,
         rd: i.system.rd,
         peso: i.system.peso,
-        penalidades: i.system.penalidades
+        penalidades: i.system.penalidades,
+        equipado: i.system.equipado !== false
       }));
 
     context.system = system;
@@ -136,7 +159,8 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
         nome: i.name,
         tipo: i.system.tipo,
         efeito: i.system.efeito,
-        colateral: i.system.colateral
+        colateral: i.system.colateral,
+        ...estadoConsumivel(i)
       }));
 
     context.system = system;
@@ -268,7 +292,8 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
         efeito: i.system.efeito,
         colateral: i.system.colateral,
         conceito: i.system.conceito,
-        preco: i.system.preco
+        preco: i.system.preco,
+        ...estadoConsumivel(i)
       }));
 
     context.system = system;
@@ -282,7 +307,8 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
         efeito: i.system.efeito,
         colateral: i.system.colateral,
         conceito: i.system.conceito,
-        preco: i.system.preco
+        preco: i.system.preco,
+        ...estadoConsumivel(i)
       }));
 
     context.system = system;
@@ -311,6 +337,15 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
 
   activateListeners(html) {
     super.activateListeners(html);
+
+    // Liga/desliga armadura equipada e consumíveis ativos
+    html.find(".toggle-item").on("change", ev => {
+      ev.stopPropagation();
+      const input = ev.currentTarget;
+      const item = this.actor.items.get(input.dataset.itemId);
+      if (!item) return;
+      item.update({ [input.dataset.campo]: input.checked });
+    });
 
     html.find(".rolar-atributo").on("click", ev => {
       const atributo = ev.currentTarget.dataset.atributo;
@@ -388,7 +423,7 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
 
       if (atributoMatch) {
         atributoKey = atributoMatch[1].toLowerCase();
-        atributoValor = Number(actor.system.atributos[atributoKey] ?? 0);
+        atributoValor = Number(actor.system.atributosTotais?.[atributoKey] ?? actor.system.atributos[atributoKey] ?? 0);
       }
 
       return {

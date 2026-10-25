@@ -1,9 +1,12 @@
+import { camposModificadores } from "./modificadores.js";
+
 export class AONovaOrdemItemsModel extends foundry.abstract.DataModel {
 
   static defineSchema() {
     const f = foundry.data.fields;
 
     return {
+      modificadores: camposModificadores(),
 
       tipo: new f.StringField({ initial: "Nenhuma" }),
 

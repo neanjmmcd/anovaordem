@@ -101,6 +101,24 @@ Distribuídas em 7 categorias com **250 pontos base** para alocação:
 | Elixires / Mutagênicos | Compostos de transformação |
 | Items | Itens gerais de equipamento |
 
+### Itens que alteram a ficha
+
+Os valores abaixo são **calculados automaticamente** a partir dos itens na ficha — ao remover o item, a ficha volta ao normal:
+
+| Valor | Cálculo |
+|-------|---------|
+| **RD** | CON + armaduras **equipadas** + bônus de RD de itens (ex.: Placas Subdérmicas) |
+| **Peso/Unit** | Soma do peso de todos os itens |
+| **Essência máxima** | PSI × 2, reduzida pelo dreno (%) dos implantes |
+| **Deslocamento** | 7m + armadura + estado de Saúde + itens (ex.: Pernas de Pistão) |
+| **Atributos / Perícias** | Valor da ficha + modificadores de implantes, mutagênicos e consumíveis ativos |
+| **Penalidades** | Saúde + armadura (testes físicos) + Estado Mental (Mentais/Sociais) + itens |
+
+- **Armaduras:** só contam quando marcadas como *Equipada*. Armaduras da mesma categoria somam RD com penalidade proporcional (2 Leves = Média); categorias diferentes acumulam e dobram as penalidades.
+- **Consumíveis** (elixires, injeções, drogas): só valem quando marcados como *Ativo*. Com duração definida, se desligam sozinhos ao fim das rodadas de combate.
+- **Dreno de Essência:** em 30% ou menos, Resistência Mental −20%; em 20% ou menos, CAR e Perícias Sociais pela metade.
+- Os modificadores de cada item são editados na própria ficha do item, em *Modificadores na ficha*. O mestre ainda pode usar os campos de *Ajuste* para RD, Essência e Deslocamento.
+
 ---
 
 ## Como Instalar no FoundryVTT

@@ -2,7 +2,7 @@ import { AONovaOrdemActorSheet } from "./sheet.js";
 import { AONovaOrdemPersonagemModel } from "./actor-model.js";
 import { AONOVAORDEM } from "./config.js";
 import * as Rolls from "./rolls.js";
-import { status } from "./rolls.js";
+import { status, statusSanidade } from "./rolls.js";
 import { AONovaOrdemArmaduraModel } from "./item-armadura-model.js";
 import { AONovaOrdemArmaduraSheet } from "./item-armadura-sheet.js";
 import { AONovaOrdemItemsModel } from "./item-items-model.js";
@@ -74,11 +74,11 @@ Hooks.once("init", () => {
     mecha: AONovaOrdemMechaModel,
     veiculo: AONovaOrdemVeiculoModel,
     alquimia: AONovaOrdemAlquimiaModel,
-    acido: AONovaOrdemAcidoModel,
-    veneno: AONovaOrdemVenenoModel,
-    injecao: AONovaOrdemInjecaoModel,
-    elixir: AONovaOrdemElixirModel,
-    mutagenico: AONovaOrdemMutagenicoModel
+    acidos: AONovaOrdemAcidoModel,
+    venenos: AONovaOrdemVenenoModel,
+    injecoes: AONovaOrdemInjecaoModel,
+    elixires: AONovaOrdemElixirModel,
+    mutagenicos: AONovaOrdemMutagenicoModel
   };
 
   Items.unregisterSheet("core", ItemSheet);
@@ -147,72 +147,102 @@ Hooks.once("init", () => {
     makeDefault: true
   });
   
+  // Partial compartilhado dos modificadores nas fichas de item
+  const carregar = foundry.applications?.handlebars?.loadTemplates ?? loadTemplates;
+  carregar({ "aon-modificadores": "systems/a-nova-ordem/sheets/partials/modificadores.html" });
+
   console.log("A Nova Ordem | Sistema inicializado");
 });
 
 
-Hooks.on("createItem", async (item, options, userId) => {
-
-  console.log("HOOK createItem disparou:", item.name, item.type);
-  if (!item.parent) return;              // não está em um actor
-  if (item.type == "armadura"){
-    const actor = item.parent;
-    const armadura = item.system;
-    // console.log(actor.system.rd,armadura.rd,actor.system.atributos.con)
-    await actor.update({
-      "system.rd": actor.system.atributos.con + armadura.rd,
-      "system.pesoUnit": actor.system.pesoUnit + armadura.peso
-    });
+/* =========================
+ * DURAÇÃO DOS CONSUMÍVEIS
+ * RD, peso, essência e atributos agora são calculados no modelo do
+ * personagem (actor-model.js) — não é mais preciso somar/subtrair aqui.
+ * A cada nova rodada de combate, consumíveis ativos com duração
+ * perdem 1 rodada e se desligam ao chegar a 0.
+ * ========================= */
+/* =========================
+ * SANIDADE NO CHAT
+ * Toda alteração de Sanidade anuncia o estado mental atual,
+ * sem revelar o valor. Só o usuário que fez a alteração envia.
+ * ========================= */
+Hooks.on("preUpdateActor", (actor, changes, options) => {
+  if (foundry.utils.hasProperty(changes, "system.sanidade")) {
+    options.aonSanidadeAnterior = Number(actor.system.sanidade ?? 0);
   }
-  if (item.type == "items"){
-    const actor = item.parent;
-    const items = item.system;
-    await actor.update({
-      "system.pesoUnit": actor.system.pesoUnit + (items.peso ?? 0)
-    });
-  }
-  if (item.type == "arma"){
-    const actor = item.parent;
-    const arma = item.system;
-    await actor.update({
-      "system.pesoUnit": actor.system.pesoUnit + (arma.peso ?? 0)
-    });
-  }
-  
-  return;
-  
 });
 
-Hooks.on("deleteItem", async (item, options, userId) => {
-  console.log("HOOK deleteItem disparou:", item.name, item.type);
-  if (!item.parent) return;
-  if (item.type == "armadura"){
-    const actor = item.parent;
-    const armadura = item.system;
-    // console.log(actor.system.rd,armadura.rd,actor.system.atributos.con)
-    await actor.update({
-      "system.rd": Math.max(0, (actor.system.rd - armadura.rd)),
-      "system.pesoUnit": actor.system.pesoUnit - armadura.peso
-    });
-  }
-  if (item.type == "items"){
-    const actor = item.parent;
-    const items = item.system;
-    await actor.update({
-      "system.pesoUnit": Math.max(0, actor.system.pesoUnit - (items.peso ?? 0))
-    });
-  }
-  if (item.type == "arma"){
-    const actor = item.parent;
-    const arma = item.system;
-    await actor.update({
-      "system.pesoUnit": Math.max(0, actor.system.pesoUnit - (arma.peso ?? 0))
-    });
-  }
-  return;
+Hooks.on("updateActor", (actor, changes, options, userId) => {
+  if (userId !== game.user.id) return;
+  if (!foundry.utils.hasProperty(changes, "system.sanidade")) return;
 
-  
+  const nova = Number(actor.system.sanidade ?? 0);
+  const anterior = options.aonSanidadeAnterior;
+  if (anterior === nova) return;
+
+  const [estado, efeito] = statusSanidade(nova);
+  const perdeu = anterior === undefined || nova < anterior;
+  const cor = perdeu ? "#8a2be2" : "#4682b4";
+
+  ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    flavor: `
+      <div class="chat-card">
+        <div style="align-items:center;">
+          <img src="${actor.img}" width="40" height="40" style="border:0; border-radius:4px;margin: 10px 0 10px 40%"></img>
+          <div style="background-color:#363636; border-radius:10px;color:#e0d8b0">
+            A mente de <b>${actor.name}</b> ${perdeu ? "foi abalada." : "se estabilizou."}
+          </div>
+        </div>
+        <hr style="background-color:${cor}">
+        <b>Estado Mental:</b> ${estado}<br>
+        <i>${efeito}</i>
+      </div>
+    `
+  });
 });
+
+// Ao ativar um consumível, reinicia a contagem de rodadas
+Hooks.on("preUpdateItem", (item, changes) => {
+  const ativo = foundry.utils.getProperty(changes, "system.ativo");
+  if (ativo === true && !item.system.ativo) {
+    foundry.utils.setProperty(changes, "system.restante", Number(item.system.duracao ?? 0));
+  }
+});
+
+Hooks.on("updateCombat", async (combat, changed, options) => {
+  if (!game.user.isGM) return;
+  // Rodada 1 = início do combate: não consome duração
+  if (!("round" in changed) || changed.round <= 1 || (options?.direction ?? 1) < 0) return;
+
+  for (const combatant of combat.combatants) {
+    const actor = combatant.actor;
+    if (!actor) continue;
+
+    const updates = [];
+    const encerrados = [];
+    for (const item of actor.items) {
+      const s = item.system;
+      if (!s?.ativo || !(s.duracao > 0)) continue;
+      const restante = Math.max(0, Number(s.restante ?? 0) - 1);
+      if (restante === 0) {
+        updates.push({ _id: item.id, "system.ativo": false, "system.restante": 0 });
+        encerrados.push(item.name);
+      } else {
+        updates.push({ _id: item.id, "system.restante": restante });
+      }
+    }
+    if (updates.length) await actor.updateEmbeddedDocuments("Item", updates);
+    if (encerrados.length) {
+      ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: `<b>Efeito encerrado:</b> ${encerrados.join(", ")}`
+      });
+    }
+  }
+});
+
 Hooks.on("renderChatMessage", (message, html, data) => {
 
   html.find(".aplicar-dano").on("click", async ev => {
