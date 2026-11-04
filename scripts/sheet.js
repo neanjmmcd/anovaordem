@@ -1,6 +1,6 @@
 import { AONovaOrdemCatalogo } from "./catalogo.js";
 import { AONovaOrdemCriador } from "./criador.js";
-import { atacar } from "./combate.js";
+import { atacar, conjurar } from "./combate.js";
 
 
 /* Estado de ativação dos consumíveis (elixires, injeções, drogas) */
@@ -360,14 +360,14 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
     });
 
     // Liga/desliga armadura equipada e consumíveis ativos
-    html.find(".toggle-item").on("change", ev => {
+    html.find(".toggle-item").on("change", async ev => {
       ev.stopPropagation();
       const input = ev.currentTarget;
       const item = this.actor.items.get(input.dataset.itemId);
       if (!item) return;
-      item.update({ [input.dataset.campo]: input.checked });
-      // Consumível ativado: animação no próprio personagem
-      if (input.dataset.campo === "system.ativo" && input.checked) {
+      await item.update({ [input.dataset.campo]: input.checked });
+      // Consumível ativado: animação no próprio personagem (não toca se acabou o estoque)
+      if (input.dataset.campo === "system.ativo" && input.checked && item.system.ativo) {
         window.tocarAnimacao(this.actor, item, { noProprio: true });
       }
     });
@@ -398,26 +398,22 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
       await atacar(this.actor, item);
       window.tocarAnimacao(this.actor, item);
     });
-    html.find(".rolar-alquimico").on("click", ev => {
+    // Técnica alquímica: mesmo fluxo do ataque, com a perícia Pedras de Energia
+    html.find(".rolar-alquimico").on("click", async ev => {
       ev.preventDefault();
-
-      const tr = ev.currentTarget.closest("tr");
-      if (!tr) return;
-
-      const itemId = tr.dataset.itemId;
-      if (!itemId) return;
-
-      const item = this.actor.items.get(itemId);
+      const item = this.actor.items.get(ev.currentTarget.closest("tr")?.dataset.itemId);
       if (!item) return;
-
-      const al = item.system;
-
-      window.rolarAlquimico({
-        actor: this.actor,
-        alquimico: al,
-        img: item.img
-      });
+      await atacar(this.actor, item);
       window.tocarAnimacao(this.actor, item);
+    });
+
+    // Feitiços e rituais (o ritual toca a animação em quem conjura)
+    html.find(".aon-conjurar, .rolar-magias").on("click", async ev => {
+      ev.preventDefault();
+      const item = this.actor.items.get(ev.currentTarget.closest("tr")?.dataset.itemId);
+      if (!item) return;
+      await conjurar(this.actor, item);
+      window.tocarAnimacao(this.actor, item, { noProprio: item.type === "rituais" });
     });
     //REMOVER ITEMS EM GERAL ************************************
     html.find(".remover-alquimico").on("click", ev => {

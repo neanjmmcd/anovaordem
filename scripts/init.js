@@ -37,7 +37,7 @@ import { AONovaOrdemMutagenicoModel } from "./item-mutagenico-model.js";
 import { AONovaOrdemMutagenicoSheet } from "./item-mutagenico-sheet.js";
 import { AONovaOrdemCatalogo } from "./catalogo.js";
 import { AONovaOrdemCriador } from "./criador.js";
-import { registrarCombate, pedir, atacar } from "./combate.js";
+import { registrarCombate, pedir, atacar, conjurar, config } from "./combate.js";
 import { AONovaOrdemNpcModel } from "./npc-model.js";
 import { AONovaOrdemNpcSheet } from "./npc-sheet.js";
 import { AONovaOrdemPainelMestre } from "./painel-mestre.js";
@@ -74,7 +74,7 @@ Hooks.once("init", () => {
   window.rolarDano = Rolls.rolarDano;
   window.rolarAlquimico = Rolls.rolarAlquimico;
   window.tocarAnimacao = Rolls.tocarAnimacao;
-  game.aonovaordem = { catalogo: AONovaOrdemCatalogo, criador: AONovaOrdemCriador, atacar, painel: AONovaOrdemPainelMestre };
+  game.aonovaordem = { catalogo: AONovaOrdemCatalogo, criador: AONovaOrdemCriador, atacar, conjurar, painel: AONovaOrdemPainelMestre };
   
   //Carregaar armaduras e items
   CONFIG.Item.dataModels = {
@@ -283,6 +283,17 @@ Hooks.on("updateActor", (actor, changes, options, userId) => {
 Hooks.on("preUpdateItem", (item, changes) => {
   const ativo = foundry.utils.getProperty(changes, "system.ativo");
   if (ativo === true && !item.system.ativo) {
+    // Tomar um consumível gasta uma unidade
+    const cfg = config();
+    if (item.parent?.documentName === "Actor" && cfg.ativo && cfg.consumirItens) {
+      const qtd = Number(item.system.quantidade ?? 1);
+      if (qtd < 1) {
+        ui.notifications.warn(`${item.parent.name} não tem mais ${item.name}.`);
+        item.parent.sheet?.render(false);
+        return false;
+      }
+      foundry.utils.setProperty(changes, "system.quantidade", qtd - 1);
+    }
     foundry.utils.setProperty(changes, "system.restante", Number(item.system.duracao ?? 0));
   }
 });
@@ -332,7 +343,7 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
       const actor = alvoDoBotao();
       if (!actor) return ui.notifications.warn("Selecione ou marque um token.");
       if (cura) pedir("cura", { uuid: actor.uuid, cura: valor });
-      else pedir("dano", { uuid: actor.uuid, dano: valor, bruto: true });
+      else pedir("dano", { uuid: actor.uuid, dano: valor, bruto: true, alquimico: !!botao.dataset.alquimico });
     });
   }
 });

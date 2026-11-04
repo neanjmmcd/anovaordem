@@ -2,46 +2,294 @@
   "id": "a-nova-ordem",
   "title": "A Nova Ordem",
   "description": "Sistema dieselpunk 1975 criado por Alê Gomes e programado por NeaN World",
-  "version": "0.6.0",
-
+  "version": "0.7.0",
   "authors": [
-    { "name": "Alê Gomes", "role": "Criador do Sistema" },
-    { "name": "NeaN World", "role": "Programador" }
+    {
+      "name": "Alê Gomes",
+      "role": "Criador do Sistema"
+    },
+    {
+      "name": "NeaN World",
+      "role": "Programador"
+    }
   ],
-
+  "url": "https://github.com/neanjmmcd/anovaordem",
+  "manifest": "https://raw.githubusercontent.com/neanjmmcd/anovaordem/main/system.json",
+  "download": "https://github.com/neanjmmcd/anovaordem/archive/refs/heads/main.zip",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13.351"
+  },
   "relationships": {
     "recommends": [
-      { "id": "item-piles", "type": "module", "reason": "Saque, baús e lojas usando ¢RD (integração nativa do sistema)", "compatibility": { "verified": "3.3.2" } },
-      { "id": "autoanimations", "type": "module", "reason": "Toca as animações próprias do sistema (instale pelo menu Animações do Sistema)", "compatibility": { "verified": "6.6.2" } },
-      { "id": "sequencer", "type": "module", "reason": "Necessário para o Automated Animations", "compatibility": { "verified": "3.6.11" } },
-      { "id": "socketlib", "type": "module", "reason": "Necessário para o Automated Animations" },
-      { "id": "JB2A_DnD5e", "type": "module", "reason": "Opcional: animações extras (o sistema já traz efeitos próprios)" },
-      { "id": "dice-so-nice", "type": "module", "reason": "Dados 3D nas rolagens (opcional)" }
+      {
+        "id": "item-piles",
+        "type": "module",
+        "reason": "Saque, baús e lojas usando ¢RD (integração nativa do sistema)",
+        "compatibility": {
+          "verified": "3.3.2"
+        }
+      },
+      {
+        "id": "autoanimations",
+        "type": "module",
+        "reason": "Toca as animações próprias do sistema (instale pelo menu Animações do Sistema)",
+        "compatibility": {
+          "verified": "6.6.2"
+        }
+      },
+      {
+        "id": "sequencer",
+        "type": "module",
+        "reason": "Necessário para o Automated Animations",
+        "compatibility": {
+          "verified": "3.6.11"
+        }
+      },
+      {
+        "id": "socketlib",
+        "type": "module",
+        "reason": "Necessário para o Automated Animations"
+      },
+      {
+        "id": "JB2A_DnD5e",
+        "type": "module",
+        "reason": "Opcional: animações extras (o sistema já traz efeitos próprios)"
+      },
+      {
+        "id": "dice-so-nice",
+        "type": "module",
+        "reason": "Dados 3D nas rolagens (opcional)"
+      }
     ]
   },
-
   "esmodules": [
     "scripts/init.js",
     "scripts/sheet.js",
     "scripts/rolls.js"
   ],
-
   "styles": [
     "styles/anovaordem.css"
   ],
-
   "packs": [
+    {
+      "name": "livro",
+      "label": "Manual do Sistema",
+      "path": "packs/livro",
+      "type": "JournalEntry",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "armas",
+      "label": "Armas",
+      "path": "packs/armas",
+      "type": "Item",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "armaduras",
+      "label": "Armaduras",
+      "path": "packs/armaduras",
+      "type": "Item",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "items",
+      "label": "Itens",
+      "path": "packs/items",
+      "type": "Item",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "implantes",
+      "label": "Implantes",
+      "path": "packs/implantes",
+      "type": "Item",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "mechas",
+      "label": "Mechas",
+      "path": "packs/mechas",
+      "type": "Item",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "veiculos",
+      "label": "Veículos",
+      "path": "packs/veiculos",
+      "type": "Item",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "alquimico",
+      "label": "Técnicas Alquímicas",
+      "path": "packs/alquimico",
+      "type": "Item",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "alquimia",
+      "label": "Alquimia",
+      "path": "packs/alquimia",
+      "type": "Item",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "acidos",
+      "label": "Ácidos",
+      "path": "packs/acidos",
+      "type": "Item",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "venenos",
+      "label": "Venenos",
+      "path": "packs/venenos",
+      "type": "Item",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "injecoes",
+      "label": "Injeções",
+      "path": "packs/injecoes",
+      "type": "Item",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "elixires",
+      "label": "Elixires",
+      "path": "packs/elixires",
+      "type": "Item",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "mutagenicos",
+      "label": "Mutagênicos",
+      "path": "packs/mutagenicos",
+      "type": "Item",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "drogas",
+      "label": "Drogas",
+      "path": "packs/drogas",
+      "type": "Item",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "magias",
+      "label": "Magias",
+      "path": "packs/magias",
+      "type": "Item",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "rituais",
+      "label": "Rituais",
+      "path": "packs/rituais",
+      "type": "Item",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
     {
       "name": "bestiario",
       "label": "Bestiário (Mestre)",
       "path": "packs/bestiario",
       "type": "Actor",
       "system": "a-nova-ordem",
-      "ownership": { "PLAYER": "NONE", "TRUSTED": "NONE", "ASSISTANT": "OWNER" },
+      "ownership": {
+        "PLAYER": "NONE",
+        "TRUSTED": "NONE",
+        "ASSISTANT": "OWNER"
+      },
       "flags": {}
     }
   ],
-
   "languages": [
     {
       "lang": "pt-BR",
@@ -49,7 +297,6 @@
       "path": "lang/pt-BR.json"
     }
   ],
-
   "grid": {
     "distance": 1,
     "units": "m"
@@ -63,11 +310,8 @@
       "flags": {}
     }
   ],
-
   "initiative": "1d100",
-
   "socket": true,
-
   "documentTypes": {
     "Actor": {
       "personagem": {},
@@ -123,6 +367,64 @@
         "label": "Mutagênicos"
       }
     }
-  }
-
+  },
+  "packFolders": [
+    {
+      "name": "A Nova Ordem",
+      "sorting": "m",
+      "color": "#7a5c2e",
+      "packs": [
+        "livro"
+      ],
+      "folders": [
+        {
+          "name": "Equipamento",
+          "sorting": "m",
+          "packs": [
+            "armas",
+            "armaduras",
+            "items"
+          ]
+        },
+        {
+          "name": "Cibernética",
+          "sorting": "m",
+          "packs": [
+            "implantes",
+            "mechas",
+            "veiculos"
+          ]
+        },
+        {
+          "name": "Alquimia",
+          "sorting": "m",
+          "packs": [
+            "alquimico",
+            "alquimia",
+            "acidos",
+            "venenos",
+            "injecoes",
+            "elixires",
+            "mutagenicos",
+            "drogas"
+          ]
+        },
+        {
+          "name": "Ocultismo",
+          "sorting": "m",
+          "packs": [
+            "magias",
+            "rituais"
+          ]
+        },
+        {
+          "name": "Mestre",
+          "sorting": "m",
+          "packs": [
+            "bestiario"
+          ]
+        }
+      ]
+    }
+  ]
 }

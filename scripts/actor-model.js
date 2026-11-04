@@ -238,6 +238,7 @@ export class AONovaOrdemPersonagemModel extends foundry.abstract.TypeDataModel {
     );
 
     // RD = CON + armaduras equipadas + implantes + ajuste
+    this.rdArmadura = armadura.rd;
     this.rd = this.atributosTotais.con + armadura.rd + rdItens + Number(ajustes.rd ?? 0);
     this.rdDetalhe = `CON ${this.atributosTotais.con} + Armadura ${armadura.rd}`
       + (rdItens ? ` + Itens ${rdItens}` : "")

@@ -12,6 +12,7 @@ const SISTEMA = "a-nova-ordem";
 const VIDEO = nome => `systems/${SISTEMA}/assets/animacoes/${nome}.webm`;
 const SOM = nome => `systems/${SISTEMA}/assets/sons/${nome}.ogg`;
 const VERSAO_MENU = 5; // formato do menu no Automated Animations 6.x
+const VERSAO_ANIMACOES = "2"; // aumente ao mudar a tabela: o mestre recebe a atualização sozinho
 
 /* rótulos → efeito. menu "range" = projétil até o alvo; "ontoken" = efeito no alvo
  * (consumíveis tocam no próprio personagem, ver tocarAnimacao em rolls.js) */
@@ -39,6 +40,11 @@ const GRUPOS = [
     rotulos: ["Soco", "Chute", "Encontrão", "Bastão", "Marreta", "Martelo", "Soqueira", "Golpes", "Mordida", "Mandíbula",
               "Fauce", "Esmagamento", "Aríete", "Arremesso", "Escudo"] },
   { menu: "ontoken", video: "impacto", som: "raio", rotulos: ["Bastão Elétrico"] },
+  // Feitiços (no alvo) e rituais (em quem conjura); nome exato: "Visão" não pode pegar "Visão Térmica"
+  { menu: "ontoken", video: "magia", som: "magia", size: 2, exato: true,
+    rotulos: ["Ebulição", "Sussurros na Escuridão", "Compreensão", "Crise Existencial", "Ecos do Exterior", "Olhar Desalinhado",
+              "Visão", "Instinto de Presa", "Obediência", "Fúria Cega", "Quebra", "Pânico",
+              "Marca do Servo Silente", "Liturgia do Corpo Vazio", "Totem do Mau Olhado Permanente", "Véu da Noite"] },
   // Consumíveis no próprio personagem
   { menu: "ontoken", video: "cura", som: "cura", rotulos: ["Soro do Cão", "Destilado Âmbar", "Elixir"] },
   { menu: "ontoken", video: "estimulante", som: "injecao", rotulos: ["Pulso Carmesim", "Adrena-7", "Noosfina", "Éter Sereno", "Córtex-Flux"] }
@@ -84,7 +90,7 @@ function entrada(rotulo, g) {
     fromAmmo: false,
     menu: g.menu,
     macro: { enable: false },
-    advanced: { exactMatch: false, excludedTerms: [] },
+    advanced: { exactMatch: !!g.exato, excludedTerms: [] },
     levels3d: { enable: false, type: "", data: {}, secondary: { enable: false, data: {} }, sound: somVazio() },
     primary: {
       options: opcoes(g.menu, g),
@@ -127,12 +133,14 @@ export async function instalarNoAA() {
   }
   await removerDoAA();
   await aa.mergeMenus(montarMenu(), { range: true, ontoken: true });
+  await game.settings.set(SISTEMA, "animacoesVersao", VERSAO_ANIMACOES);
   ui.notifications.info(`A Nova Ordem: ${ROTULOS.length} animações instaladas no Automated Animations.`);
 }
 
 export async function removerAnimacoes() {
   if (!game.modules.get("autoanimations")?.active) return ui.notifications.warn("O Automated Animations não está ativo.");
   const n = await removerDoAA();
+  await game.settings.set(SISTEMA, "animacoesVersao", "removido");
   ui.notifications.info(`A Nova Ordem: ${n} animações do sistema removidas do Automated Animations.`);
 }
 
@@ -178,11 +186,25 @@ class ConfigAnimacoes extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 }
 
+/* O mestre recebe as animações sozinho ao abrir o mundo com o módulo ativo.
+ * Quem clicou em "Remover" não recebe de novo. */
+Hooks.once("ready", async () => {
+  if (!game.users.activeGM?.isSelf || !game.modules.get("autoanimations")?.active) return;
+  const instalada = game.settings.get(SISTEMA, "animacoesVersao");
+  if (instalada === VERSAO_ANIMACOES || instalada === "removido") return;
+  try {
+    await instalarNoAA();
+  } catch (err) {
+    console.warn("A Nova Ordem | Falha ao instalar as animações:", err);
+  }
+});
+
 export function registrarAnimacoes() {
+  game.settings.register(SISTEMA, "animacoesVersao", { scope: "world", config: false, type: String, default: "" });
   game.settings.registerMenu(SISTEMA, "animacoesMenu", {
     name: "Animações do Sistema",
     label: "Configurar",
-    hint: "Instala no Automated Animations os efeitos e sons próprios do sistema para as armas, alquímicos e consumíveis do compêndio.",
+    hint: "Com o Automated Animations ativo, os efeitos e sons do sistema se instalam sozinhos. Aqui dá para ver, atualizar ou remover.",
     icon: "fas fa-wand-magic-sparkles",
     type: ConfigAnimacoes,
     restricted: true

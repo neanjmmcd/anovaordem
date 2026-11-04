@@ -84,6 +84,7 @@
   <ul class="aon-npc-itens">
     {{#each outros}}
     <li><img src="{{img}}"> <a class="npc-abrir-item" data-item-id="{{id}}">{{nome}}</a> <small>{{tipo}}</small>
+      {{#if usavel}}<button type="button" class="npc-usar" data-item-id="{{id}}" title="Usar"><i class="fas fa-wand-sparkles"></i></button>{{/if}}
       <button type="button" class="npc-del-item" data-item-id="{{id}}" title="Remover">🗑</button></li>
     {{/each}}
   </ul>

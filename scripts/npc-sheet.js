@@ -1,5 +1,5 @@
 import { TIERS } from "./npc-model.js";
-import { atacar, chancePericia, periciaDaArma, rolarTeste } from "./combate.js";
+import { atacar, conjurar, chancePericia, periciaDaArma, rolarTeste } from "./combate.js";
 
 /* Ficha compacta de NPC (Tiers do Suplemento) */
 export class AONovaOrdemNpcSheet extends foundry.appv1.sheets.ActorSheet {
@@ -40,7 +40,8 @@ export class AONovaOrdemNpcSheet extends foundry.appv1.sheets.ActorSheet {
       };
     });
     context.outros = this.actor.items.filter(i => i.type !== "arma").map(i => ({
-      id: i.id, nome: i.name, img: i.img, tipo: cfg.tiposItem[i.type] ?? i.type
+      id: i.id, nome: i.name, img: i.img, tipo: cfg.tiposItem[i.type] ?? i.type,
+      usavel: ["alquimico", "magias", "rituais"].includes(i.type)
     }));
     return context;
   }
@@ -80,6 +81,13 @@ export class AONovaOrdemNpcSheet extends foundry.appv1.sheets.ActorSheet {
       if (!item) return;
       await atacar(this.actor, item);
       window.tocarAnimacao(this.actor, item);
+    });
+    html.find(".npc-usar").on("click", async ev => {
+      const item = this.actor.items.get(ev.currentTarget.dataset.itemId);
+      if (!item) return;
+      if (item.type === "alquimico") await atacar(this.actor, item);
+      else await conjurar(this.actor, item);
+      window.tocarAnimacao(this.actor, item, { noProprio: item.type === "rituais" });
     });
     html.find(".npc-abrir-item").on("click", ev => this.actor.items.get(ev.currentTarget.dataset.itemId)?.sheet.render(true));
     html.find(".npc-del-item").on("click", ev => this.actor.items.get(ev.currentTarget.dataset.itemId)?.delete());

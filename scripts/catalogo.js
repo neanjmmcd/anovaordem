@@ -70,9 +70,18 @@ export class AONovaOrdemCatalogo extends HandlebarsApplicationMixin(ApplicationV
       fonte
     });
 
-    for (const pack of game.packs.filter(p => p.documentName === "Item" && p.visible)) {
+    // Compêndios do sistema primeiro: cópia igual em compêndio do mundo não aparece duas vezes
+    const packs = game.packs.filter(p => p.documentName === "Item" && p.visible)
+      .sort((a, c) => (c.metadata.packageType === "system") - (a.metadata.packageType === "system"));
+    const vistos = new Set();
+    for (const pack of packs) {
       const indice = await pack.getIndex({ fields: CAMPOS_INDICE });
-      for (const e of indice) add({ ...e, uuid: e.uuid ?? `Compendium.${pack.collection}.Item.${e._id}` }, pack.title);
+      for (const e of indice) {
+        const chave = `${e.type}|${e.name}`;
+        if (vistos.has(chave)) continue;
+        vistos.add(chave);
+        add({ ...e, uuid: e.uuid ?? `Compendium.${pack.collection}.Item.${e._id}` }, pack.title);
+      }
     }
     for (const item of game.items.filter(i => i.visible)) add(item, "Mundo");
 

@@ -489,3 +489,7 @@ button.rolar-pericia {
 .aon-anim-rotulos { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 3px; }
 .aon-anim-rotulos span { font-size: 11px; padding: 0 5px; border: 1px solid #555; border-radius: 3px; opacity: .7; }
 .aon-anim-rotulos span.ok { border-color: #3c9a3c; opacity: 1; }
+
+/* Cartão: efeito da técnica/feitiço e avisos */
+.aon-card .aon-card-efeito { margin-top: 6px; font-size: 12px; }
+.aon-card .aon-card-aviso { margin-top: 6px; padding: 3px 6px; border-left: 3px solid #b5502a; font-size: 12px; }
