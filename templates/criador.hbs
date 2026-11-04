@@ -1,0 +1,77 @@
+<div class="aon-cri">
+  <div class="aon-cri-corpo">
+
+    {{#if bloqueado}}
+      <p class="aon-cri-aviso">Este personagem já foi criado. Só o mestre pode refazer a criação.</p>
+    {{/if}}
+
+    <!-- 1. DADOS -->
+    <h3>1. Dados do personagem</h3>
+    <div class="aon-cri-dados">
+      <label>Nome <input type="text" data-dado="name" value="{{dados.name}}"></label>
+      <label>Codinome <input type="text" data-dado="codinome" value="{{dados.codinome}}"></label>
+      <label>Idade <input type="text" data-dado="idade" value="{{dados.idade}}"></label>
+      <label>Pele <input type="text" data-dado="pele" value="{{dados.pele}}"></label>
+      <label>Olhos <input type="text" data-dado="olhos" value="{{dados.olhos}}"></label>
+      <label>Peso <input type="text" data-dado="peso" value="{{dados.peso}}"></label>
+    </div>
+
+    <!-- 2. ATRIBUTOS -->
+    <h3>2. Atributos — 3d6, distribua como quiser</h3>
+    <div class="aon-cri-rolagem">
+      {{#if rolagens.length}}
+        <span>Resultados: {{#each rolagens}}<b>{{v}}</b>{{#unless @last}} · {{/unless}}{{/each}} (soma {{somaRolagens}})</span>
+      {{else}}
+        <span>Role 7 vezes 3d6. Os resultados vão para o chat.</span>
+      {{/if}}
+      {{#if podeRolar}}
+        <button type="button" data-action="rolar"><i class="fas fa-dice"></i> {{#if rolagens.length}}Rolar de novo{{else}}Rolar atributos{{/if}}</button>
+      {{/if}}
+      {{#if aguardandoMestre}}<span class="aon-cri-nota">Nova rolagem só com liberação do mestre.</span>{{/if}}
+      {{#if isGM}}{{#if rolagens.length}}
+        <button type="button" data-action="liberar" title="Permite ao jogador rolar de novo"><i class="fas fa-unlock"></i> Liberar nova rolagem</button>
+      {{/if}}{{/if}}
+    </div>
+
+    {{#if rolagens.length}}
+    <div class="aon-cri-atributos">
+      {{#each atributos}}
+      <label>{{label}}
+        <select data-atributo="{{key}}">
+          <option value="">—</option>
+          {{#each opcoes}}<option value="{{i}}" {{#if selected}}selected{{/if}}>{{v}}</option>{{/each}}
+        </select>
+      </label>
+      {{/each}}
+    </div>
+    {{/if}}
+
+    <!-- 3. PERÍCIAS -->
+    <h3>3. Perícias — {{pontos}} pontos somados aos valores base</h3>
+    <p class="aon-cri-pontos">Pontos restantes: <b class="aon-cri-restante">{{restante}}</b>
+      {{#if teto}} · teto na criação: {{teto}}%{{/if}}</p>
+
+    <div class="aon-cri-pericias">
+      {{#each grupos}}
+      <table>
+        <thead><tr><th>{{nome}}</th><th>Base</th><th>+ Pontos</th><th>Total</th></tr></thead>
+        <tbody>
+          {{#each lista}}
+          <tr class="{{#if acimaTeto}}aon-cri-acima{{/if}}">
+            <td>{{label}} <small>({{atr}})</small></td>
+            <td>{{base}}%</td>
+            <td><input type="number" min="0" step="1" data-pericia="{{key}}" data-base="{{base}}" value="{{pontos}}"></td>
+            <td class="aon-cri-total">{{total}}%</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      {{/each}}
+    </div>
+  </div>
+
+  <footer class="aon-cri-rodape">
+    <span>Saúde e Sanidade começam em 100 · Essência = PSI × 2</span>
+    <button type="button" data-action="aplicar" {{#if bloqueado}}disabled{{/if}}><i class="fas fa-check"></i> Concluir criação</button>
+  </footer>
+</div>

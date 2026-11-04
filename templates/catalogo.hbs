@@ -1,0 +1,42 @@
+<div class="aon-cat">
+  <div class="aon-cat-filtros">
+    <input type="search" data-filtro="texto" value="{{filtros.texto}}" placeholder="Buscar por nome, tipo ou efeito…">
+    <select data-filtro="tipo">
+      <option value="">Todas as categorias</option>
+      {{#each tipos}}<option value="{{valor}}" {{#if (eq valor ../filtros.tipo)}}selected{{/if}}>{{label}}</option>{{/each}}
+    </select>
+    <select data-filtro="fonte">
+      <option value="">Todas as fontes</option>
+      {{#each fontes}}<option value="{{this}}" {{#if (eq this ../filtros.fonte)}}selected{{/if}}>{{this}}</option>{{/each}}
+    </select>
+    <input type="number" min="0" data-filtro="precoMax" value="{{filtros.precoMax}}" placeholder="Preço máx." title="Preço máximo (¢RD)">
+    <input type="number" min="0" data-filtro="pesoMax" value="{{filtros.pesoMax}}" placeholder="Peso máx." title="Peso máximo">
+    <button type="button" data-action="limpar" title="Limpar filtros"><i class="fas fa-eraser"></i></button>
+    <button type="button" data-action="recarregar" title="Recarregar compêndios"><i class="fas fa-rotate"></i></button>
+  </div>
+
+  <div class="aon-cat-info">
+    <span class="aon-cat-contador"></span>
+    {{#if podeAdicionar}}
+      <span>{{#if alvo}}Adicionar a: <b>{{alvo}}</b>{{else}}Selecione um token para adicionar{{/if}} · ou arraste para a ficha</span>
+    {{/if}}
+  </div>
+
+  <ol class="aon-cat-lista">
+    {{#each entradas}}
+    <li class="aon-cat-item" draggable="true" data-uuid="{{uuid}}" data-busca="{{busca}}" data-tipo="{{tipo}}"
+        data-fonte="{{fonte}}" data-preco="{{preco}}" data-peso="{{peso}}">
+      <img src="{{img}}" alt="">
+      <a class="aon-cat-nome" data-action="abrir" title="Abrir ficha do item">{{nome}}</a>
+      <span class="aon-cat-tipo">{{tipoLabel}}</span>
+      <span class="aon-cat-num" title="Preço">¢{{preco}}</span>
+      <span class="aon-cat-num" title="Peso">{{peso}}</span>
+      <span class="aon-cat-fonte">{{fonte}}</span>
+      <span class="aon-cat-acoes">
+        <button type="button" data-action="chat" title="Mostrar no chat"><i class="fas fa-comment"></i></button>
+        {{#if ../podeAdicionar}}<button type="button" data-action="adicionar" title="Adicionar à ficha"><i class="fas fa-plus"></i></button>{{/if}}
+      </span>
+    </li>
+    {{/each}}
+  </ol>
+</div>

@@ -35,6 +35,13 @@ import { AONovaOrdemElixirModel } from "./item-elixir-model.js";
 import { AONovaOrdemElixirSheet } from "./item-elixir-sheet.js";
 import { AONovaOrdemMutagenicoModel } from "./item-mutagenico-model.js";
 import { AONovaOrdemMutagenicoSheet } from "./item-mutagenico-sheet.js";
+import { AONovaOrdemCatalogo } from "./catalogo.js";
+import { AONovaOrdemCriador } from "./criador.js";
+import { registrarCombate, pedir, atacar } from "./combate.js";
+import { AONovaOrdemNpcModel } from "./npc-model.js";
+import { AONovaOrdemNpcSheet } from "./npc-sheet.js";
+import { AONovaOrdemPainelMestre } from "./painel-mestre.js";
+import "./item-piles.js";
 
 
 Hooks.once("init", () => {
@@ -45,13 +52,18 @@ Hooks.once("init", () => {
   
   // DataModel
   CONFIG.Actor.dataModels = {
-    personagem: AONovaOrdemPersonagemModel
+    personagem: AONovaOrdemPersonagemModel,
+    npc: AONovaOrdemNpcModel
   };
 
   // Sheet
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("a-nova-ordem", AONovaOrdemActorSheet, {
     types: ["personagem"],
+    makeDefault: true
+  });
+  Actors.registerSheet("a-nova-ordem", AONovaOrdemNpcSheet, {
+    types: ["npc"],
     makeDefault: true
   });
   
@@ -61,6 +73,7 @@ Hooks.once("init", () => {
   window.rolarDano = Rolls.rolarDano;
   window.rolarAlquimico = Rolls.rolarAlquimico;
   window.tocarAnimacao = Rolls.tocarAnimacao;
+  game.aonovaordem = { catalogo: AONovaOrdemCatalogo, criador: AONovaOrdemCriador, atacar, painel: AONovaOrdemPainelMestre };
   
   //Carregaar armaduras e items
   CONFIG.Item.dataModels = {
@@ -152,9 +165,67 @@ Hooks.once("init", () => {
   const carregar = foundry.applications?.handlebars?.loadTemplates ?? loadTemplates;
   carregar({ "aon-modificadores": "systems/a-nova-ordem/sheets/partials/modificadores.html" });
 
+  /* Configurações do mundo */
+  game.settings.register("a-nova-ordem", "catalogoJogadores", {
+    name: "Jogadores adicionam itens pelo Catálogo",
+    hint: "Se desligado, só o mestre vê o botão de adicionar (os jogadores ainda podem consultar e mostrar no chat).",
+    scope: "world", config: true, type: Boolean, default: true
+  });
+  game.settings.register("a-nova-ordem", "abrirCriador", {
+    name: "Abrir o Criador de Personagem para personagens novos",
+    hint: "Quando um jogador cria um personagem, o criador abre sozinho.",
+    scope: "world", config: true, type: Boolean, default: true
+  });
+  game.settings.register("a-nova-ordem", "tetoCriacao", {
+    name: "Teto de perícia na criação (%)",
+    hint: "Valor máximo de uma perícia ao criar o personagem. 0 = sem teto (regra do livro).",
+    scope: "world", config: true, type: Number, default: 0
+  });
+
+  registrarCombate();
+  game.settings.register("a-nova-ordem", "painelMestre", {
+    scope: "world", config: false, type: Object, default: { experiencia: "novatos", pjs: "" }
+  });
+
+  /* Atalho do Catálogo */
+  game.keybindings.register("a-nova-ordem", "catalogo", {
+    name: "Abrir Catálogo de Itens",
+    editable: [{ key: "Space", modifiers: ["Control"] }],
+    onDown: () => { AONovaOrdemCatalogo.abrir(); return true; }
+  });
+
   console.log("A Nova Ordem | Sistema inicializado");
 });
 
+
+/* =========================
+ * QUANTIDADE NAS FICHAS DE ITEM
+ * Um campo só para todos os tipos, inserido no cabeçalho da ficha.
+ * ========================= */
+Hooks.on("renderItemSheet", (app, html) => {
+  const el = html instanceof HTMLElement ? html : html[0];
+  const cabecalho = el?.querySelector(".sheet-header");
+  if (!cabecalho || cabecalho.querySelector(".aon-quantidade")) return;
+  const label = document.createElement("label");
+  label.className = "aon-quantidade";
+  label.title = "Quantidade (o peso é multiplicado por ela)";
+  label.innerHTML = `Qtd. <input type="number" name="system.quantidade" min="0" step="1"
+    value="${Number(app.item.system.quantidade ?? 1)}" ${app.isEditable ? "" : "disabled"}>`;
+  cabecalho.append(label);
+});
+
+/* Botão do Catálogo na aba Itens */
+Hooks.on("renderItemDirectory", (app, html) => {
+  const el = html instanceof HTMLElement ? html : html[0];
+  const acoes = el?.querySelector(".header-actions");
+  if (!acoes || acoes.querySelector(".aon-abrir-catalogo")) return;
+  const botao = document.createElement("button");
+  botao.type = "button";
+  botao.className = "aon-abrir-catalogo";
+  botao.innerHTML = `<i class="fas fa-magnifying-glass"></i> Catálogo`;
+  botao.addEventListener("click", () => AONovaOrdemCatalogo.abrir());
+  acoes.append(botao);
+});
 
 /* =========================
  * SANIDADE NO CHAT
@@ -246,125 +317,20 @@ Hooks.on("updateCombat", async (combat, changed, options) => {
   }
 });
 
-Hooks.on("renderChatMessage", (message, html, data) => {
-
-  html.find(".aplicar-dano").on("click", async ev => {
-    ev.preventDefault();
-
-    const dano = Number(ev.currentTarget.dataset.dano);
-    if (isNaN(dano)) return ui.notifications.warn("Dano inválido.");
-    
-    // Token selecionado?
-    const token = canvas.tokens.controlled[0];
-    if (!token) {
-      return ui.notifications.warn("Selecione um token.");
-    }
-
-    const actor = token.actor;
-    if (!actor) return;
-
-    const rd = actor.system.rd ?? 0;
-    const danoEfetivo = Math.max(0, dano - rd);
-    const saudeAtual = Number(actor.system.saude ?? 0);
-    const saudeNova = Math.max(0, saudeAtual - danoEfetivo);
-
-    let resutado = status(saudeNova);
-
-    await actor.update({
-      "system.saude": saudeNova,
-      "system.penalidades.penfisica":        Number(resutado[1] ?? 0),
-      "system.penalidades.pensociais":       Number(resutado[1] ?? 0),
-      "system.penalidades.penmentais":       Number(resutado[1] ?? 0),
-      "system.penalidades.pentecnicologica": Number(resutado[1] ?? 0),
-      "system.penalidades.penaquimica":      Number(resutado[1] ?? 0),
-      "system.penalidades.penmagica":        Number(resutado[1] ?? 0),
-      "system.penalidades.pensobrevivencia": Number(resutado[1] ?? 0)
+/* Botões − / + dos cartões de dano: token selecionado ou, sem seleção, o alvo marcado.
+ * Se o jogador não for dono do alvo, o mestre aplica (combate.js). */
+Hooks.on("renderChatMessageHTML", (message, html) => {
+  const alvoDoBotao = () => canvas.tokens.controlled[0]?.actor ?? [...game.user.targets][0]?.actor;
+  for (const botao of html.querySelectorAll(".aplicar-dano, .aplicar-cura")) {
+    botao.addEventListener("click", ev => {
+      ev.preventDefault();
+      const cura = botao.classList.contains("aplicar-cura");
+      const valor = Number(cura ? botao.dataset.cura : botao.dataset.dano);
+      if (isNaN(valor)) return ui.notifications.warn("Valor inválido.");
+      const actor = alvoDoBotao();
+      if (!actor) return ui.notifications.warn("Selecione ou marque um token.");
+      if (cura) pedir("cura", { uuid: actor.uuid, cura: valor });
+      else pedir("dano", { uuid: actor.uuid, dano: valor, bruto: true });
     });
-
-    
-    ui.notifications.info(
-      `${actor.name} sofreu ${dano} de dano à Saúde.<br><br><b>Status:</b> ${resutado[0]}`
-    );
-    ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor: actor.name }),
-      flavor: `
-        <div class="chat-card">
-          <div style="align-items:center;">
-            <img src="${actor.img}" width="40" height="40" style="border:0; border-radius:4px;margin: 10px 0 10px 40%"></img>
-            <div style="background-color:#363636; border-radius:10px;color:#e0d8b0">
-              Reduziu <b style="color:red">${danoEfetivo}</b> na sua Saúde.
-            </div>
-          </div>
-          <hr style="background-color:red">
-          <b>Status:</b> ${resutado[0]}
-        </div>
-        
-      `
-    });
-  });
-  html.find(".aplicar-cura").on("click", async ev => {
-    ev.preventDefault();
-
-    const dano = Number(ev.currentTarget.dataset.cura);
-    if (isNaN(dano)) return ui.notifications.warn("Cura inválido.");
-
-    // Token selecionado?
-    const token = canvas.tokens.controlled[0];
-    if (!token) {
-      return ui.notifications.warn("Selecione um token.");
-    }
-
-    const actor = token.actor;
-    if (!actor) return;
-
-    const saudeAtual = Number(actor.system.saude ?? 0);
-    const saudeNova = Math.min(100, saudeAtual + dano);
-    let resutado = status(saudeNova);
-    await actor.update({
-      "system.saude": saudeNova,
-      "system.penalidades.penfisica":        Number(resutado[1] ?? 0),
-      "system.penalidades.pensociais":       Number(resutado[1] ?? 0),
-      "system.penalidades.penmentais":       Number(resutado[1] ?? 0),
-      "system.penalidades.pentecnicologica": Number(resutado[1] ?? 0),
-      "system.penalidades.penaquimica":      Number(resutado[1] ?? 0),
-      "system.penalidades.penmagica":        Number(resutado[1] ?? 0),
-      "system.penalidades.pensobrevivencia": Number(resutado[1] ?? 0)
-    });
-
-    ui.notifications.info(
-      `<b>${actor.name}</b> Curou ${dano} na sua Saúde.<br><br><b>Status:</b> ${resutado[0]}`
-    );
-    ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor }),
-      flavor: `
-        <div class="chat-card">
-          <div style="align-items:center;">
-            <img src="${actor.img}" width="40" height="40" style="border:0; border-radius:4px;margin: 10px 0 10px 40%"></img>
-            <div style="background-color:#363636; border-radius:10px;color:#e0d8b0">
-              Curou <b style="color:Chartreuse">${dano}</b> na sua Saúde.
-            </div>
-          </div>
-          <hr style="background-color:green">
-          <b>Status:</b> ${resutado[0]}
-        </div>
-      `
-    });
-
-    // ChatMessage.create({
-    //   speaker: ChatMessage.getSpeaker({ actor: actor.name }),
-    //   flavor: `
-    //         <img src="${actor.img}" width="40" height="40" style="border:0; border-radius:4px;margin-left:40%"></img>
-    //     <b>${actor.name}</b> Curou ${dano} na sua Saúde.<br><br><b>Status:</b> ${resutado[0]}
-        
-    //   `
-    // });
-    
-  });
-
+  }
 });
-
-
-
-
-
-

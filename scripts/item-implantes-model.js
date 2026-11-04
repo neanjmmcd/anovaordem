@@ -1,4 +1,4 @@
-import { camposModificadores } from "./modificadores.js";
+import { camposModificadores, campoQuantidade } from "./modificadores.js";
 
 export class AONovaOrdemImplantesModel extends foundry.abstract.DataModel {
 
@@ -6,6 +6,7 @@ export class AONovaOrdemImplantesModel extends foundry.abstract.DataModel {
     const f = foundry.data.fields;
 
     return {
+      quantidade: campoQuantidade(),
       modificadores: camposModificadores(),
 
       name: new f.StringField({ initial: "Nenhuma" }),

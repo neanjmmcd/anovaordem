@@ -318,3 +318,159 @@ button.rolar-pericia {
   gap: 4px 8px;
   margin-bottom: 6px;
 }
+
+/* =========================
+ * QUANTIDADE
+ * ========================= */
+.aon-qtd { color: #c9a24a; font-weight: bold; }
+.item-sheet .sheet-header .aon-quantidade { flex: 0 0 64px; align-items: center; }
+.item-sheet .sheet-header .aon-quantidade input { width: 56px; }
+
+/* =========================
+ * CATÁLOGO DE ITENS
+ * ========================= */
+.aon-catalogo .window-content { padding: 0; }
+.aon-cat { display: flex; flex-direction: column; height: 100%; background: #2a2a2a; color: #e0d8b0; }
+.aon-cat-filtros { display: flex; gap: 4px; padding: 6px; border-bottom: 1px solid #7a5c2e; }
+.aon-cat-filtros input[type="search"] { flex: 2; text-align: left; }
+.aon-cat-filtros select { flex: 1; background: #1f1f1f; color: #e0d8b0; border: 1px solid #7a5c2e; }
+.aon-cat-filtros input[type="number"] { width: 80px; flex: 0 0 80px; }
+.aon-cat-filtros button { flex: 0 0 32px; }
+.aon-cat-info { display: flex; justify-content: space-between; padding: 4px 8px; font-size: 12px; opacity: .85; }
+.aon-cat-lista { flex: 1; overflow-y: auto; margin: 0; padding: 0 6px 6px; list-style: none; }
+.aon-cat-item {
+  display: grid; grid-template-columns: 32px 1fr 120px 60px 40px 130px 64px;
+  align-items: center; gap: 6px; padding: 2px 4px; border-bottom: 1px solid #3d3d3d; cursor: grab;
+}
+.aon-cat-item:hover { background: #363636; }
+.aon-cat-item[hidden] { display: none; }
+.aon-cat-item img { width: 32px; height: 32px; border: 1px solid #7a5c2e; object-fit: cover; }
+.aon-cat-nome { cursor: pointer; font-weight: bold; }
+.aon-cat-tipo, .aon-cat-fonte { font-size: 11px; opacity: .8; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.aon-cat-num { text-align: right; font-size: 12px; }
+.aon-cat-acoes { display: flex; gap: 2px; }
+.aon-cat-acoes button { width: 28px; height: 26px; line-height: 1; padding: 0; }
+.directory .aon-abrir-catalogo { flex: 1 0 100%; }
+
+/* =========================
+ * CRIADOR DE PERSONAGEM
+ * ========================= */
+.aon-criador .window-content { padding: 0; }
+.aon-cri { display: flex; flex-direction: column; height: 100%; background: #363636; color: #e0d8b0; font-family: serif; }
+.aon-cri-corpo { flex: 1; overflow-y: auto; padding: 8px 12px; }
+.aon-cri h3 { border-bottom: 1px solid #7a5c2e; margin: 12px 0 6px; }
+.aon-cri-dados { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.aon-cri-rolagem { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.aon-cri-rolagem button { flex: 0 0 auto; }
+.aon-cri-nota, .aon-cri-aviso { color: #c9a24a; font-style: italic; }
+.aon-cri-atributos { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 8px; text-align: center; }
+.aon-cri-atributos label { align-items: center; font-size: 10px; }
+.aon-cri-atributos select { width: 100%; background: #1f1f1f; color: #e0d8b0; border: 1px solid #7a5c2e; }
+.aon-cri-pontos { font-size: 14px; }
+.aon-cri-negativo { color: #ff5a5a; }
+.aon-cri-pericias { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.aon-cri-pericias table { margin: 0; font-size: 12px; }
+.aon-cri-pericias th:first-child, .aon-cri-pericias td:first-child { text-align: left; }
+.aon-cri-pericias td { padding: 1px 4px; text-align: center; }
+.aon-cri-pericias input { width: 48px; }
+.aon-cri-acima td { color: #ff5a5a; }
+.aon-cri-rodape { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 12px; border-top: 1px solid #7a5c2e; font-size: 12px; }
+.aon-cri-rodape button { flex: 0 0 auto; }
+.aon-cri-chat .aon-cri-valores { font-size: 16px; font-weight: bold; }
+.aon-cri-chat button { margin-top: 6px; }
+
+/* =========================
+ * CARTÃO DE ATAQUE (chat)
+ * ========================= */
+.aon-ataque .aon-linha { margin-top: 4px; }
+.aon-ataque .aon-alvo { margin-top: 6px; padding: 4px; border: 1px solid #7a5c2e; border-radius: 4px; }
+.aon-ataque .aon-alvo img { vertical-align: middle; border: 0; }
+.aon-ataque .aon-botoes { display: flex; gap: 4px; margin-top: 4px; }
+.aon-ataque .aon-resolvido { margin-top: 4px; font-style: italic; }
+
+/* =========================
+ * CONFIGURAÇÃO DE COMBATE
+ * ========================= */
+.aon-config-combate .aon-cfg-dica { font-style: italic; opacity: .8; }
+.aon-config-combate .form-footer { display: flex; gap: 6px; margin-top: 8px; }
+
+/* =========================
+ * FICHA DE NPC
+ * ========================= */
+.aon-npc h3 { border-bottom: 1px solid #7a5c2e; margin: 10px 0 4px; font-size: 14px; }
+.aon-npc h3 small { font-size: 10px; opacity: .7; font-weight: normal; }
+.aon-npc h3 button { width: 24px; height: 20px; line-height: 1; padding: 0; float: right; }
+.aon-npc-topo { display: grid; grid-template-columns: 110px 1fr; gap: 10px; }
+.aon-npc-topo img { width: 110px; height: 110px; object-fit: cover; border: 2px solid #7a5c2e; }
+.aon-npc-id { display: flex; flex-direction: column; gap: 4px; }
+.aon-npc-nome { font-size: 20px; height: 32px; }
+.aon-npc-linha { display: grid; grid-template-columns: 1.3fr 1.3fr .6fr; gap: 6px; }
+.aon-npc-linha select { background: #1f1f1f; color: #e0d8b0; border: 1px solid #7a5c2e; }
+.aon-npc-ameaca { font-size: 18px; font-weight: bold; text-align: center; color: #c9a24a; }
+.aon-npc-lema { font-style: italic; text-align: left; }
+.aon-npc-recursos { display: grid; grid-template-columns: 1.4fr 1.4fr .7fr .9fr .8fr; gap: 6px; margin-top: 8px; }
+.aon-npc-recursos label { align-items: center; }
+.aon-npc-saude { display: flex; align-items: center; gap: 2px; }
+.aon-npc-saude input { width: 48px; }
+.aon-npc-estado { font-weight: bold; padding-top: 4px; }
+.aon-npc-barra, .aon-painel-saude { height: 6px; background: #1f1f1f; border: 1px solid #7a5c2e; margin-top: 4px; }
+.aon-npc-barra span, .aon-painel-saude span { display: block; height: 100%; background: #8b1e1e; }
+.aon-npc-grupos { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+.aon-npc-grupos label { align-items: center; font-size: 10px; }
+.aon-npc-destaques select { width: 100%; background: #1f1f1f; color: #e0d8b0; border: 1px solid #7a5c2e; }
+.aon-npc-destaques input { width: 60px; }
+.aon-npc-qualquer { display: grid; grid-template-columns: 1fr auto; gap: 4px; margin-top: 4px; }
+.aon-npc-qualquer select { min-width: 0; width: 100%; background: #1f1f1f; color: #e0d8b0; border: 1px solid #7a5c2e; }
+.aon-npc-qualquer button { width: auto; white-space: nowrap; padding: 0 10px; }
+.aon-npc-itens { list-style: none; margin: 0; padding: 0; }
+.aon-npc-itens li { display: flex; align-items: center; gap: 6px; padding: 2px 0; }
+.aon-npc-itens img { width: 24px; height: 24px; border: 0; }
+.aon-npc-itens button { margin-left: auto; width: 28px; }
+.aon-npc textarea { width: 100%; text-align: left; }
+.aon-npc input[name="system.pontoFraco"] { width: 100%; text-align: left; }
+
+/* =========================
+ * PAINEL DO MESTRE
+ * ========================= */
+.aon-painel .window-content { padding: 0; }
+.aon-painel-corpo { height: 100%; overflow-y: auto; padding: 6px 10px; background: #2a2a2a; color: #e0d8b0; }
+.aon-painel h3 { border-bottom: 1px solid #7a5c2e; margin: 10px 0 4px; }
+.aon-painel-orc-linha { display: grid; grid-template-columns: 1.4fr .7fr 1.6fr; gap: 6px; align-items: end; }
+.aon-painel-orc-linha select { background: #1f1f1f; color: #e0d8b0; border: 1px solid #7a5c2e; }
+.aon-painel-orc-total { font-size: 13px; }
+.aon-painel-dif { display: inline-block; margin-left: 6px; padding: 1px 6px; border: 1px solid #c9a24a; border-radius: 3px; color: #c9a24a; font-weight: bold; }
+.aon-painel-faixas { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 11px; opacity: .9; }
+.aon-painel-faixas button { flex: 0 0 auto; }
+.aon-painel-lista { list-style: none; margin: 0; padding: 0; }
+.aon-painel-linha { display: grid; grid-template-columns: 40px 1fr auto; gap: 8px; align-items: center; padding: 4px 0; border-bottom: 1px solid #3d3d3d; }
+.aon-painel-linha img { width: 40px; height: 40px; object-fit: cover; border: 1px solid #7a5c2e; cursor: pointer; }
+.aon-painel-linha.aon-oculto { opacity: .55; }
+.aon-painel-info { display: flex; flex-direction: column; min-width: 0; }
+.aon-painel-info a { cursor: pointer; }
+.aon-painel-acoes { display: flex; gap: 2px; align-items: center; }
+.aon-painel-acoes input { width: 48px; }
+.aon-painel-acoes button { width: 28px; height: 26px; padding: 0; line-height: 1; }
+.aon-painel-acoes button.ativo { background: #8b1e1e; color: #fff; }
+.aon-painel-vazio { opacity: .7; font-style: italic; padding: 4px 0; }
+
+/* =========================
+ * CARTÃO ÚNICO DO CHAT
+ * ========================= */
+.aon-card { --aon-cor: #7a5c2e; }
+.aon-card-topo { display: flex; align-items: center; gap: 8px; background: #363636; color: #e0d8b0; border-radius: 10px; padding: 4px 8px; }
+.aon-card-topo img { width: 40px; height: 40px; border: 0; border-radius: 4px; object-fit: cover; flex: 0 0 40px; }
+.aon-card-titulo { display: flex; flex-direction: column; line-height: 1.2; }
+.aon-card-titulo small { opacity: .8; }
+.aon-card .aon-calculo { margin-top: 6px; font-size: 12px; }
+.aon-card hr { border: 0; height: 3px; background: var(--aon-cor); margin: 6px 0; }
+.aon-card-resultado { text-align: center; font-size: 14px; }
+.aon-card .aon-alvo { margin-top: 6px; padding: 4px 6px; border: 1px solid #7a5c2e; border-radius: 6px; }
+.aon-card .aon-alvo-nome { display: flex; align-items: center; gap: 6px; }
+.aon-card .aon-alvo-nome img { width: 28px; height: 28px; border: 0; border-radius: 3px; }
+.aon-card .aon-alvo-res, .aon-card .aon-resolvido { margin-top: 4px; }
+.aon-card .aon-botoes { display: flex; gap: 4px; margin-top: 4px; }
+
+/* Listas de seleção: opções legíveis no tema escuro */
+.a-nova-ordem select option,
+.a-nova-ordem select optgroup { background: #1f1f1f; color: #e0d8b0; }
+.a-nova-ordem select option:checked { background: #7a5c2e; color: #fff; }

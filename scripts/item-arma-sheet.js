@@ -12,6 +12,7 @@ export class AONovaOrdemArmaSheet extends ItemSheet {
   getData() {
     const context = super.getData();
     context.system = this.item.system;
+    context.config = CONFIG.AONOVAORDEM;
     return context;
   }
 }

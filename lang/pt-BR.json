@@ -1,1 +1,26 @@
-{}
+{
+  "TYPES": {
+    "Actor": {
+      "personagem": "Personagem",
+      "npc": "NPC / Ameaça"
+    },
+    "Item": {
+      "arma": "Arma",
+      "armadura": "Armadura",
+      "items": "Item",
+      "alquimico": "Técnica Alquímica",
+      "alquimia": "Alquimia",
+      "drogas": "Droga",
+      "elixires": "Elixir",
+      "injecoes": "Injeção",
+      "venenos": "Veneno",
+      "acidos": "Ácido",
+      "mutagenicos": "Mutagênico",
+      "implantes": "Implante",
+      "magias": "Magia",
+      "rituais": "Ritual",
+      "veiculo": "Veículo",
+      "mecha": "Mecha"
+    }
+  }
+}

@@ -1,3 +1,7 @@
+import { AONovaOrdemCatalogo } from "./catalogo.js";
+import { AONovaOrdemCriador } from "./criador.js";
+import { atacar } from "./combate.js";
+
 
 /* Estado de ativação dos consumíveis (elixires, injeções, drogas) */
 function estadoConsumivel(i) {
@@ -335,8 +339,25 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
 
 
 
+  /* Lupa do Catálogo e Criador de Personagem no topo da ficha */
+  _getHeaderButtons() {
+    const botoes = super._getHeaderButtons();
+    if (!this.actor.isOwner) return botoes;
+    return [
+      { label: "Catálogo", class: "aon-catalogo", icon: "fas fa-magnifying-glass", onclick: () => AONovaOrdemCatalogo.abrir(this.actor) },
+      { label: "Criador", class: "aon-criador", icon: "fas fa-user-plus", onclick: () => AONovaOrdemCriador.abrir(this.actor) },
+      ...botoes
+    ];
+  }
+
   activateListeners(html) {
     super.activateListeners(html);
+
+    // Quantidade ao lado do nome quando houver mais de uma unidade
+    html.find('td[class^="mostrar-"]').each((_, td) => {
+      const qtd = Number(this.actor.items.get(td.dataset.itemId)?.system.quantidade ?? 1);
+      if (qtd !== 1) td.insertAdjacentHTML("beforeend", ` <span class="aon-qtd">×${qtd}</span>`);
+    });
 
     // Liga/desliga armadura equipada e consumíveis ativos
     html.find(".toggle-item").on("change", ev => {
@@ -369,74 +390,14 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
       window.rolarPericia(this.actor, pericia);
     });
 
-    html.find(".rolar-dano").on("click", ev => {
+    // Ataque com arma: teste, esquiva, dano − RD (combate.js, configurável pelo mestre)
+    html.find(".rolar-dano").on("click", async ev => {
       ev.preventDefault();
-
-      const tr = ev.currentTarget.closest("tr");
-      if (!tr) return;
-
-      const itemId = tr.dataset.itemId;
-      if (!itemId) return;
-
-      const item = this.actor.items.get(itemId);
+      const item = this.actor.items.get(ev.currentTarget.closest("tr")?.dataset.itemId);
       if (!item) return;
-
-      const municao = item.system.ammo;
-      if (municao < 1) {
-        ui.notifications.warn("Sem munição na arma.");
-        return;
-      }
-
-      const danoTexto = item.system.dano; 
-      // Ex: "2d6 + FOR / perfurante"
-
-      const resultado = prepararDano(danoTexto, this.actor);
-
-      if (!resultado) {
-        ui.notifications.warn("Dano inválido na arma.");
-        return;
-      }
-
-      window.rolarDano({
-        actor: this.actor,
-        itemName: item.name,
-        formula: resultado.formula,
-        atributo: resultado.atributo,
-        atributoValor: resultado.atributoValor,
-        textoOriginal: danoTexto
-      });
+      await atacar(this.actor, item);
       window.tocarAnimacao(this.actor, item);
     });
-    function prepararDano(texto, actor) {
-      if (!texto) return null;
-
-      // Divide pelo "/"
-      const [partePrincipal] = texto.split("/");
-
-      /// 1️⃣ Sempre tenta pegar XdY (ou um número fixo, ex: "0")
-      const formulaMatch = partePrincipal.match(/(\d+d\d+)/i)
-        ?? partePrincipal.match(/^\s*(\d+)\s*$/);
-      if (!formulaMatch) return null;
-
-      const formulaBase = formulaMatch[1]; // ex: 2d6 ou 4d6
-
-      // 2️⃣ Tenta pegar "+ ATR" (opcional)
-      const atributoMatch = partePrincipal.match(/\+\s*(\w+)/i);
-
-      let atributoKey = "";
-      let atributoValor = 0;
-
-      if (atributoMatch) {
-        atributoKey = atributoMatch[1].toLowerCase();
-        atributoValor = Number(actor.system.atributosTotais?.[atributoKey] ?? actor.system.atributos[atributoKey] ?? 0);
-      }
-
-      return {
-        formula: formulaBase,
-        atributo: atributoKey,
-        atributoValor
-      };
-    }
     html.find(".rolar-alquimico").on("click", ev => {
       ev.preventDefault();
 
@@ -453,7 +414,8 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
 
       window.rolarAlquimico({
         actor: this.actor,
-        alquimico: al
+        alquimico: al,
+        img: item.img
       });
       window.tocarAnimacao(this.actor, item);
     });

@@ -26,6 +26,11 @@ export function camposModificadores() {
   });
 }
 
+/* Quantidade (pilhas de itens, Item Piles); o peso é multiplicado por ela */
+export function campoQuantidade() {
+  return new foundry.data.fields.NumberField({ initial: 1, integer: true, min: 0 });
+}
+
 /* Consumíveis: só valem enquanto ativos, com duração em rodadas de combate */
 export function camposConsumivel() {
   const f = foundry.data.fields;

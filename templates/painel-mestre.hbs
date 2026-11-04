@@ -1,0 +1,50 @@
+<div class="aon-painel-corpo">
+
+  <section class="aon-painel-orcamento">
+    <h3>Encontro — {{cena}}</h3>
+    <div class="aon-painel-orc-linha">
+      <label>Grupo
+        <select data-ajuste="experiencia">{{selectOptions experiencias selected=exp}}</select>
+      </label>
+      <label title="Vazio = conta os personagens dos jogadores na cena">Personagens
+        <input type="number" min="0" data-ajuste="pjs" value="{{#unless pjsAuto}}{{pjs}}{{/unless}}" placeholder="{{pjs}}">
+      </label>
+      <div class="aon-painel-orc-total">
+        Ameaça na cena: <b>{{soma}}</b> / orçamento <b>{{orcamento}}</b>
+        <span class="aon-painel-dif">{{dificuldade}}</span>
+      </div>
+    </div>
+    <p class="aon-painel-faixas">Fácil até {{faixas.facil}} · Normal até {{faixas.normal}} · Difícil até {{faixas.dificil}} · Mortal até {{faixas.mortal}}
+      <button type="button" data-action="combate" title="Adicionar todos os tokens da cena ao combate"><i class="fas fa-swords"></i> Tudo no combate</button>
+    </p>
+  </section>
+
+  {{#*inline "linha"}}
+  <li class="aon-painel-linha {{#if oculto}}aon-oculto{{/if}}" data-token-id="{{tokenId}}">
+    <img src="{{img}}" data-action="focar" title="Selecionar e centralizar">
+    <div class="aon-painel-info">
+      <a data-action="ficha" title="Abrir ficha"><b>{{nome}}</b></a>
+      {{#if npc}}<small>Tier {{tier}} · Ameaça {{ameaca}}</small>{{/if}}
+      <div class="aon-painel-saude" title="{{saude}} / {{max}}"><span style="width: {{pct}}%"></span></div>
+      <small>{{saude}}/{{max}} · {{estado}} · RD {{rd}}{{#if emCombate}} · <i class="fas fa-swords"></i>{{/if}}</small>
+    </div>
+    <div class="aon-painel-acoes">
+      <input type="number" min="1" class="aon-painel-valor" placeholder="0">
+      <button type="button" data-action="dano" title="Dano (desconta a RD)">−</button>
+      <button type="button" data-action="cura" title="Cura">+</button>
+      <button type="button" data-action="alvo" class="{{#if alvo}}ativo{{/if}}" title="Marcar como alvo"><i class="fas fa-bullseye"></i></button>
+      <button type="button" data-action="ocultar" title="Mostrar/ocultar token"><i class="fas {{#if oculto}}fa-eye-slash{{else}}fa-eye{{/if}}"></i></button>
+    </div>
+  </li>
+  {{/inline}}
+
+  <h3>Ameaças e NPCs ({{ameacas.length}})</h3>
+  <ol class="aon-painel-lista">
+    {{#each ameacas}}{{> linha}}{{else}}<li class="aon-painel-vazio">Nenhum token de NPC nesta cena.</li>{{/each}}
+  </ol>
+
+  <h3>Personagens ({{jogadores.length}})</h3>
+  <ol class="aon-painel-lista">
+    {{#each jogadores}}{{> linha}}{{else}}<li class="aon-painel-vazio">Nenhum personagem de jogador nesta cena.</li>{{/each}}
+  </ol>
+</div>
