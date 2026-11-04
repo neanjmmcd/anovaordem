@@ -41,6 +41,7 @@ import { registrarCombate, pedir, atacar } from "./combate.js";
 import { AONovaOrdemNpcModel } from "./npc-model.js";
 import { AONovaOrdemNpcSheet } from "./npc-sheet.js";
 import { AONovaOrdemPainelMestre } from "./painel-mestre.js";
+import { registrarAnimacoes } from "./animacoes.js";
 import "./item-piles.js";
 
 
@@ -183,6 +184,7 @@ Hooks.once("init", () => {
   });
 
   registrarCombate();
+  registrarAnimacoes();
   game.settings.register("a-nova-ordem", "painelMestre", {
     scope: "world", config: false, type: Object, default: { experiencia: "novatos", pjs: "" }
   });

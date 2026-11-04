@@ -2,7 +2,7 @@
   "id": "a-nova-ordem",
   "title": "A Nova Ordem",
   "description": "Sistema dieselpunk 1975 criado por Alê Gomes e programado por NeaN World",
-  "version": "0.5.0",
+  "version": "0.6.0",
 
   "authors": [
     { "name": "Alê Gomes", "role": "Criador do Sistema" },
@@ -11,11 +11,11 @@
 
   "relationships": {
     "recommends": [
-      { "id": "item-piles", "type": "module", "reason": "Saque, baús e lojas usando ¢RD (integração nativa do sistema)" },
-      { "id": "autoanimations", "type": "module", "reason": "Animações de armas, alquímicos e consumíveis" },
-      { "id": "sequencer", "type": "module", "reason": "Necessário para o Automated Animations" },
+      { "id": "item-piles", "type": "module", "reason": "Saque, baús e lojas usando ¢RD (integração nativa do sistema)", "compatibility": { "verified": "3.3.2" } },
+      { "id": "autoanimations", "type": "module", "reason": "Toca as animações próprias do sistema (instale pelo menu Animações do Sistema)", "compatibility": { "verified": "6.6.2" } },
+      { "id": "sequencer", "type": "module", "reason": "Necessário para o Automated Animations", "compatibility": { "verified": "3.6.11" } },
       { "id": "socketlib", "type": "module", "reason": "Necessário para o Automated Animations" },
-      { "id": "JB2A_DnD5e", "type": "module", "reason": "Pacote de animações gratuito usado pelo Automated Animations" },
+      { "id": "JB2A_DnD5e", "type": "module", "reason": "Opcional: animações extras (o sistema já traz efeitos próprios)" },
       { "id": "dice-so-nice", "type": "module", "reason": "Dados 3D nas rolagens (opcional)" }
     ]
   },
@@ -28,6 +28,18 @@
 
   "styles": [
     "styles/anovaordem.css"
+  ],
+
+  "packs": [
+    {
+      "name": "bestiario",
+      "label": "Bestiário (Mestre)",
+      "path": "packs/bestiario",
+      "type": "Actor",
+      "system": "a-nova-ordem",
+      "ownership": { "PLAYER": "NONE", "TRUSTED": "NONE", "ASSISTANT": "OWNER" },
+      "flags": {}
+    }
   ],
 
   "languages": [

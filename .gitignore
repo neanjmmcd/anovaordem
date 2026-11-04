@@ -23,3 +23,9 @@ package-lock.json
 # Manual editável (Word) — usado só para gerar o PDF
 *.docx
 ~$*
+
+# Compêndios do sistema (LevelDB): os .log guardam os dados e precisam ir para o git
+!packs/**/*.log
+packs/**/LOCK
+packs/**/LOG
+packs/**/LOG.old

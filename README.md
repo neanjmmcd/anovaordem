@@ -1,6 +1,6 @@
 # Dieselpunk — A Nova Ordem
 
-> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.5.0` · Funcional e jogável
+> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.6.0` · Funcional e jogável
 
 Um sistema percentual de RPG ambientado em um mundo dieselpunk alternativo, onde o Eixo venceu a Segunda Guerra Mundial. O ano é 1975. Três impérios totalitários dividem o planeta — e você é um Libertário operando nas sombras, tentando mudar o curso da história.
 
@@ -150,13 +150,20 @@ Os valores abaixo são **calculados automaticamente** a partir dos itens na fich
 | **Quantidade** | Todo item tem *Qtd.* no topo da sua ficha. O peso é multiplicado pela quantidade e a ficha mostra `×N` ao lado do nome. |
 | **Criador de Personagem** | Botão **Criador** no topo da ficha (abre sozinho quando um jogador cria um personagem). Passo a passo do manual: dados, atributos em 3d6 ×7 distribuídos à vontade e 250 pontos de perícia somados aos valores base. As rolagens vão para o chat; rolar de novo só se o mestre liberar (botão no chat ou no criador). Ao concluir, Saúde e Sanidade vão a 100 e Essência a PSI × 2. |
 | **Item Piles** | Com o módulo ativo, saques, baús e lojas funcionam com o sistema: quantidade em `system.quantidade`, preço em `system.preco` e dinheiro no ¢RD da ficha. Magias, rituais, técnicas alquímicas e implantes não entram em pilhas. |
-| **Animações** | Com o Automated Animations ativo, armas, alquímicos e consumíveis tocam animação (veja abaixo). |
+| **Animações** | Efeitos e sons próprios para armas, alquímicos e consumíveis, instalados no Automated Animations por um botão (veja abaixo). |
+| **Bestiário (só o mestre)** | Compêndio com os 14 NPCs do Suplemento já montados na ficha de NPC, com ilustração, armas, perícias em destaque, Ponto Fraco e habilidades. Jogadores não veem o compêndio. Arraste para a cena ou para a aba Atores. |
 
 **Configurações do mundo** (*Configurações → Configurar Sistema*): jogadores podem ou não adicionar itens pelo Catálogo; abrir o Criador sozinho; teto de perícia na criação (0 = sem teto, regra do livro).
 
 ### Animações
 
-Com o módulo **[Automated Animations](https://foundryvtt.com/packages/autoanimations)** ativo (e suas dependências *Sequencer*, *socketlib* e um pacote JB2A), o sistema toca a animação ao rolar dano de armas e alquímicos e ao ativar consumíveis. A animação é escolhida pelo **nome do item** no menu *Global Automatic Recognition* do Automated Animations — cadastre lá os nomes em português (ex.: "Pistola", "Lâmina", "Voltaic"). O módulo *Automated Animations For All* não é necessário.
+O sistema traz **efeitos e sons próprios** (gerados com o NeanTools) em `assets/animacoes` e `assets/sons`: tiro, rajada, raio, jato de chamas, bola de fogo, gelo, ácido, gás, explosão, onda de choque, clarão, corte, impacto, cura e estimulante. **Não é preciso o JB2A.**
+
+1. Ative o **[Automated Animations](https://foundryvtt.com/packages/autoanimations)** e o **Sequencer** (e o socketlib).
+2. Em *Configurações → Configurar Sistema → Animações do Sistema* (só o mestre), clique em **Instalar / atualizar**. A janela mostra a prévia de cada efeito, deixa ouvir o som e marca quais nomes já estão instalados.
+3. Pronto: ao atacar com uma arma, rolar um alquímico ou ativar um consumível, a animação toca. Armas de fogo, elétricas, alquímicos de fogo, gelo e ácido e o lança-chamas saem do atacante até o alvo; as demais tocam no alvo; consumíveis tocam no próprio personagem.
+
+O Automated Animations reconhece o item quando o **nome contém o rótulo** (ex.: "Pistola" vale para Pistola Leve e Pistola Pesada). **Remover do sistema** tira só as entradas do sistema, sem mexer nas que você criou. Feito para o Automated Animations 6.6.2 e o Sequencer 3.6.11.
 
 ---
 
@@ -170,9 +177,9 @@ O sistema funciona sem nenhum módulo. Os abaixo foram integrados ou testados co
 | Módulo | Para quê | Situação |
 |--------|----------|----------|
 | [Item Piles](https://foundryvtt.com/packages/item-piles) | Saque, baús, lojas e troca entre jogadores usando ¢RD | Integração nativa (desde a v0.4.0) |
-| [Automated Animations](https://foundryvtt.com/packages/autoanimations) | Animações de armas, alquímicos e consumíveis | Integrado (v0.3.1) |
+| [Automated Animations](https://foundryvtt.com/packages/autoanimations) | Toca as animações de armas, alquímicos e consumíveis | Integrado; feito para a 6.6.2 |
 | [Sequencer](https://foundryvtt.com/packages/sequencer) e [socketlib](https://foundryvtt.com/packages/socketlib) | Dependências do Automated Animations | — |
-| [JB2A (gratuito)](https://foundryvtt.com/packages/JB2A_DnD5e) | Pacote de animações usado pelo Automated Animations | — |
+| [JB2A (gratuito)](https://foundryvtt.com/packages/JB2A_DnD5e) | Animações extras para quem quiser montar as suas | Opcional: o sistema já traz os efeitos próprios |
 | [Dice So Nice!](https://foundryvtt.com/packages/dice-so-nice) | Dados 3D nas rolagens | Opcional, funciona com qualquer sistema |
 
 **Não são necessários** (o sistema já faz de forma nativa ou não são compatíveis): *Compendium Browser* (use o Catálogo), *Plutonium* (use o Criador de Personagem), *Midi-QOL* e módulos de condições do D&D 5e (só funcionam no dnd5e), *Automated Animations For All*.
@@ -208,7 +215,7 @@ As regras completas do sistema estão disponíveis no arquivo **`Dieselpunk - A 
 
 ## Status do Projeto
 
-> **Versão `0.5.0` — Funcional e jogável**
+> **Versão `0.6.0` — Funcional e jogável**
 > O sistema está em desenvolvimento contínuo e pode receber melhorias. Críticas, comentários e sugestões são bem-vindos.
 
 ---

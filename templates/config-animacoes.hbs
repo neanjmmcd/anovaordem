@@ -1,0 +1,31 @@
+<div class="aon-anim">
+  <section class="aon-anim-status">
+    {{#if aa.ativo}}
+      <p><i class="fas fa-circle-check"></i> Automated Animations {{aa.versao}} ativo
+        {{#unless aa.sequencer}} · <b>ative também o Sequencer</b>{{/unless}}</p>
+    {{else}}
+      <p class="aon-anim-aviso"><i class="fas fa-triangle-exclamation"></i> Automated Animations não está ativo. Ative-o (com o Sequencer) para instalar.</p>
+    {{/if}}
+    <p>{{instalados}} de {{total}} animações do sistema instaladas. Os efeitos ficam em <code>assets/animacoes</code> e não precisam do JB2A.
+      O módulo reconhece o item pelo nome: um item cujo nome contém o rótulo usa a animação. Itens novos com nome parecido também funcionam.</p>
+    <div class="aon-anim-botoes">
+      <button type="button" data-action="instalar" {{#unless aa.ativo}}disabled{{/unless}}><i class="fas fa-download"></i> Instalar / atualizar</button>
+      <button type="button" data-action="remover" {{#unless aa.ativo}}disabled{{/unless}}><i class="fas fa-trash"></i> Remover do sistema</button>
+    </div>
+  </section>
+
+  <ol class="aon-anim-lista">
+    {{#each grupos}}
+    <li>
+      <video src="{{caminho}}" autoplay loop muted playsinline></video>
+      <div>
+        <b>{{video}}</b> <small>{{tipo}}</small>
+        {{#if som}}<a data-action="previa" data-som="{{som}}" title="Ouvir"><i class="fas fa-volume-high"></i> {{som}}</a>{{/if}}
+        <div class="aon-anim-rotulos">
+          {{#each rotulos}}<span class="{{#if ok}}ok{{/if}}">{{r}}</span>{{/each}}
+        </div>
+      </div>
+    </li>
+    {{/each}}
+  </ol>
+</div>
