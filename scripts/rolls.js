@@ -123,7 +123,7 @@ export async function rolarAlquimico({actor, alquimico, img}) {
       calculo: `<b>Nível:</b> ${al.nivel} · <b>Técnica:</b> ${al.tecnica} · <b>Tipo:</b> ${al.tipo}<br>`
         + `<b>Alvo/Efeito:</b> ${al.alvo}<br><b>Efeito Secundário:</b> ${al.efeito}<br>`
         + `<b>Dano:</b> ${al.dano} = <b>${total}</b>`,
-      resultado: "<b>Dano rolado</b>", cor: CORES.dano, extra: botoesDanoCura(total)
+      resultado: "<b>Dano rolado</b>", cor: CORES.dano, extra: botoesDanoCura(total, true)
     })
   });
 }

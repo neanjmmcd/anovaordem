@@ -1,6 +1,6 @@
 # Dieselpunk — A Nova Ordem
 
-> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.6.0` · Funcional e jogável
+> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.7.0` · Funcional e jogável
 
 Um sistema percentual de RPG ambientado em um mundo dieselpunk alternativo, onde o Eixo venceu a Segunda Guerra Mundial. O ano é 1975. Três impérios totalitários dividem o planeta — e você é um Libertário operando nas sombras, tentando mudar o curso da história.
 
@@ -14,7 +14,7 @@ Um sistema percentual de RPG ambientado em um mundo dieselpunk alternativo, onde
 - [Recursos do Sistema no Foundry](#recursos-do-sistema-no-foundry)
 - [Módulos Recomendados](#módulos-recomendados)
 - [Como Instalar no FoundryVTT](#como-instalar-no-foundryvtt)
-- [Compêndio de Itens](#compêndio-de-itens-opcional)
+- [Compêndios](#compêndios)
 - [Regras Completas](#regras-completas)
 - [Créditos](#créditos) · [Licença](#licença)
 
@@ -140,7 +140,10 @@ Os valores abaixo são **calculados automaticamente** a partir dos itens na fich
 | **Ficha automática** | RD, peso, Essência, deslocamento, atributos, perícias e penalidades são calculados a partir dos itens (veja [Itens que alteram a ficha](#itens-que-alteram-a-ficha)). |
 | **Rolagens** | Clique no atributo ou na perícia. Perícias com dois atributos perguntam qual usar. Crítico em 01–04, falha crítica em 96–100. |
 | **Ataque automático** | O botão de dano da arma rola a **perícia da arma** (Armas de Fogo, Brancas, Pesadas… escolhida na ficha da arma ou deduzida pelo nome), o alvo marcado pode **esquivar** e o dano entra já descontando a RD (mínimo 1). Crítico dobra os dados; armas de disparo e arremesso gastam 1 de munição por ataque (Armas Brancas e Briga não gastam). Com alvo marcado, o cartão mostra quem está sendo atacado. Se o jogador não é dono do alvo, o mestre conectado aplica. |
-| **Automação de Combate** | *Configurações → Configurar Sistema → Automação de Combate* (só o mestre): liga/desliga tudo, o teste de ataque, a esquiva (sem esquiva / botão para o dono do alvo / automática), a aplicação do dano (automática / botão), o gasto de munição e o crítico. Pode ser mudada no meio da sessão. |
+| **Alquímicos** | O botão de dano da técnica segue o mesmo fluxo com a perícia **Pedras de Energia**: o dano ignora metade da armadura (o mestre ajusta quando a armadura for tratada) e a pedra se desfaz ao usar (−1 de quantidade). Nível 4: o cartão avisa a Incapacitação do usuário e, na falha crítica, a pedra explode nele. |
+| **Feitiços e rituais** | Botão ✨ na ficha. Testa **Feitiçaria** ou **Rituais** e gasta Essência, mesmo se falhar (+2 com Humanidade em 50% ou menos). O alvo se defende com **Resistência Mental**, conforme a opção de esquiva, e o dano vai na Sanidade, sem RD e sem mostrar o número aos jogadores. Crítico dobra esse dano. Sem Essência suficiente ou em Mente Vazia, não conjura. |
+| **Consumíveis gastam** | Marcar elixir, injeção ou droga como *Ativo* gasta 1 da quantidade. Sem estoque, não ativa. |
+| **Automação de Combate** | *Configurações → Configurar Sistema → Automação de Combate* (só o mestre): liga/desliga tudo, o teste de ataque, o gasto de pedras, consumíveis e Essência, a esquiva (sem esquiva / botão para o dono do alvo / automática), a aplicação do dano (automática / botão), o gasto de munição e o crítico. Pode ser mudada no meio da sessão. |
 | **Dano e cura pelo chat** | Os botões − / + dos cartões aplicam no token selecionado (ou no alvo marcado): o − desconta a RD; o estado de Saúde e as penalidades são atualizados. |
 | **NPC / Ameaça** | Tipo de ator próprio, com ficha compacta no formato do Suplemento: Tier, função, Valor de Ameaça, Saúde em pontos (o estado é calculado pela porcentagem), RD, atributos, Grupos de Perícias e perícias em destaque com a chance já somada. Armas arrastadas para a ficha atacam com o mesmo fluxo dos personagens. |
 | **Painel do Mestre** | Botão de torre nos controles de token (só o mestre). Lista ameaças e personagens da cena com barra de Saúde, estado e RD; dano/cura rápidos, marcar alvo, ocultar token, abrir ficha e pôr todos no combate. Calcula o **orçamento de encontro** (experiência do grupo × personagens) e mostra se a cena está Fácil, Normal, Difícil ou Mortal. |
@@ -157,11 +160,11 @@ Os valores abaixo são **calculados automaticamente** a partir dos itens na fich
 
 ### Animações
 
-O sistema traz **efeitos e sons próprios** (gerados com o NeanTools) em `assets/animacoes` e `assets/sons`: tiro, rajada, raio, jato de chamas, bola de fogo, gelo, ácido, gás, explosão, onda de choque, clarão, corte, impacto, cura e estimulante. **Não é preciso o JB2A.**
+O sistema traz **efeitos e sons próprios** (gerados com o NeanTools) em `assets/animacoes` e `assets/sons`: tiro, rajada, raio, jato de chamas, bola de fogo, gelo, ácido, gás, explosão, onda de choque, clarão, corte, impacto, magia, cura e estimulante. **Não é preciso o JB2A.**
 
 1. Ative o **[Automated Animations](https://foundryvtt.com/packages/autoanimations)** e o **Sequencer** (e o socketlib).
-2. Em *Configurações → Configurar Sistema → Animações do Sistema* (só o mestre), clique em **Instalar / atualizar**. A janela mostra a prévia de cada efeito, deixa ouvir o som e marca quais nomes já estão instalados.
-3. Pronto: ao atacar com uma arma, rolar um alquímico ou ativar um consumível, a animação toca. Armas de fogo, elétricas, alquímicos de fogo, gelo e ácido e o lança-chamas saem do atacante até o alvo; as demais tocam no alvo; consumíveis tocam no próprio personagem.
+2. Abra o mundo como mestre: as animações se instalam sozinhas. Em *Configurações → Configurar Sistema → Animações do Sistema* dá para ver a prévia, ouvir os sons e atualizar.
+3. Pronto: ao atacar com uma arma, rolar um alquímico, conjurar ou ativar um consumível, a animação toca. Armas de fogo, elétricas, alquímicos de fogo, gelo e ácido e o lança-chamas saem do atacante até o alvo; as demais tocam no alvo; consumíveis tocam no próprio personagem.
 
 O Automated Animations reconhece o item quando o **nome contém o rótulo** (ex.: "Pistola" vale para Pistola Leve e Pistola Pesada). **Remover do sistema** tira só as entradas do sistema, sem mexer nas que você criou. Feito para o Automated Animations 6.6.2 e o Sequencer 3.6.11.
 
@@ -188,22 +191,33 @@ O sistema funciona sem nenhum módulo. Os abaixo foram integrados ou testados co
 
 ## Como Instalar no FoundryVTT
 
-1. Copie a pasta `a-nova-ordem` para o diretório `Data/systems/` da sua instalação do FoundryVTT
-2. Reinicie o FoundryVTT
-3. Ao criar um novo Mundo, selecione **"A Nova Ordem"** como sistema de jogo
+1. No Foundry, abra **Sistemas de Jogo → Instalar Sistema**.
+2. Em **URL do Manifesto**, cole o endereço abaixo e clique em **Instalar**:
+
+   ```
+   https://raw.githubusercontent.com/neanjmmcd/anovaordem/main/system.json
+   ```
+
+3. Crie um mundo com o sistema **A Nova Ordem**. Pronto: não há nada para copiar ou extrair.
+
+Tudo vem junto com o sistema: compêndios, Bestiário, imagens, efeitos, sons e o manual. As atualizações aparecem no próprio Foundry.
+
+**Quem já tinha os compêndios antigos no mundo** (arquivo `compedium.rar`, que não existe mais): pode apagar os compêndios do mundo pela aba Compêndios. O Catálogo já mostra só uma cópia de cada item.
 
 ---
 
-## Compêndio de Itens (opcional)
+## Compêndios
 
-O arquivo **`compedium.rar`** contém uma coleção de itens prontos (armas, armaduras, alquímicos, implantes, etc.) para usar no seu mundo. As imagens dos itens já vêm com o sistema, em `assets/itens`.
+Ficam na aba Compêndios, na pasta **A Nova Ordem**:
 
-O conteúdo do `.rar` corresponde à pasta `packs` do mundo. Para instalar:
-
-1. Extraia o arquivo `compedium.rar`
-2. Copie o conteúdo extraído para `Data/worlds/<nome-do-seu-mundo>/packs/`
-
-> **Atenção:** Se o seu mundo já possui uma pasta `packs` com conteúdo próprio, **não substitua a pasta inteira** — copie apenas os arquivos novos para dentro dela, para não perder itens que você já tenha criado.
+| Pasta | Conteúdo |
+|-------|----------|
+| — | **Manual do Sistema** (o PDF, dentro do Foundry) |
+| Equipamento | Armas, Armaduras, Itens |
+| Cibernética | Implantes, Mechas, Veículos |
+| Alquimia | Técnicas Alquímicas, Alquimia, Ácidos, Venenos, Injeções, Elixires, Mutagênicos, Drogas |
+| Ocultismo | Magias, Rituais |
+| Mestre | **Bestiário** (só o mestre vê) |
 
 ---
 
@@ -215,7 +229,7 @@ As regras completas do sistema estão disponíveis no arquivo **`Dieselpunk - A 
 
 ## Status do Projeto
 
-> **Versão `0.6.0` — Funcional e jogável**
+> **Versão `0.7.0` — Funcional e jogável**
 > O sistema está em desenvolvimento contínuo e pode receber melhorias. Críticas, comentários e sugestões são bem-vindos.
 
 ---

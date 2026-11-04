@@ -19,6 +19,9 @@ export const COMBATE_PADRAO = {
   esquiva: "botao",        // "nenhuma" | "botao" (o dono do alvo decide) | "automatica"
   aplicarDano: "automatico", // "automatico" | "botao" (alguém clica para aplicar)
   consumirMunicao: true,   // −1 munição por ataque
+  consumirPedras: true,    // alquímicos: a pedra se desfaz ao ser usada (−1 quantidade)
+  consumirItens: true,     // elixires, injeções e drogas: −1 quantidade ao ativar
+  gastarEssencia: true,    // feitiços e rituais descontam Essência de quem conjura
   criticoDobra: true,      // crítico (01–04) dobra os dados de dano
   ocultarRolagemMestre: false // jogadores veem só sucesso/falha/crítico das rolagens do mestre
 };
@@ -28,6 +31,18 @@ export function config() {
 }
 
 const PERICIAS_CORPO_A_CORPO = ["armasBrancas", "briga"];
+
+/** RD contra o ataque. Dano alquímico ignora metade da armadura (o livro exclui armadura tratada: ajuste do mestre) */
+export function rdContra(actor, alquimico = false) {
+  const rd = Number(actor.system.rd ?? 0);
+  if (!alquimico) return rd;
+  const armadura = actor.type === "npc"
+    ? Math.max(0, rd - Number(actor.system.atributos?.con ?? 0))
+    : Number(actor.system.rdArmadura ?? 0);
+  return rd - Math.floor(armadura / 2);
+}
+
+const quebraLinhas = t => String(t ?? "").replace(/\n/g, "<br>");
 
 const PENALIDADES = ["penfisica", "pensociais", "penmentais", "pentecnicologica", "penaquimica", "penmagica", "pensobrevivencia"];
 
@@ -94,7 +109,7 @@ export function periciaDaArma(item) {
   if (item.system.pericia) return item.system.pericia;
   const t = `${item.name} ${item.system.tipo ?? ""} ${item.system.dano ?? ""}`.toLowerCase();
   if (/experiment|voltaic|tesla/.test(t)) return "armasExperimentais";
-  if (/pesad|canh[aã]o|foguete|morteiro|gatling|lan[çc]a-chamas/.test(t)) return "armasPesadas";
+  if (/pesad|canh[aã]o|foguete|morteiro|gatling|lan[çc]a-chamas|lan[çc]a-granadas/.test(t)) return "armasPesadas";
   if (/granada|dinamite/.test(t)) return "atletismo";
   if (/soco|punho|soqueira/.test(t)) return "briga";
   if (/\+\s*for\b|l[aâ]mina|faca|espada|machado|bast[aã]o|katana|adaga|porrete|cassetete/.test(t)) return "armasBrancas";
@@ -119,33 +134,39 @@ export function prepararDano(texto, actor) {
 export async function atacar(actor, item) {
   const cfg = config();
   const alvos = [...game.user.targets].map(t => t.actor).filter(Boolean);
+  const alquimico = item.type === "alquimico";
 
   // Só armas de disparo/arremesso usam munição; corpo-a-corpo (Armas Brancas, Briga) não gasta
   if (item.type === "arma" && "ammo" in item.system && !PERICIAS_CORPO_A_CORPO.includes(periciaDaArma(item))) {
     if (Number(item.system.ammo) < 1) return ui.notifications.warn("Sem munição na arma.");
     if (cfg.ativo && cfg.consumirMunicao) await item.update({ "system.ammo": Number(item.system.ammo) - 1 });
   }
+  // A pedra alquímica se desfaz ao ser usada
+  if (alquimico && cfg.ativo && cfg.consumirPedras) {
+    const qtd = Number(item.system.quantidade ?? 1);
+    if (qtd < 1) return ui.notifications.warn(`Sem pedras de ${item.name}.`);
+    await item.update({ "system.quantidade": qtd - 1 });
+  }
 
   const dano = prepararDano(item.system.dano, actor);
-  if (!dano) return ui.notifications.warn(`Dano inválido em ${item.name}.`);
+  if (!dano && !alquimico) return ui.notifications.warn(`Dano inválido em ${item.name}.`);
 
-  // Sem automação ou sem teste de ataque: só o dano (comportamento antigo)
+  // Sem automação ou sem teste de ataque: só o dano
   let ataque = null;
-  if (cfg.ativo && cfg.rolarAtaque && item.type === "arma") {
-    const key = periciaDaArma(item);
-    const chance = chancePericia(actor, key);
+  if (cfg.ativo && cfg.rolarAtaque) {
+    const chance = chancePericia(actor, alquimico ? "pedrasEnergia" : periciaDaArma(item));
     const roll = await new Roll("1d100").evaluate();
     ataque = { roll, chance, ...grau(roll.total, chance.alvo) };
   }
 
-  let formula = dano.formula;
-  if (ataque?.sucesso && ataque.critico && cfg.criticoDobra) {
+  let formula = dano?.formula ?? "";
+  if (dano && ataque?.sucesso && ataque.critico && cfg.criticoDobra) {
     formula = formula.replace(/^(\d+)d/i, (_, n) => `${Number(n) * 2}d`);
   }
 
   const rolls = ataque ? [ataque.roll] : [];
   let danoRoll = null, total = 0;
-  if (!ataque || ataque.sucesso) {
+  if (dano && (!ataque || ataque.sucesso)) {
     danoRoll = await new Roll(formula).evaluate();
     rolls.push(danoRoll);
     total = danoRoll.total + dano.atributoValor;
@@ -156,20 +177,30 @@ export async function atacar(actor, item) {
   if (ataque) calculo += `Ataque: ${ataque.chance.texto} · d100 = <b>${ataque.roll.total}</b><br>`;
   if (danoRoll) {
     calculo += `Dano: ${formula}${dano.atributo ? ` + ${dano.atributo.toUpperCase()} (${dano.atributoValor})` : ""}`
-      + ` = <b>${total}</b>${formula !== dano.formula ? " (crítico: dados dobrados)" : ""}`;
+      + ` = <b>${total}</b>${formula !== dano.formula ? " (crítico: dados dobrados)" : ""}`
+      + `${alquimico ? " · alquímico: ignora metade da armadura" : ""}`;
   }
 
   // Alvos
   const pendentes = [];
-  let extra = "";
+  let extra = alquimico ? blocoAlquimico(item, ataque) : "";
   if (danoRoll && cfg.ativo && alvos.length) {
     for (const alvo of alvos) {
-      const bloco = await resolverAlvo(alvo, total, cfg);
+      const bloco = await resolverAlvo(alvo, total, cfg, alquimico);
       extra += bloco.html;
       if (bloco.pendente) pendentes.push(bloco.pendente);
     }
   } else if (danoRoll) {
-    extra += botoesDanoCura(total);
+    extra += botoesDanoCura(total, alquimico);
+  }
+
+  // Nível 4, falha crítica: a pedra explode no próprio usuário
+  let explosao = null;
+  if (alquimico && dano && Number(item.system.nivel) === 4 && ataque?.critico && !ataque.sucesso && cfg.ativo) {
+    const r = await new Roll(dano.formula).evaluate();
+    rolls.push(r);
+    explosao = Math.max(1, r.total - rdContra(actor, true));
+    extra += `<div class="aon-card-aviso"><b>A pedra explodiu!</b> ${actor.name} sofre todos os efeitos.</div>`;
   }
 
   const html = cartao({
@@ -177,7 +208,7 @@ export async function atacar(actor, item) {
     titulo: item.name,
     subtitulo: actor.name + textoAlvos(alvos),
     calculo,
-    resultado: ataque ? `<b>${ataque.texto}</b>` : `<b>Dano rolado</b>`,
+    resultado: ataque ? `<b>${ataque.texto}</b>` : `<b>${danoRoll ? "Dano rolado" : "Efeito"}</b>`,
     cor: ataque ? corDoGrau(ataque) : CORES.dano,
     extra
   });
@@ -186,6 +217,102 @@ export async function atacar(actor, item) {
   for (const p of pendentes.filter(p => p.aplicarJa)) {
     await pedir("dano", { uuid: p.uuid, dano: p.dano, messageId: msg.id });
   }
+  if (explosao) await pedir("dano", { uuid: actor.uuid, dano: explosao });
+}
+
+/** Técnica, alvo e efeito da pedra; no nível 4, o preço de usar (livro) */
+function blocoAlquimico(item, ataque) {
+  const s = item.system;
+  let html = `<div class="aon-card-efeito"><b>Nível ${s.nivel}</b>${s.tecnica ? ` · ${s.tecnica}` : ""}${s.tipo ? ` · ${s.tipo}` : ""}`
+    + `${s.alvo ? `<br>${quebraLinhas(s.alvo)}` : ""}${s.efeito ? `<br>${quebraLinhas(s.efeito)}` : ""}</div>`;
+  if (Number(s.nivel) === 4 && !(ataque?.critico && !ataque.sucesso)) {
+    const turnos = ataque?.sucesso && ataque.critico ? "2 turnos" : "o próximo turno";
+    html += `<div class="aon-card-aviso"><b>Nível 4:</b> o usuário fica Incapacitado por ${turnos}.</div>`;
+  }
+  return html;
+}
+
+/* =========================
+ * FEITIÇOS E RITUAIS
+ * Teste de Feitiçaria ou Rituais, custo em Essência (+2 com Humanidade ≤ 50%).
+ * O alvo se defende com Resistência Mental; o dano do feitiço vai na Sanidade,
+ * sem RD e sem mostrar o número aos jogadores.
+ * ========================= */
+export async function conjurar(actor, item) {
+  const cfg = config();
+  const sys = actor.system;
+  const ritual = item.type === "rituais";
+  if (sys.estadoMental === "Mente Vazia") return ui.notifications.warn(`${actor.name} não conjura: Mente Vazia.`);
+
+  let custo = parseInt(item.system.essencia, 10) || 0;
+  if (Number(sys.humanidade ?? 100) <= 50) custo += 2;
+  const gasta = cfg.ativo && cfg.gastarEssencia && sys.essencia !== undefined;
+  if (gasta && custo > Number(sys.essencia ?? 0)) {
+    return ui.notifications.warn(`Essência insuficiente: ${item.name} custa ${custo}, ${actor.name} tem ${sys.essencia}.`);
+  }
+
+  const chance = chancePericia(actor, ritual ? "rituais" : "feiticaria");
+  const roll = await new Roll("1d100").evaluate();
+  const g = grau(roll.total, chance.alvo);
+  if (gasta && custo) await actor.update({ "system.essencia": Number(sys.essencia) - custo });
+
+  let ds = ritual ? 0 : Number(item.system.dano ?? 0);
+  if (g.sucesso && g.critico && cfg.criticoDobra) ds *= 2;
+  const alvos = ritual ? [] : [...game.user.targets].map(t => t.actor).filter(Boolean);
+
+  let extra = `<div class="aon-card-efeito">${ritual && item.system.tempo ? `<b>Tempo e materiais:</b> ${quebraLinhas(item.system.tempo)}<br>` : ""}`
+    + `${quebraLinhas(item.system.efeito)}</div>`;
+  if (sys.estadoMental === "Colapso Mental") {
+    extra += `<div class="aon-card-aviso"><b>Colapso Mental:</b> feitiços exigem teste de Resistência Mental.</div>`;
+  }
+
+  const pendentes = [];
+  if (g.sucesso && cfg.ativo) {
+    for (const alvo of alvos) {
+      const bloco = await resolverFeitico(alvo, ds, cfg);
+      extra += bloco.html;
+      if (bloco.pendente) pendentes.push(bloco.pendente);
+    }
+  }
+
+  const msg = await enviarCartao({
+    actor, rolls: [roll], flags: { pendentes },
+    html: cartao({
+      img: item.img, titulo: item.name, subtitulo: actor.name + textoAlvos(alvos),
+      calculo: `${chance.texto} · d100 = <b>${roll.total}</b>${custo ? `<br>Custo: <b>${custo}</b> de Essência${gasta ? "" : " (não descontado)"}` : ""}`,
+      resultado: `<b>${g.texto}</b>`, cor: corDoGrau(g), extra
+    })
+  });
+  for (const p of pendentes) await pedir("sanidade", { uuid: p.uuid, ds: p.ds, messageId: msg.id });
+}
+
+/** Defesa de um alvo contra o feitiço (Resistência Mental + PSI) */
+async function resolverFeitico(alvo, ds, cfg) {
+  const conta = ds ? `<span class="aon-so-mestre">Dano à Sanidade: <b>${ds}</b></span>` : "";
+  if (cfg.esquiva === "automatica") {
+    const chance = chancePericia(alvo, "resistenciaMental");
+    const r = await new Roll("1d100").evaluate();
+    const g = grau(r.total, chance.alvo);
+    const calc = `Resistência: ${chance.texto} · d100 = <b>${r.total}</b><br>${conta}`;
+    if (g.sucesso) return { html: blocoAlvo(alvo, calc, `<b>Resistiu!</b>`) };
+    return { html: blocoAlvo(alvo, calc, ""), pendente: { uuid: alvo.uuid, ds } };
+  }
+  if (cfg.esquiva === "botao") {
+    const dados = `data-uuid="${alvo.uuid}" data-ds="${ds}" data-pericia="resistenciaMental"`;
+    return {
+      html: blocoAlvo(alvo, conta, "",
+        `<div class="aon-botoes">
+          <button type="button" class="aon-esquivar" ${dados}><i class="fas fa-brain"></i> Resistir</button>
+          <button type="button" class="aon-receber" ${dados}><i class="fas fa-skull"></i> Sofrer</button>
+        </div>`)
+    };
+  }
+  if (cfg.aplicarDano === "automatico") return { html: blocoAlvo(alvo, conta, ""), pendente: { uuid: alvo.uuid, ds } };
+  return {
+    html: blocoAlvo(alvo, conta, "",
+      `<div class="aon-botoes"><button type="button" class="aon-receber" data-uuid="${alvo.uuid}" data-ds="${ds}">
+      <i class="fas fa-skull"></i> Aplicar</button></div>`)
+  };
 }
 
 /** Bloco de um alvo dentro do cartão de ataque */
@@ -199,8 +326,8 @@ function blocoAlvo(alvo, calculo, resultado, botoes = "") {
 }
 
 /** Monta o bloco de cada alvo conforme a configuração de esquiva/aplicação */
-async function resolverAlvo(alvo, total, cfg) {
-  const rd = Number(alvo.system.rd ?? 0);
+async function resolverAlvo(alvo, total, cfg, alquimico = false) {
+  const rd = rdContra(alvo, alquimico);
   const efetivo = Math.max(1, total - rd); // todo acerto causa no mínimo 1 (livro)
 
   if (cfg.esquiva === "automatica") {
@@ -238,9 +365,9 @@ function blocoDano(alvo, calc, efetivo, rd, total, cfg, prefixo = "") {
   };
 }
 
-export function botoesDanoCura(total) {
+export function botoesDanoCura(total, alquimico = false) {
   return `<p>
-    <button class="aplicar-dano" data-dano="${total}" title="Aplicar dano (− RD) no token selecionado ou no alvo"><b>-</b></button>
+    <button class="aplicar-dano" data-dano="${total}" ${alquimico ? 'data-alquimico="1"' : ""} title="Aplicar dano (− RD) no token selecionado ou no alvo"><b>-</b></button>
     <b>Total: ${total}</b>
     <button class="aplicar-cura" data-cura="${total}" title="Aplicar cura no token selecionado ou no alvo"><b>+</b></button></p>`;
 }
@@ -299,17 +426,24 @@ function anunciar(actor, texto, cor, estado) {
 
 const ACOES = {
   // bruto: o valor ainda não teve a RD descontada (botão − do chat)
-  async dano({ uuid, dano, messageId, bruto }) {
+  async dano({ uuid, dano, messageId, bruto, alquimico }) {
     const actor = await fromUuid(uuid);
     if (!actor) return;
-    const efetivo = bruto ? Math.max(1, Number(dano) - Number(actor.system.rd ?? 0)) : Number(dano);
+    const efetivo = bruto ? Math.max(1, Number(dano) - rdContra(actor, alquimico)) : Number(dano);
     const estado = await executarDano(actor, efetivo);
     if (messageId) await resolverBloco(messageId, uuid, `Recebeu <b style="color:red">${efetivo}</b> — <b>${estado}</b>`);
     if (bruto) anunciar(actor, `Reduziu <b style="color:red">${efetivo}</b> na sua Saúde.`, CORES.dano, estado);
     return estado;
   },
-  async esquivou({ uuid, messageId }) {
-    if (messageId) await resolverBloco(messageId, uuid, `<b>Esquivou!</b>`);
+  async esquivou({ uuid, messageId, texto = "Esquivou!" }) {
+    if (messageId) await resolverBloco(messageId, uuid, `<b>${texto}</b>`);
+  },
+  // Feitiço: o estado mental é anunciado pelo hook de Sanidade (init.js), sem o número
+  async sanidade({ uuid, ds, messageId }) {
+    const actor = await fromUuid(uuid);
+    if (!actor) return;
+    if (Number(ds) > 0) await actor.update({ "system.sanidade": Math.max(0, Number(actor.system.sanidade ?? 0) - Number(ds)) });
+    if (messageId) await resolverBloco(messageId, uuid, `<b>Afetado pelo feitiço</b>`);
   },
   async cura({ uuid, cura }) {
     const actor = await fromUuid(uuid);
@@ -340,7 +474,7 @@ export function registrarCombate() {
   game.settings.registerMenu(SISTEMA, "combateMenu", {
     name: "Automação de Combate",
     label: "Configurar",
-    hint: "Ligar/desligar teste de ataque, esquiva, aplicação de dano, munição e crítico.",
+    hint: "Ligar/desligar teste de ataque, esquiva, aplicação de dano, gasto de munição, pedras, consumíveis e Essência, e crítico.",
     icon: "fas fa-crosshairs",
     type: ConfigCombate,
     restricted: true
@@ -362,24 +496,27 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
     botao.addEventListener("click", async ev => {
       ev.preventDefault();
       botao.closest(".aon-botoes")?.querySelectorAll("button").forEach(b => (b.disabled = true));
-      const { uuid, dano } = botao.dataset;
-      if (botao.classList.contains("aon-receber")) {
-        return pedir("dano", { uuid, dano: Number(dano), messageId: message.id });
-      }
+      const { uuid, dano, ds, pericia = "esquiva" } = botao.dataset;
+      const feitico = ds !== undefined;
+      const sofrer = () => feitico
+        ? pedir("sanidade", { uuid, ds: Number(ds), messageId: message.id })
+        : pedir("dano", { uuid, dano: Number(dano), messageId: message.id });
+      if (botao.classList.contains("aon-receber")) return sofrer();
+
       const alvo = await fromUuid(uuid);
-      const chance = chancePericia(alvo, "esquiva");
+      const chance = chancePericia(alvo, pericia);
       const r = await new Roll("1d100").evaluate();
       const g = grau(r.total, chance.alvo);
       await enviarCartao({
         actor: alvo, rolls: [r],
         html: cartao({
-          img: alvo.img, titulo: "Esquiva", subtitulo: alvo.name,
+          img: alvo.img, titulo: feitico ? "Resistência Mental" : "Esquiva", subtitulo: alvo.name,
           calculo: `${chance.texto} · d100 = <b>${r.total}</b>`,
           resultado: `<b>${g.texto}</b>`, cor: corDoGrau(g)
         })
       });
-      if (g.sucesso) return pedir("esquivou", { uuid, messageId: message.id });
-      return pedir("dano", { uuid, dano: Number(dano), messageId: message.id });
+      if (g.sucesso) return pedir("esquivou", { uuid, messageId: message.id, texto: feitico ? "Resistiu!" : "Esquivou!" });
+      return sofrer();
     });
   }
 });

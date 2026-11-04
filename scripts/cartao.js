@@ -64,6 +64,7 @@ export async function enviarCartao({ actor, html, rolls = [], flags = {} }) {
 
 /* Esconde o cálculo dos jogadores nas rolagens ocultas do mestre */
 Hooks.on("renderChatMessageHTML", (message, html) => {
-  if (game.user.isGM || !message.getFlag(SISTEMA, "ocultar")) return;
-  html.querySelectorAll(".aon-calculo").forEach(el => el.remove());
+  if (game.user.isGM) return;
+  html.querySelectorAll(".aon-so-mestre").forEach(el => el.remove());
+  if (message.getFlag(SISTEMA, "ocultar")) html.querySelectorAll(".aon-calculo").forEach(el => el.remove());
 });

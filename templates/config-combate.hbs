@@ -16,7 +16,7 @@
   <div class="form-group">
     <label>Esquiva do alvo</label>
     <select name="esquiva">{{selectOptions esquivas selected=c.esquiva}}</select>
-    <p class="hint">Botão: o jogador dono do alvo (ou o mestre) escolhe Esquivar ou Receber. Automática: o sistema rola a Esquiva do alvo.</p>
+    <p class="hint">Botão: o jogador dono do alvo (ou o mestre) escolhe se defender ou receber. Automática: o sistema rola a defesa. Vale para Esquiva e, nos feitiços, para Resistência Mental.</p>
   </div>
 
   <div class="form-group">
@@ -28,6 +28,23 @@
   <div class="form-group">
     <label>Gastar munição</label>
     <input type="checkbox" name="consumirMunicao" {{checked c.consumirMunicao}}>
+  </div>
+
+  <div class="form-group">
+    <label>Pedras alquímicas se desfazem ao usar</label>
+    <input type="checkbox" name="consumirPedras" {{checked c.consumirPedras}}>
+    <p class="hint">Cada uso gasta 1 da quantidade da pedra, como diz o livro.</p>
+  </div>
+
+  <div class="form-group">
+    <label>Consumíveis gastam quantidade</label>
+    <input type="checkbox" name="consumirItens" {{checked c.consumirItens}}>
+    <p class="hint">Marcar elixir, injeção ou droga como Ativo gasta 1 da quantidade.</p>
+  </div>
+
+  <div class="form-group">
+    <label>Feitiços e rituais gastam Essência</label>
+    <input type="checkbox" name="gastarEssencia" {{checked c.gastarEssencia}}>
   </div>
 
   <div class="form-group">
