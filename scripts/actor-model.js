@@ -244,7 +244,7 @@ export class AONovaOrdemPersonagemModel extends foundry.abstract.TypeDataModel {
       + (ajustes.rd ? ` + Ajuste ${ajustes.rd}` : "");
 
     // Peso total carregado
-    this.pesoUnit = items.reduce((t, i) => t + Number(i.system.peso ?? 0), 0);
+    this.pesoUnit = items.reduce((t, i) => t + Number(i.system.peso ?? 0) * Number(i.system.quantidade ?? 1), 0);
     this.cargaExtra = cargaExtra;
 
     // Penalidades totais = Saúde (gravadas) + armadura (físicas) + Sanidade + itens

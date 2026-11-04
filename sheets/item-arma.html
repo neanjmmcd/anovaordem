@@ -19,6 +19,11 @@
     </section>
 
     <section>
+      <label title="Perícia rolada no teste de ataque. Automático: o sistema deduz pelo nome e pelo dano.">Perícia de ataque</label>
+      <select name="system.pericia">{{selectOptions config.periciaOptions selected=system.pericia blank="Automático"}}</select>
+    </section>
+
+    <section>
       <label>Munição</label>
       <input type="number" name="system.ammo" value="{{system.ammo}}" min="0">
     </section>

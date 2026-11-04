@@ -1,0 +1,49 @@
+<div class="aon-cfg">
+  <p class="aon-cfg-dica">Vale para o mundo todo. O mestre pode mudar a qualquer momento, inclusive no meio da sessão.</p>
+
+  <div class="form-group">
+    <label>Automação ligada</label>
+    <input type="checkbox" name="ativo" {{checked c.ativo}}>
+    <p class="hint">Desligada: as armas só rolam o dano e o chat mostra os botões − / + (nada é aplicado sozinho).</p>
+  </div>
+
+  <div class="form-group">
+    <label>Rolar teste de ataque</label>
+    <input type="checkbox" name="rolarAtaque" {{checked c.rolarAtaque}}>
+    <p class="hint">Antes do dano, rola a perícia da arma (Armas de Fogo, Brancas, Pesadas…). Errou, não há dano.</p>
+  </div>
+
+  <div class="form-group">
+    <label>Esquiva do alvo</label>
+    <select name="esquiva">{{selectOptions esquivas selected=c.esquiva}}</select>
+    <p class="hint">Botão: o jogador dono do alvo (ou o mestre) escolhe Esquivar ou Receber. Automática: o sistema rola a Esquiva do alvo.</p>
+  </div>
+
+  <div class="form-group">
+    <label>Aplicar o dano</label>
+    <select name="aplicarDano">{{selectOptions aplicacoes selected=c.aplicarDano}}</select>
+    <p class="hint">Automático: desconta a RD e tira da Saúde do alvo marcado. Botão: mostra o valor e espera alguém confirmar.</p>
+  </div>
+
+  <div class="form-group">
+    <label>Gastar munição</label>
+    <input type="checkbox" name="consumirMunicao" {{checked c.consumirMunicao}}>
+  </div>
+
+  <div class="form-group">
+    <label>Crítico dobra os dados de dano</label>
+    <input type="checkbox" name="criticoDobra" {{checked c.criticoDobra}}>
+  </div>
+
+  <h4>Rolagens do mestre</h4>
+  <div class="form-group">
+    <label>Ocultar cálculo das rolagens do mestre</label>
+    <input type="checkbox" name="ocultarRolagemMestre" {{checked c.ocultarRolagemMestre}}>
+    <p class="hint">Os jogadores veem só o resultado (sucesso, falha, crítico) dos testes, ataques e esquivas rolados pelo mestre. O mestre continua vendo o cálculo completo para conferir. Os dados 3D não aparecem nessas rolagens, para não mostrar o número.</p>
+  </div>
+
+  <footer class="form-footer">
+    <button type="button" data-action="padrao"><i class="fas fa-rotate-left"></i> Restaurar padrão</button>
+    <button type="submit"><i class="fas fa-save"></i> Salvar</button>
+  </footer>
+</div>

@@ -1,4 +1,4 @@
-import { camposModificadores, camposConsumivel } from "./modificadores.js";
+import { camposModificadores, camposConsumivel, campoQuantidade } from "./modificadores.js";
 
 export class AONovaOrdemDrogasModel extends foundry.abstract.DataModel {
 
@@ -6,6 +6,7 @@ export class AONovaOrdemDrogasModel extends foundry.abstract.DataModel {
     const f = foundry.data.fields;
 
     return {
+      quantidade: campoQuantidade(),
       modificadores: camposModificadores(),
       ...camposConsumivel(),
 

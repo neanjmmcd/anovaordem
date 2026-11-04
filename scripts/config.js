@@ -297,3 +297,26 @@ AONOVAORDEM.penGrupoOptions = {
   todas: "Todas",
   ...Object.fromEntries(Object.entries(AONOVAORDEM.penalidades).map(([key, p]) => [key, p.label]))
 };
+
+/* Nomes dos tipos de item (system.json), usados no Catálogo */
+AONOVAORDEM.tiposItem = {
+  arma: "Arma",
+  armadura: "Armadura",
+  items: "Item",
+  alquimico: "Técnica Alquímica",
+  alquimia: "Alquimia",
+  drogas: "Droga",
+  elixires: "Elixir",
+  injecoes: "Injeção",
+  venenos: "Veneno",
+  acidos: "Ácido",
+  mutagenicos: "Mutagênico",
+  implantes: "Implante",
+  magias: "Magia",
+  rituais: "Ritual",
+  veiculo: "Veículo",
+  mecha: "Mecha"
+};
+
+/* Tipos que se acumulam em pilha (quantidade) ao adicionar o mesmo item */
+AONOVAORDEM.tiposEmpilhaveis = ["items", "drogas", "elixires", "injecoes", "venenos", "acidos", "mutagenicos"];

@@ -2,12 +2,23 @@
   "id": "a-nova-ordem",
   "title": "A Nova Ordem",
   "description": "Sistema dieselpunk 1975 criado por Alê Gomes e programado por NeaN World",
-  "version": "0.3.1",
+  "version": "0.5.0",
 
   "authors": [
     { "name": "Alê Gomes", "role": "Criador do Sistema" },
     { "name": "NeaN World", "role": "Programador" }
   ],
+
+  "relationships": {
+    "recommends": [
+      { "id": "item-piles", "type": "module", "reason": "Saque, baús e lojas usando ¢RD (integração nativa do sistema)" },
+      { "id": "autoanimations", "type": "module", "reason": "Animações de armas, alquímicos e consumíveis" },
+      { "id": "sequencer", "type": "module", "reason": "Necessário para o Automated Animations" },
+      { "id": "socketlib", "type": "module", "reason": "Necessário para o Automated Animations" },
+      { "id": "JB2A_DnD5e", "type": "module", "reason": "Pacote de animações gratuito usado pelo Automated Animations" },
+      { "id": "dice-so-nice", "type": "module", "reason": "Dados 3D nas rolagens (opcional)" }
+    ]
+  },
 
   "esmodules": [
     "scripts/init.js",
@@ -43,9 +54,12 @@
 
   "initiative": "1d100",
 
+  "socket": true,
+
   "documentTypes": {
     "Actor": {
-      "personagem": {}
+      "personagem": {},
+      "npc": {}
     },
     "Item": {
       "armadura": {

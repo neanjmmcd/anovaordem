@@ -1,0 +1,103 @@
+<form class="aonovaordem-sheet aon-npc" autocomplete="off">
+
+  <header class="aon-npc-topo">
+    <img src="{{actor.img}}" data-edit="img" title="{{actor.name}}">
+    <div class="aon-npc-id">
+      <input class="aon-npc-nome" name="name" type="text" value="{{actor.name}}" placeholder="Nome">
+      <div class="aon-npc-linha">
+        <label>Tier <select name="system.tier" data-dtype="Number">{{selectOptions tiers selected=system.tier}}</select></label>
+        <label>Função <input type="text" name="system.funcao" value="{{system.funcao}}"></label>
+        <label title="Valor de Ameaça (orçamento de encontro)">Ameaça <span class="aon-npc-ameaca">{{system.ameaca}}</span></label>
+      </div>
+      <input class="aon-npc-lema" type="text" name="system.lema" value="{{system.lema}}" placeholder="Frase de apresentação">
+    </div>
+  </header>
+
+  <section class="aon-npc-recursos">
+    <label>Saúde
+      <span class="aon-npc-saude">
+        <input type="number" name="system.saude" value="{{system.saude}}"> / <input type="number" name="system.saudeMax" value="{{system.saudeMax}}">
+      </span>
+    </label>
+    <label>Estado <span class="aon-npc-estado">{{system.estadoSaude}}{{#if system.penSaude}} (−{{system.penSaude}}%){{/if}}</span></label>
+    <label>RD <input type="number" name="system.rd" value="{{system.rd}}"></label>
+    <label>Deslocamento <input type="text" name="system.deslocamento" value="{{system.deslocamento}}"></label>
+    <label>Sanidade <input type="number" name="system.sanidade" value="{{system.sanidade}}"></label>
+  </section>
+  <div class="aon-npc-barra"><span style="width: {{system.saudePct}}%"></span></div>
+
+  <h3>Atributos</h3>
+  <section class="atributos">
+    {{#each atributos}}
+    <div class="atributo">
+      <label class="rolar-atributo" data-atributo="{{key}}" title="Rolar {{label}}">{{label}}</label>
+      <input type="number" name="system.atributos.{{key}}" value="{{valor}}">
+    </div>
+    {{/each}}
+  </section>
+
+  <h3>Grupos de Perícias <small>(valem para toda perícia do grupo que não estiver em destaque)</small></h3>
+  <section class="aon-npc-grupos">
+    {{#each grupos}}
+    <label>{{label}} <input type="number" name="system.grupos.{{key}}" value="{{valor}}"></label>
+    {{/each}}
+  </section>
+
+  <h3>Perícias em destaque <button type="button" class="npc-add-destaque" title="Adicionar perícia"><i class="fas fa-plus"></i></button></h3>
+  <table class="armadura-tabela aon-npc-destaques">
+    <thead><tr><th>Perícia</th><th>Valor</th><th title="Perícia + melhor atributo − penalidade de Saúde">Chance</th><th></th></tr></thead>
+    <tbody>
+      {{#each destaques}}
+      <tr>
+        <td><select class="npc-destaque-campo" data-index="{{i}}" data-campo="pericia">{{selectOptions ../periciaOptions selected=pericia blank="—"}}</select></td>
+        <td><input class="npc-destaque-campo" type="number" data-index="{{i}}" data-campo="valor" value="{{valor}}"></td>
+        <td>{{#if pericia}}<a class="npc-rolar-pericia" data-pericia="{{pericia}}" title="Rolar"><i class="fas fa-dice-d20"></i> {{chance}}%</a>{{/if}}</td>
+        <td><button type="button" class="npc-del-destaque" data-index="{{i}}" title="Remover">🗑</button></td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <div class="aon-npc-qualquer">
+    <select class="npc-qualquer-pericia">{{selectOptions periciaOptions blank="Rolar outra perícia…"}}</select>
+    <button type="button" class="npc-rolar-qualquer"><i class="fas fa-dice-d20"></i> Rolar</button>
+  </div>
+
+  <h3>Ataques <small>(arraste armas do Catálogo ou do compêndio)</small></h3>
+  <table class="armadura-tabela">
+    <thead><tr><th></th><th>Arma</th><th>Dano</th><th>Perícia</th><th>Mun.</th><th></th></tr></thead>
+    <tbody>
+      {{#each armas}}
+      <tr>
+        <td><button type="button" class="npc-atacar" data-item-id="{{id}}" title="Atacar o alvo marcado"><i class="fas fa-crosshairs"></i></button></td>
+        <td><a class="npc-abrir-item" data-item-id="{{id}}">{{nome}}</a></td>
+        <td>{{dano}}</td>
+        <td>{{pericia}} {{chance}}%</td>
+        <td>{{ammo}}</td>
+        <td><button type="button" class="npc-del-item" data-item-id="{{id}}" title="Remover">🗑</button></td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  {{#if outros.length}}
+  <h3>Outros itens</h3>
+  <ul class="aon-npc-itens">
+    {{#each outros}}
+    <li><img src="{{img}}"> <a class="npc-abrir-item" data-item-id="{{id}}">{{nome}}</a> <small>{{tipo}}</small>
+      <button type="button" class="npc-del-item" data-item-id="{{id}}" title="Remover">🗑</button></li>
+    {{/each}}
+  </ul>
+  {{/if}}
+
+  <h3>Ponto Fraco</h3>
+  <input type="text" name="system.pontoFraco" value="{{system.pontoFraco}}" placeholder="Ex.: mangueiras do pescoço (−20%, ignora a armadura)">
+
+  <h3>Habilidades</h3>
+  <textarea name="system.habilidades" rows="4">{{system.habilidades}}</textarea>
+
+  <h3>Equipamento</h3>
+  <textarea name="system.equipamento" rows="2">{{system.equipamento}}</textarea>
+
+  <h3>Uso em mesa / Notas</h3>
+  <textarea name="system.notas" rows="3">{{system.notas}}</textarea>
+</form>
