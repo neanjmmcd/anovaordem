@@ -474,3 +474,18 @@ button.rolar-pericia {
 .a-nova-ordem select option,
 .a-nova-ordem select optgroup { background: #1f1f1f; color: #e0d8b0; }
 .a-nova-ordem select option:checked { background: #7a5c2e; color: #fff; }
+
+/* =========================
+ * ANIMAÇÕES DO SISTEMA
+ * ========================= */
+.aon-config-animacoes .window-content { display: flex; flex-direction: column; }
+.aon-anim { display: flex; flex-direction: column; height: 100%; }
+.aon-anim-aviso { color: #c9a24a; }
+.aon-anim-botoes { display: flex; gap: 6px; }
+.aon-anim-lista { flex: 1; overflow-y: auto; list-style: none; margin: 8px 0 0; padding: 0; }
+.aon-anim-lista li { display: grid; grid-template-columns: 96px 1fr; gap: 8px; align-items: center; padding: 4px 0; border-bottom: 1px solid #3d3d3d; }
+.aon-anim-lista video { width: 96px; height: 64px; object-fit: contain; background: #1b1b1b; border: 1px solid #7a5c2e; }
+.aon-anim-lista a { cursor: pointer; margin-left: 6px; }
+.aon-anim-rotulos { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 3px; }
+.aon-anim-rotulos span { font-size: 11px; padding: 0 5px; border: 1px solid #555; border-radius: 3px; opacity: .7; }
+.aon-anim-rotulos span.ok { border-color: #3c9a3c; opacity: 1; }
