@@ -1,0 +1,2 @@
+# Compêndios (LevelDB) são binários: o git não pode mexer em fim de linha
+packs/** binary
