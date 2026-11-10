@@ -2,7 +2,7 @@
   "id": "a-nova-ordem",
   "title": "A Nova Ordem",
   "description": "Sistema dieselpunk 1975 criado por Alê Gomes e programado por NeaN World",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "authors": [
     {
       "name": "Alê Gomes",
@@ -254,7 +254,7 @@
     },
     {
       "name": "magias",
-      "label": "Magias",
+      "label": "Feitiços",
       "path": "packs/magias",
       "type": "Item",
       "system": "a-nova-ordem",
@@ -310,7 +310,7 @@
       "flags": {}
     }
   ],
-  "initiative": "1d100",
+  "initiative": "1d6 + @atributosTotais.des",
   "socket": true,
   "documentTypes": {
     "Actor": {
@@ -334,7 +334,7 @@
         "label": "Drogas"
       },
       "magias": {
-        "label": "Magias"
+        "label": "Feitiço"
       },
       "rituais": {
         "label": "Rituais"

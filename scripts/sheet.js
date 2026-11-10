@@ -1,6 +1,7 @@
 import { AONovaOrdemCatalogo } from "./catalogo.js";
 import { AONovaOrdemCriador } from "./criador.js";
 import { atacar, conjurar } from "./combate.js";
+import { periciaLiberada } from "./rolls.js";
 
 
 /* Estado de ativação dos consumíveis (elixires, injeções, drogas) */
@@ -28,11 +29,13 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
     console.log("AONovaOrdem | getData chamado");
     const context = super.getData();
     const system = this.actor.system;
+    const actor = this.actor;
 
     function montarPericia(key, config, system) {
       const data = system.pericias?.[key] ?? { valor: 0, bonus: 0 };
       const bonusItens = Number(system.periciasItens?.[key] ?? 0);
 
+      const liberada = periciaLiberada(actor, key);
       return {
         key,
         label: config.label,
@@ -41,6 +44,8 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
         bonus: Number(data.bonus ?? 0),
         bonusItens,
         bonusItensTexto: bonusItens > 0 ? `+${bonusItens}` : `${bonusItens}`,
+        bloqueada: !liberada,
+        totalPericia: Number(data.valor ?? 0) + Number(data.bonus ?? 0) + bonusItens,
         total:
           Number(config.base ?? 0) +
           Number(data.valor ?? 0) +
@@ -96,6 +101,7 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
     }
 
     context.periciasPorGrupo = grupos;
+    context.gruposST = Object.fromEntries(CONFIG.AONOVAORDEM.gruposSomenteTreinado.map(g => [g, true]));
     
     /* ARMADURAS */
     context.armaduras = this.actor.items
@@ -582,8 +588,8 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
       if (!itemId) return;
 
       new Dialog({
-        title: "Remover Magias",
-        content: "<p>Tem certeza que deseja remover esta magia?</p>",
+        title: "Remover Feitiço",
+        content: "<p>Tem certeza que deseja remover este feitiço?</p>",
         buttons: {
           sim: {
             label: "Sim",

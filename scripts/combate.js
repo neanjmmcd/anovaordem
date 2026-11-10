@@ -6,7 +6,7 @@
  * pedido vai pelo socket do sistema e o mestre ativo aplica.
  * ========================= */
 
-import { status } from "./rolls.js";
+import { status, checarTreino } from "./rolls.js";
 import { cartao, enviarCartao, corDoGrau, CORES, textoAlvos } from "./cartao.js";
 
 const SISTEMA = "a-nova-ordem";
@@ -16,8 +16,8 @@ const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 export const COMBATE_PADRAO = {
   ativo: true,             // desligado = só botões de dano/cura no chat, nada automático
   rolarAtaque: true,       // rolar a perícia da arma antes do dano
-  esquiva: "botao",        // "nenhuma" | "botao" (o dono do alvo decide) | "automatica"
-  aplicarDano: "automatico", // "automatico" | "botao" (alguém clica para aplicar)
+  esquiva: "botao",        // só feitiços (Resistência Mental): "nenhuma" | "botao" | "automatica"
+  aplicarDano: "botao",    // "automatico" | "botao" (o mestre confirma: acertou ou esquivou)
   consumirMunicao: true,   // −1 munição por ataque
   consumirPedras: true,    // alquímicos: a pedra se desfaz ao ser usada (−1 quantidade)
   consumirItens: true,     // elixires, injeções e drogas: −1 quantidade ao ativar
@@ -32,14 +32,29 @@ export function config() {
 
 const PERICIAS_CORPO_A_CORPO = ["armasBrancas", "briga"];
 
-/** RD contra o ataque. Dano alquímico ignora metade da armadura (o livro exclui armadura tratada: ajuste do mestre) */
+/** Tipo de dano alquímico do item ("Térmico (Calor)" → "calor"); "geral" se não reconhecer */
+export function tipoAlquimico(tipo) {
+  const t = String(tipo ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  if (t.includes("calor")) return "calor";
+  if (t.includes("frio")) return "frio";
+  if (t.includes("eletr")) return "eletrico";
+  if (t.includes("cinet")) return "cinetico";
+  if (t.includes("quim")) return "quimico";
+  return "geral";
+}
+
+/** RD contra o ataque. Dano alquímico ignora metade da armadura que não foi tratada para o seu tipo.
+ *  alquimico: false, ou o tipo de dano ("calor", "frio", "eletrico", "cinetico", "quimico", "geral") */
 export function rdContra(actor, alquimico = false) {
   const rd = Number(actor.system.rd ?? 0);
   if (!alquimico) return rd;
-  const armadura = actor.type === "npc"
-    ? Math.max(0, rd - Number(actor.system.atributos?.con ?? 0))
-    : Number(actor.system.rdArmadura ?? 0);
-  return rd - Math.floor(armadura / 2);
+  // NPC sem itens de armadura: a RD da ficha menos a CON é a armadura (o mestre ajusta se for tratada)
+  if (actor.type === "npc") return rd - Math.floor(Math.max(0, rd - Number(actor.system.atributos?.con ?? 0)) / 2);
+  const tratada = actor.items
+    .filter(i => i.type === "armadura" && i.system.equipado !== false && i.system.tratamento?.[alquimico])
+    .reduce((t, i) => t + Number(i.system.rd ?? 0), 0);
+  const semTratamento = Math.max(0, Number(actor.system.rdArmadura ?? 0) - tratada);
+  return rd - Math.floor(semTratamento / 2);
 }
 
 const quebraLinhas = t => String(t ?? "").replace(/\n/g, "<br>");
@@ -90,6 +105,7 @@ export function chancePericia(actor, key) {
 
 /** Teste simples de perícia (melhor atributo) com cartão no chat */
 export async function rolarTeste(actor, key) {
+  if (!checarTreino(actor, key)) return;
   const chance = chancePericia(actor, key);
   const roll = await new Roll("1d100").evaluate();
   const g = grau(roll.total, chance.alvo);
@@ -134,7 +150,8 @@ export function prepararDano(texto, actor) {
 export async function atacar(actor, item) {
   const cfg = config();
   const alvos = [...game.user.targets].map(t => t.actor).filter(Boolean);
-  const alquimico = item.type === "alquimico";
+  const alquimico = item.type === "alquimico" ? tipoAlquimico(item.system.tipo) : false;
+  if (alquimico && cfg.ativo && cfg.rolarAtaque && !checarTreino(actor, "pedrasEnergia")) return;
 
   // Só armas de disparo/arremesso usam munição; corpo-a-corpo (Armas Brancas, Briga) não gasta
   if (item.type === "arma" && "ammo" in item.system && !PERICIAS_CORPO_A_CORPO.includes(periciaDaArma(item))) {
@@ -146,6 +163,8 @@ export async function atacar(actor, item) {
     const qtd = Number(item.system.quantidade ?? 1);
     if (qtd < 1) return ui.notifications.warn(`Sem pedras de ${item.name}.`);
     await item.update({ "system.quantidade": qtd - 1 });
+    // A última pedra sai da ficha depois da animação (que usa o item)
+    if (qtd - 1 < 1) setTimeout(() => actor.items.get(item.id)?.delete(), 4000);
   }
 
   const dano = prepararDano(item.system.dano, actor);
@@ -178,7 +197,7 @@ export async function atacar(actor, item) {
   if (danoRoll) {
     calculo += `Dano: ${formula}${dano.atributo ? ` + ${dano.atributo.toUpperCase()} (${dano.atributoValor})` : ""}`
       + ` = <b>${total}</b>${formula !== dano.formula ? " (crítico: dados dobrados)" : ""}`
-      + `${alquimico ? " · alquímico: ignora metade da armadura" : ""}`;
+      + `${alquimico ? " · alquímico: ignora metade da armadura não tratada" : ""}`;
   }
 
   // Alvos
@@ -199,7 +218,7 @@ export async function atacar(actor, item) {
   if (alquimico && dano && Number(item.system.nivel) === 4 && ataque?.critico && !ataque.sucesso && cfg.ativo) {
     const r = await new Roll(dano.formula).evaluate();
     rolls.push(r);
-    explosao = Math.max(1, r.total - rdContra(actor, true));
+    explosao = Math.max(1, r.total - rdContra(actor, alquimico));
     extra += `<div class="aon-card-aviso"><b>A pedra explodiu!</b> ${actor.name} sofre todos os efeitos.</div>`;
   }
 
@@ -243,6 +262,7 @@ export async function conjurar(actor, item) {
   const sys = actor.system;
   const ritual = item.type === "rituais";
   if (sys.estadoMental === "Mente Vazia") return ui.notifications.warn(`${actor.name} não conjura: Mente Vazia.`);
+  if (!checarTreino(actor, ritual ? "rituais" : "feiticaria")) return;
 
   let custo = parseInt(item.system.essencia, 10) || 0;
   if (Number(sys.humanidade ?? 100) <= 50) custo += 2;
@@ -325,49 +345,27 @@ function blocoAlvo(alvo, calculo, resultado, botoes = "") {
   </div>`;
 }
 
-/** Monta o bloco de cada alvo conforme a configuração de esquiva/aplicação */
+/** Bloco de cada alvo do ataque. Não há esquiva automática: o mestre decide se acertou ou se o alvo esquivou */
 async function resolverAlvo(alvo, total, cfg, alquimico = false) {
   const rd = rdContra(alvo, alquimico);
   const efetivo = Math.max(1, total - rd); // todo acerto causa no mínimo 1 (livro)
-
-  if (cfg.esquiva === "automatica") {
-    const chance = chancePericia(alvo, "esquiva");
-    const r = await new Roll("1d100").evaluate();
-    const g = grau(r.total, chance.alvo);
-    const calc = `Esquiva: ${chance.texto} · d100 = <b>${r.total}</b>`;
-    if (g.sucesso) return { html: blocoAlvo(alvo, calc, `<b>Esquivou!</b>`) };
-    return blocoDano(alvo, calc + "<br>", efetivo, rd, total, cfg, "Não esquivou. ");
-  }
-  if (cfg.esquiva === "botao") {
-    return {
-      html: blocoAlvo(alvo, `RD ${rd} · dano após RD: <b>${efetivo}</b>`, "",
-        `<div class="aon-botoes" data-uuid="${alvo.uuid}">
-          <button type="button" class="aon-esquivar" data-uuid="${alvo.uuid}" data-dano="${efetivo}"><i class="fas fa-person-running"></i> Esquivar</button>
-          <button type="button" class="aon-receber" data-uuid="${alvo.uuid}" data-dano="${efetivo}"><i class="fas fa-heart-crack"></i> Receber</button>
-        </div>`)
-    };
-  }
-  return blocoDano(alvo, "", efetivo, rd, total, cfg);
-}
-
-function blocoDano(alvo, calc, efetivo, rd, total, cfg, prefixo = "") {
-  const conta = `${calc}${total} − RD ${rd} = <b style="color:red">${efetivo}</b>`;
+  const conta = `${total} − RD ${rd} = <b style="color:red">${efetivo}</b>`;
   if (cfg.aplicarDano === "automatico") {
-    return {
-      html: blocoAlvo(alvo, conta, prefixo ? prefixo : ""),
-      pendente: { uuid: alvo.uuid, dano: efetivo, aplicarJa: true }
-    };
+    return { html: blocoAlvo(alvo, conta, ""), pendente: { uuid: alvo.uuid, dano: efetivo, aplicarJa: true } };
   }
+  const dados = `data-uuid="${alvo.uuid}" data-dano="${efetivo}" data-mestre="1"`;
   return {
-    html: blocoAlvo(alvo, conta, prefixo,
-      `<div class="aon-botoes"><button type="button" class="aon-receber" data-uuid="${alvo.uuid}" data-dano="${efetivo}">
-      <i class="fas fa-heart-crack"></i> Aplicar dano</button></div>`)
+    html: blocoAlvo(alvo, conta, "",
+      `<div class="aon-botoes">
+        <button type="button" class="aon-receber" ${dados}><i class="fas fa-heart-crack"></i> Aplicar dano</button>
+        <button type="button" class="aon-esquivou" ${dados}><i class="fas fa-person-running"></i> Esquivou</button>
+      </div>`)
   };
 }
 
 export function botoesDanoCura(total, alquimico = false) {
   return `<p>
-    <button class="aplicar-dano" data-dano="${total}" ${alquimico ? 'data-alquimico="1"' : ""} title="Aplicar dano (− RD) no token selecionado ou no alvo"><b>-</b></button>
+    <button class="aplicar-dano" data-dano="${total}" ${alquimico ? `data-alquimico="${alquimico}"` : ""} title="Aplicar dano (− RD) no token selecionado ou no alvo"><b>-</b></button>
     <b>Total: ${total}</b>
     <button class="aplicar-cura" data-cura="${total}" title="Aplicar cura no token selecionado ou no alvo"><b>+</b></button></p>`;
 }
@@ -489,10 +487,21 @@ Hooks.once("ready", () => {
 });
 
 Hooks.on("renderChatMessageHTML", (message, html) => {
+  // Ataques: só o mestre decide se o alvo esquivou
+  for (const botao of html.querySelectorAll(".aon-esquivou")) {
+    if (!game.user.isGM) { botao.closest(".aon-botoes")?.remove(); continue; }
+    botao.addEventListener("click", ev => {
+      ev.preventDefault();
+      botao.closest(".aon-botoes")?.querySelectorAll("button").forEach(b => (b.disabled = true));
+      pedir("esquivou", { uuid: botao.dataset.uuid, messageId: message.id, texto: "Esquivou!" });
+    });
+  }
   for (const botao of html.querySelectorAll(".aon-esquivar, .aon-receber")) {
+    if (!botao.isConnected) continue;
     const actor = fromUuidSync(botao.dataset.uuid);
-    // Só o mestre e o dono do alvo decidem
-    if (!game.user.isGM && !actor?.isOwner) { botao.closest(".aon-botoes")?.remove(); continue; }
+    // Feitiços: o mestre e o dono do alvo decidem. Ataques: só o mestre
+    const pode = game.user.isGM || (!botao.dataset.mestre && actor?.isOwner);
+    if (!pode) { botao.closest(".aon-botoes")?.remove(); continue; }
     botao.addEventListener("click", async ev => {
       ev.preventDefault();
       botao.closest(".aon-botoes")?.querySelectorAll("button").forEach(b => (b.disabled = true));
@@ -529,8 +538,8 @@ class ConfigCombate extends HandlebarsApplicationMixin(ApplicationV2) {
     id: "aon-config-combate",
     tag: "form",
     classes: ["a-nova-ordem", "aon-config-combate"],
-    window: { title: "Automação de Combate", icon: "fas fa-crosshairs" },
-    position: { width: 480 },
+    window: { title: "Automação de Combate", icon: "fas fa-crosshairs", resizable: true },
+    position: { width: 500, height: 640 },
     form: { handler: ConfigCombate.#salvar, closeOnSubmit: true },
     actions: { padrao: ConfigCombate.#padrao }
   };
@@ -540,8 +549,8 @@ class ConfigCombate extends HandlebarsApplicationMixin(ApplicationV2) {
     const c = config();
     return {
       c,
-      esquivas: { nenhuma: "Sem esquiva", botao: "Botão para o dono do alvo", automatica: "Automática (o sistema rola)" },
-      aplicacoes: { automatico: "Automático", botao: "Botão no chat (confirmar)" }
+      esquivas: { nenhuma: "Sem resistência", botao: "Botão para o dono do alvo", automatica: "Automática (o sistema rola)" },
+      aplicacoes: { automatico: "Automático", botao: "Botões para o mestre (aplicar ou esquivou)" }
     };
   }
 

@@ -29,6 +29,15 @@
       <input type="number" name="system.preco" value="{{system.preco}}">
     </label>
 
+    <fieldset class="aon-tratamento" title="Dano alquímico ignora metade da armadura que não foi tratada para o seu tipo">
+      <legend>Tratada contra dano alquímico</legend>
+      <label><input type="checkbox" name="system.tratamento.calor" {{checked system.tratamento.calor}}> Térmico (Calor)</label>
+      <label><input type="checkbox" name="system.tratamento.frio" {{checked system.tratamento.frio}}> Térmico (Frio)</label>
+      <label><input type="checkbox" name="system.tratamento.eletrico" {{checked system.tratamento.eletrico}}> Elétrico</label>
+      <label><input type="checkbox" name="system.tratamento.cinetico" {{checked system.tratamento.cinetico}}> Cinético</label>
+      <label><input type="checkbox" name="system.tratamento.quimico" {{checked system.tratamento.quimico}}> Químico</label>
+    </fieldset>
+
     <label>Penalidades</label>
     <textarea name="system.penalidades">{{system.penalidades}}</textarea>
 

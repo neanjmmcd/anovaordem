@@ -1,6 +1,29 @@
 import { config, pedir, grau, botoesDanoCura } from "./combate.js";
 import { cartao, enviarCartao, corDoGrau, CORES, textoAlvos } from "./cartao.js";
 
+/** Pontos gastos na perícia (criação grava em valor; a ficha, em bônus) */
+export function pontosPericia(actor, key) {
+  const p = actor.system.pericias?.[key] ?? {};
+  const base = Number(CONFIG.Actor.dataModels.personagem.schema.getField(`pericias.${key}.valor`)?.initial ?? 0);
+  return Math.max(0, Number(p.valor ?? 0) - base) + Number(p.bonus ?? 0);
+}
+
+/** Perícia ST (somente treinado) sem pontos gastos não pode ser rolada. NPCs usam os grupos e sempre rolam */
+export function periciaLiberada(actor, key) {
+  const cfg = CONFIG.AONOVAORDEM;
+  if (!actor || actor.type !== "personagem") return true;
+  if (!cfg.gruposSomenteTreinado.includes(cfg.pericias[key]?.grupo)) return true;
+  if (cfg.periciasSemTreino.includes(key)) return true;
+  return pontosPericia(actor, key) > 0;
+}
+
+/** Aviso padrão; devolve true se pode rolar */
+export function checarTreino(actor, key) {
+  if (periciaLiberada(actor, key)) return true;
+  ui.notifications.warn(`${actor.name} não tem treino em ${CONFIG.AONOVAORDEM.pericias[key]?.label ?? key} (perícia ST: só rola com pontos gastos).`);
+  return false;
+}
+
 /* =========================
  * ROLAR PERÍCIA
  * ========================= */
@@ -8,6 +31,7 @@ export async function rolarPericia(actor, periciaKey) {
   
   const periciaCfg = CONFIG.AONOVAORDEM.pericias[periciaKey];
   if (!periciaCfg) return;
+  if (!checarTreino(actor, periciaKey)) return;
 
   const periciaData = actor.system.pericias[periciaKey] ?? {
     valor: 0,
@@ -174,7 +198,7 @@ export function statusSanidade(sanidade) {
   if (sanidade > 40) return ['Mente Fraturada','−20% em perícias Mentais; −10% em perícias Sociais. Ilusões inofensivas.'];
   if (sanidade > 20) return ['Colapso Mental', '−50% em perícias Mentais; −30% em perícias Sociais. Feitiços exigem teste de Resistência Mental. Ilusões significativas e pequenos rompantes.'];
   if (sanidade > 0)  return ['Ruína Mental',   '−60% em perícias Mentais; −40% em perícias Sociais. Falhas em testes Mentais podem impor comportamento compulsivo. Ilusões agressivas causam terror ou fúria.'];
-  return                    ['Mente Vazia',    'Incapacitado mentalmente: não conjura feitiços, não realiza testes Mentais ou Sociais. Morto por dentro.'];
+  return                    ['Mente Vazia',    'Mente vazia, sem meios clínicos para reverter: a personagem é considerada morta.'];
 }
 
 function escolherAtributo(lista) {

@@ -287,6 +287,10 @@ AONOVAORDEM.pericias = {
 };
 
 
+/* ST (somente treinado): perícias destes grupos só rolam com pontos gastos (criação ou evolução) */
+AONOVAORDEM.gruposSomenteTreinado = ["MENTAIS", "TECNOLÓGICAS", "ALQUIMIA", "MÁGICAS"];
+AONOVAORDEM.periciasSemTreino = ["resistenciaMental"];
+
 /* Opções dos seletores de modificadores nas fichas de item */
 AONOVAORDEM.periciaOptions = Object.fromEntries(
   Object.entries(AONOVAORDEM.pericias)
@@ -312,7 +316,7 @@ AONOVAORDEM.tiposItem = {
   acidos: "Ácido",
   mutagenicos: "Mutagênico",
   implantes: "Implante",
-  magias: "Magia",
+  magias: "Feitiço",
   rituais: "Ritual",
   veiculo: "Veículo",
   mecha: "Mecha"

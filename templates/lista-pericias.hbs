@@ -1,0 +1,14 @@
+<div class="aon-lista">
+  {{#each grupos}}
+  <section>
+    <h4>{{nome}}{{#if st}} <span class="aon-st" title="Somente treinado">ST</span>{{/if}}</h4>
+    <ul>
+      {{#each pericias}}
+      <li><a data-action="rolar" data-pericia="{{key}}"><i class="fas fa-dice-d20"></i> {{label}}</a> <b>{{chance}}%</b></li>
+      {{/each}}
+    </ul>
+  </section>
+  {{else}}
+  <p>Nenhuma perícia disponível.</p>
+  {{/each}}
+</div>
