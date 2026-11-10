@@ -202,31 +202,32 @@ export class AONovaOrdemPersonagemModel extends foundry.abstract.TypeDataModel {
       ATRIBUTOS.map(k => [k, Number(this.atributos[k] ?? 0) + atributosItens[k]])
     );
 
-    // Essência: PSI x2, reduzida pelo dreno (%) dos implantes
+    // Essência: PSI x2 menos o custo (em pontos) dos implantes.
+    // Humanidade = quanto da Essência original ainda resta, em % (base da tabela de Dreno)
+    const essenciaBase = this.atributosTotais.psi * 2;
     const drenoEssencia = items
       .filter(i => i.type === "implantes")
       .reduce((t, i) => t + Number(i.system.essencia ?? 0), 0);
-    const humanidade = Math.max(0, 100 - drenoEssencia);
+    const restante = Math.max(0, essenciaBase - drenoEssencia);
+    const humanidade = essenciaBase > 0 ? Math.floor(restante * 100 / essenciaBase) : 0;
     this.drenoEssencia = drenoEssencia;
     this.humanidade = humanidade;
-    this.essenciaMax = Math.max(0,
-      Math.floor(this.atributosTotais.psi * 2 * humanidade / 100) + Number(ajustes.essencia ?? 0)
-    );
+    this.essenciaMax = Math.max(0, restante + Number(ajustes.essencia ?? 0));
 
     // Consequências do Dreno de Essência
     this.avisosEssencia = [];
     this.metadeSociais = false;
     if (drenoEssencia > 0) {
-      if (humanidade <= 0) this.avisosEssencia.push("0%: sucumbiu à Cyberpsicose.");
-      else if (humanidade <= 10) this.avisosEssencia.push("≤10%: perdendo a identidade humana. Risco alto de Cyberpsicose.");
+      if (humanidade <= 0) this.avisosEssencia.push("0%: Essência zerada. Sucumbiu à Loucura Cibernética.");
+      else if (humanidade <= 10) this.avisosEssencia.push("≤10%: perdendo a identidade humana. Risco alto de Loucura Cibernética.");
       if (humanidade <= 20) {
         this.atributosTotais.car = Math.floor(this.atributosTotais.car / 2);
         this.metadeSociais = true;
-        this.avisosEssencia.push("≤20%: CAR e Perícias Sociais pela metade. Risco médio de Cyberpsicose.");
+        this.avisosEssencia.push("≤20%: CAR e Perícias Sociais pela metade. Risco médio de Loucura Cibernética.");
       }
       if (humanidade <= 30) {
         periciasItens.resistenciaMental = (periciasItens.resistenciaMental ?? 0) - 20;
-        this.avisosEssencia.push("≤30%: Resistência Mental −20%. Risco baixo de Cyberpsicose.");
+        this.avisosEssencia.push("≤30%: Resistência Mental −20%. Risco baixo de Loucura Cibernética.");
       }
       if (humanidade <= 50) this.avisosEssencia.push("≤50%: feitiços e rituais custam +2 de Essência.");
     }

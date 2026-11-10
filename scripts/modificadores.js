@@ -66,24 +66,15 @@ function categoriaPorRd(rd) {
   return cat;
 }
 
-/*
- * Armaduras equipadas:
- * - RD soma.
- * - Mesma categoria: penalidade proporcional (2 Leves = RD 6 = penalidade de Média).
- * - Categorias diferentes: penalidades acumuladas e dobradas.
- */
+/* Armaduras equipadas (no máximo 2): RD, bônus e penalidades de cada uma se somam. */
+export const MAX_ARMADURAS = 2;
+
 export function calcularArmaduras(armaduras) {
-  const rd = armaduras.reduce((t, a) => t + Number(a.system.rd ?? 0), 0);
-  const porCategoria = {};
+  let rd = 0, pen = 0, desloc = 0;
   for (const a of armaduras) {
     const r = Number(a.system.rd ?? 0);
-    if (r <= 0) continue;
     const cat = categoriaPorRd(r);
-    porCategoria[cat.nome] = (porCategoria[cat.nome] ?? 0) + r;
+    rd += r; pen += cat.pen; desloc += cat.desloc;
   }
-  const grupos = Object.values(porCategoria).map(categoriaPorRd);
-  let pen = grupos.reduce((t, c) => t + c.pen, 0);
-  let desloc = grupos.reduce((t, c) => t + c.desloc, 0);
-  if (grupos.length > 1) { pen *= 2; desloc *= 2; }
   return { rd, pen, desloc };
 }

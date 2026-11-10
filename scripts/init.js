@@ -38,6 +38,9 @@ import { AONovaOrdemMutagenicoSheet } from "./item-mutagenico-sheet.js";
 import { AONovaOrdemCatalogo } from "./catalogo.js";
 import { AONovaOrdemCriador } from "./criador.js";
 import { registrarCombate, pedir, atacar, conjurar, config } from "./combate.js";
+import { registrarMigracoes } from "./migracao.js";
+import "./regras-itens.js";
+import { registrarListaPericias } from "./lista-pericias.js";
 import { AONovaOrdemNpcModel } from "./npc-model.js";
 import { AONovaOrdemNpcSheet } from "./npc-sheet.js";
 import { AONovaOrdemPainelMestre } from "./painel-mestre.js";
@@ -179,12 +182,13 @@ Hooks.once("init", () => {
   });
   game.settings.register("a-nova-ordem", "tetoCriacao", {
     name: "Teto de perícia na criação (%)",
-    hint: "Valor máximo de uma perícia ao criar o personagem. 0 = sem teto (regra do livro).",
-    scope: "world", config: true, type: Number, default: 0
+    hint: "Valor máximo de uma perícia ao criar o personagem, sem o bônus de atributo. Regra do livro: 50. 0 = sem teto.",
+    scope: "world", config: true, type: Number, default: 50
   });
 
   registrarCombate();
   registrarAnimacoes();
+  registrarMigracoes();
   game.settings.register("a-nova-ordem", "painelMestre", {
     scope: "world", config: false, type: Object, default: { experiencia: "novatos", pjs: "" }
   });
@@ -195,6 +199,7 @@ Hooks.once("init", () => {
     editable: [{ key: "Space", modifiers: ["Control"] }],
     onDown: () => { AONovaOrdemCatalogo.abrir(); return true; }
   });
+  registrarListaPericias();
 
   console.log("A Nova Ordem | Sistema inicializado");
 });
@@ -343,7 +348,7 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
       const actor = alvoDoBotao();
       if (!actor) return ui.notifications.warn("Selecione ou marque um token.");
       if (cura) pedir("cura", { uuid: actor.uuid, cura: valor });
-      else pedir("dano", { uuid: actor.uuid, dano: valor, bruto: true, alquimico: !!botao.dataset.alquimico });
+      else pedir("dano", { uuid: actor.uuid, dano: valor, bruto: true, alquimico: botao.dataset.alquimico || false });
     });
   }
 });

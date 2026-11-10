@@ -14,15 +14,15 @@
   </div>
 
   <div class="form-group">
-    <label>Esquiva do alvo</label>
+    <label>Resistência Mental contra feitiços</label>
     <select name="esquiva">{{selectOptions esquivas selected=c.esquiva}}</select>
-    <p class="hint">Botão: o jogador dono do alvo (ou o mestre) escolhe se defender ou receber. Automática: o sistema rola a defesa. Vale para Esquiva e, nos feitiços, para Resistência Mental.</p>
+    <p class="hint">Botão: o jogador dono do alvo (ou o mestre) escolhe resistir ou sofrer. Automática: o sistema rola a Resistência Mental. Nos ataques não há esquiva automática: quem decide é o mestre.</p>
   </div>
 
   <div class="form-group">
     <label>Aplicar o dano</label>
     <select name="aplicarDano">{{selectOptions aplicacoes selected=c.aplicarDano}}</select>
-    <p class="hint">Automático: desconta a RD e tira da Saúde do alvo marcado. Botão: mostra o valor e espera alguém confirmar.</p>
+    <p class="hint">Automático: desconta a RD e tira da Saúde do alvo marcado. Botões: o mestre vê "Aplicar dano" e "Esquivou" e decide (os jogadores só veem o resultado).</p>
   </div>
 
   <div class="form-group">

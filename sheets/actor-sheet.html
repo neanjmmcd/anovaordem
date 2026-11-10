@@ -39,7 +39,7 @@
     <label title="{{system.rdDetalhe}}">RD <input type="number" class="aon-derivado" value="{{system.rd}}" readonly></label>
     <label>Saúde <input type="number" name="system.saude" value="{{system.saude}}" max="100" min="0"></label>
     <label>Sanidade <input type="number" name="system.sanidade" value="{{system.sanidade}}"  max="100" min="0"></label>
-    <label title="Atual / Máxima (PSI x2, reduzida pelo dreno dos implantes)">Essência
+    <label title="Atual / Máxima (PSI x2 menos os pontos de Essência dos implantes)">Essência
       <span class="aon-essencia">
         <input type="number" name="system.essencia" value="{{system.essencia}}">
         <span class="aon-max">/ {{system.essenciaMax}}</span>
@@ -50,7 +50,7 @@
   </section>
   <section class="recursos aon-recursos-extra">
     <label title="Base 7m + armadura + Saúde + itens">Deslocamento <input type="text" class="aon-derivado" value="{{system.deslocamento}}m" readonly></label>
-    <label title="100% − dreno de Essência dos implantes">Humanidade <input type="text" class="aon-derivado" value="{{system.humanidade}}%" readonly></label>
+    <label title="Quanto da Essência (PSI x2) ainda resta depois dos implantes">Humanidade <input type="text" class="aon-derivado" value="{{system.humanidade}}%" readonly></label>
     <label title="Carga extra de itens (mochila, compartimentos)">Carga Extra <input type="text" class="aon-derivado" value="+{{system.cargaExtra}}un." readonly></label>
     <label title="Ajuste manual do mestre somado à RD">Ajuste RD <input type="number" name="system.ajustes.rd" value="{{system.ajustes.rd}}"></label>
     <label title="Ajuste manual do mestre somado à Essência máxima">Ajuste Ess. <input type="number" name="system.ajustes.essencia" value="{{system.ajustes.essencia}}"></label>
@@ -139,15 +139,14 @@
   <section class="pericias-grid">
     {{#each periciasPorGrupo}}
       <div class="pericia-grupo">
-        <h3>{{@key}}</h3>
+        <h3>{{@key}}{{#if (lookup @root.gruposST @key)}} <span class="aon-st" title="Somente treinado: só rola com pontos gastos na criação ou na evolução (exceto Resistência Mental)">ST</span>{{/if}}</h3>
 
         {{#each this}}
-          <div class="pericia" >
-            <span class="nome rolar-pericia" data-pericia="{{key}}">{{label}}</span>
+          <div class="pericia{{#if bloqueada}} aon-pericia-bloqueada{{/if}}"{{#if bloqueada}} title="Sem treino: gaste pontos nesta perícia para poder rolar"{{/if}}>
+            <span class="nome{{#unless bloqueada}} rolar-pericia{{/unless}}" data-pericia="{{key}}">{{label}}</span>
             <input type="number" name="system.pericias.{{key}}.valor" value="{{valor}}"  hidden disabled/>
             <input type="number" name="system.pericias.{{key}}.bonus" value="{{bonus}}">
-            {{#if bonusItens}}<span class="aon-total" title="Bônus de itens">{{bonusItensTexto}}</span>{{/if}}
-            <button class="rolar-pericia" data-pericia="{{key}}" hidden>🎲</button>
+            <span class="aon-pericia-total{{#if bonusItens}} aon-modificado{{/if}}" title="Valor da perícia{{#if bonusItens}} (itens {{bonusItensTexto}}){{/if}}. Na rolagem soma o atributo.">{{#if bloqueada}}—{{else}}{{totalPericia}}%{{/if}}</span>
           </div>
         {{/each}}
       </div>
@@ -369,9 +368,9 @@
       </tbody>
     </table>
 
-    <!-- Magias -->
+    <!-- Feitiços -->
   <div class="armadura-box">
-    <h3>Magias</h3>
+    <h3>Feitiços</h3>
     <table class="armadura-tabela">
       <thead>
         <tr>
@@ -393,11 +392,11 @@
            <td>{{conceito}}</td>
            <td>{{essencia}}</td>
            <td>{{efeito}}</td>
-           <td class="rolar-magias" title="Dano a sanindade">{{dano}}</td>
+           <td class="rolar-magias" title="Dano à Sanidade">{{dano}}</td>
            <td>{{circulo}}</td>
            <td><button type="button" class="aon-conjurar" title="Conjurar (teste, Essência e Resistência Mental do alvo)">✨</button></td>
            <td>
-            <button class="remover-magias" title="Remover magias">🗑</button>
+            <button class="remover-magias" title="Remover feitiço">🗑</button>
           </td>
         </tr>
         {{/each}}
