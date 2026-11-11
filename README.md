@@ -232,6 +232,8 @@ Ficam na aba Compêndios, na pasta **A Nova Ordem**:
 
 As regras completas do sistema estão disponíveis no arquivo **`Dieselpunk - A Nova Ordem.pdf`** incluído neste repositório.
 
+O **`Suplemento - A Nova Ordem.pdf`**, também na raiz, traz a evolução de personagens, a escala de Tiers, a montagem de encontros e o bestiário completo.
+
 ---
 
 ## Status do Projeto
