@@ -272,7 +272,7 @@ export class AONovaOrdemMolduraToken extends HandlebarsApplicationMixin(Applicat
 Hooks.on("getActorSheetHeaderButtons", (sheet, botoes) => {
   if (!sheet.actor?.isOwner) return;
   botoes.unshift({
-    label: "Token", class: "aon-moldura", icon: "fas fa-circle-user",
+    label: "Token", class: "aon-botao-token", icon: "fas fa-circle-user",
     onclick: () => AONovaOrdemMolduraToken.abrir(sheet.actor, sheet.token)
   });
 });
