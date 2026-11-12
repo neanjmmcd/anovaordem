@@ -58,6 +58,13 @@ def imagem(nome):
         .save(os.path.join(pasta_img, base + '.webp'), 'WEBP', quality=82)
     return f'systems/a-nova-ordem/assets/npcs/{base}.webp'
 
+def token_de(img):
+    """Token visto de cima em assets/npcs/tokens, se existir; senão a ilustração."""
+    base = os.path.basename(img)
+    if os.path.exists(os.path.join(pasta_img, 'tokens', base)):
+        return f'systems/a-nova-ordem/assets/npcs/tokens/{base}'
+    return img
+
 def arma(texto):
     t = limpa(texto)
     m = re.match(r'\s*([^:]+):\s*(.+)', t)
@@ -66,7 +73,7 @@ def arma(texto):
     n = nome.lower()
     # Perícia explícita: o palpite automático por nome não conhece armas de criaturas
     if NATURAL.search(nome): pericia = 'briga'
-    elif re.search(r'granada|arremesso', n): pericia = 'atletismo'
+    elif re.search(r'granada|arremesso|dinamite', n): pericia = 'atletismo'
     elif re.search(r'canh[ãa]o|machine gun|gatling|lan[çc]a-chamas', n): pericia = 'armasPesadas'
     elif re.search(r'descarga', n): pericia = 'armasExperimentais'
     elif DISPARO.search(nome): pericia = 'armasFogo'
@@ -81,6 +88,7 @@ def arma(texto):
     }
 
 def ator(nome, img, system, armas, disposicao=-1):
+    tamanho = 2 if nome.startswith('Mecha') else 1  # mecha pesado ocupa 2x2
     _id = rid()
     for a in armas:
         a['_key'] = f'!actors.items!{_id}.{a["_id"]}'
@@ -90,7 +98,7 @@ def ator(nome, img, system, armas, disposicao=-1):
         'ownership': {'default': 0}, 'flags': {},
         'prototypeToken': {
             'name': nome, 'displayName': 20, 'actorLink': False, 'disposition': disposicao,
-            'displayBars': 0, 'texture': {'src': img}, 'width': 1, 'height': 1, 'lockRotation': True
+            'displayBars': 0, 'texture': {'src': token_de(img)}, 'width': tamanho, 'height': tamanho, 'lockRotation': True
         },
         '_armas': armas
     }
@@ -154,6 +162,58 @@ docs.append(ator('Mecha Tripulado Pesado "Panzer-Geist MK-IV"', imagem('PANZER-G
     'equipamento': 'Canhão antitanque, metralhadora Gatling coaxial, aríete hidráulico.',
     'notas': 'Uso em mesa: não pode ser vencido de frente com pistolas e facas. O grupo precisa de emboscadas com explosivos, alquimia de nível 3 ou 4, ou de alguém corajoso o bastante para subir na escotilha.'
 }, pz))
+
+# Personagens dos exemplos dos livros (não estão no Suplemento).
+# Os números vêm dos exemplos: Vix tem CON 9, Malha Reforçada (RD 12), Saúde 100, Esquiva 20% + DES 20%,
+# Furtividade 30%, Arrombamento 12% e Demolições 5%; o guarda atira com Armas de Fogo 35% + DES 15% e pistola 4d6.
+# Os retratos ficam em assets/npcs/<base>.webp (gerados à parte).
+def extra(nome, base, system, ataques, disposicao):
+    img = f'systems/a-nova-ordem/assets/npcs/{base}.webp'
+    if not os.path.exists(os.path.join(pasta_img, base + '.webp')):
+        img = 'icons/svg/mystery-man.svg'
+    docs.append(ator(nome, img, system, [arma(a) for a in ataques], disposicao))
+
+extra('Vix, Infiltradora da Resistência', 'vix', {
+    'tier': 2, 'funcao': 'Aliada', 'lema': 'Entra onde ninguém deveria entrar, e quase sempre sai.',
+    'saude': 100, 'saudeMax': 100, 'rd': 12, 'deslocamento': '7m', 'sanidade': 100,
+    'atributos': {'for': 8, 'des': 20, 'con': 9, 'int': 11, 'sab': 12, 'psi': 10, 'car': 10},
+    'grupos': {'penfisica': 30, 'pensociais': 15, 'penmentais': 15, 'pentecnicologica': 20, 'penaquimica': 0, 'penmagica': 0, 'pensobrevivencia': 20},
+    'destaques': [{'pericia': 'furtividade', 'valor': 50}, {'pericia': 'esquiva', 'valor': 40}, {'pericia': 'arrombamento', 'valor': 32},
+                  {'pericia': 'armasFogo', 'valor': 45}, {'pericia': 'percepcao', 'valor': 40}, {'pericia': 'demolicoes', 'valor': 16},
+                  {'pericia': 'resistenciaMental', 'valor': 30}],
+    'pontoFraco': '', 'habilidades': 'Sombra: fora de combate, um teste de Furtividade bem-sucedido deixa Vix agir antes de todos na primeira rodada.',
+    'equipamento': 'Malha Reforçada (Armadura 3, Leve), pistola leve, faca, gazuas, bolsa com 1 carga de demolição.',
+    'notas': 'Personagem dos exemplos do Livro Básico (combate e RD) e do Suplemento (Marcas de Uso e Tempo de Inatividade).\n'
+             'Uso em mesa: aliada da Resistência, contato que abre portas ou personagem pronto para um jogador.\nRD: 12 (9 CON + 3 Malha Reforçada)'
+}, ['**Pistola Leve:** 4d6 perfurante.', '**Lâmina Curta (faca):** 3d6 cortante.'], 1)
+
+extra('Guarda do Depósito de Munições', 'guarda_deposito', {
+    'tier': 1, 'funcao': 'Combatente', 'lema': 'Vigia caixas de munição a noite inteira. Atira primeiro, pergunta depois.',
+    'saude': 45, 'saudeMax': 45, 'rd': 12, 'deslocamento': '7m', 'sanidade': 100,
+    'atributos': {'for': 9, 'des': 15, 'con': 9, 'int': 7, 'sab': 9, 'psi': 5, 'car': 6},
+    'grupos': {'penfisica': 25, 'pensociais': 10, 'penmentais': 10, 'pentecnicologica': 10, 'penaquimica': 0, 'penmagica': 0, 'pensobrevivencia': 20},
+    'destaques': [{'pericia': 'armasFogo', 'valor': 50}, {'pericia': 'percepcao', 'valor': 35}, {'pericia': 'esquiva', 'valor': 30},
+                  {'pericia': 'briga', 'valor': 30}, {'pericia': 'resistenciaMental', 'valor': 20}],
+    'pontoFraco': '', 'habilidades': 'Alarme: com uma ação simples, toca o alarme do depósito; reforços da Força de Segurança chegam em 1d4+1 rodadas.',
+    'equipamento': 'Pistola, cassetete, armadura leve, lanterna, apito, molho de chaves do depósito.',
+    'notas': 'O guarda do exemplo de combate do Livro Básico (Armas de Fogo 35% + DES 15% = 50%).\n'
+             'Uso em mesa: sentinela de instalações militares. Sozinho é pouco perigoso; o problema é o alarme.\nRD: 12 (9 CON + 3 Leve)'
+}, ['**Pistola:** 4d6 perfurante.', '**Bastão (cassetete):** 4d6 concussivo.'], -1)
+
+extra('Velho Sapador da Resistência', 'sapador', {
+    'tier': 2, 'funcao': 'Aliado', 'lema': 'Explodiu pontes para os dois lados da guerra. Hoje ensina quem ainda tem coragem.',
+    'saude': 55, 'saudeMax': 55, 'rd': 9, 'deslocamento': '6m', 'sanidade': 100,
+    'atributos': {'for': 9, 'des': 10, 'con': 9, 'int': 14, 'sab': 13, 'psi': 7, 'car': 9},
+    'grupos': {'penfisica': 20, 'pensociais': 20, 'penmentais': 25, 'pentecnicologica': 40, 'penaquimica': 0, 'penmagica': 0, 'pensobrevivencia': 30},
+    'destaques': [{'pericia': 'demolicoes', 'valor': 75}, {'pericia': 'arrombamento', 'valor': 50}, {'pericia': 'engenharia', 'valor': 55},
+                  {'pericia': 'eletronica', 'valor': 45}, {'pericia': 'percepcao', 'valor': 40}, {'pericia': 'resistenciaMental', 'valor': 35}],
+    'pontoFraco': '', 'habilidades': 'Mestre de Demolições: ensina Demolições no Tempo de Inatividade (Suplemento) e pode trocar o custo em ¢RD por um serviço.\n'
+                                    'Mão firme: desarma uma bomba ou armadilha com uma ação a mais de calma, sem penalidade por pressa.',
+    'equipamento': 'Espingarda de cano serrado, 3 bananas de dinamite, alicates, rolos de fio, detonador de manivela.',
+    'notas': 'O mentor do exemplo de Tempo de Inatividade do Suplemento, que ensina Demolições a Vix.\n'
+             'Uso em mesa: mentor, fornecedor de explosivos e gancho de missão. Não luta se puder evitar.\nRD: 9 (CON)'
+}, ['**Espingarda de cano serrado:** 5d6 perfurante, alcance curto.',
+    '**Dinamite (3 unidades):** 5d6 em área de 4m.'], 1)
 
 json.dump(docs, open(SAIDA, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 for d in docs:

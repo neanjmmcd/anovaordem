@@ -1,6 +1,6 @@
 # Dieselpunk — A Nova Ordem
 
-> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.8.0` · Funcional e jogável
+> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.9.0` · Funcional e jogável
 
 Um sistema percentual de RPG ambientado em um mundo dieselpunk alternativo, onde o Eixo venceu a Segunda Guerra Mundial. O ano é 1975. Três impérios totalitários dividem o planeta — e você é um Libertário operando nas sombras, tentando mudar o curso da história.
 
@@ -144,7 +144,10 @@ Os valores abaixo são **calculados automaticamente** a partir dos itens na fich
 |---------|-----------|
 | **Ficha automática** | RD, peso, Essência, deslocamento, atributos, perícias e penalidades são calculados a partir dos itens (veja [Itens que alteram a ficha](#itens-que-alteram-a-ficha)). |
 | **Rolagens** | Clique no atributo ou na perícia. Perícias com dois atributos perguntam qual usar. Crítico em 01–04, falha crítica em 96–100. Cada perícia mostra o seu total; as perícias ST sem treino ficam apagadas e não rolam. |
-| **Lista de perícias** | Botão 🎲 no HUD do token ou tecla **P**: abre só as perícias que aquele personagem ou NPC pode rolar, por grupo, com a chance de cada uma. |
+| **Lista de perícias** | Botão 🎲 no HUD do token ou tecla **P**: abre só as perícias que aquele personagem ou NPC pode rolar, por grupo, com a chance de cada uma. O campo do topo filtra pelo nome; Enter rola a primeira. |
+| **Manual do Sistema** | Botão 📖 **Manual** nos controles de token ou em Configurações. Explica ficha, rolagens, combate, itens e atalhos dentro do Foundry. O mestre vê também as seções dele (configurações, Painel, gerador de encontro, Bestiário); os jogadores veem só a parte deles. Tem busca. Na primeira vez que cada usuário entra, recebe no chat, só para ele, uma mensagem mostrando onde fica o manual (dá para desligar). Em Configurar Sistema, a **Mensagem do Mestre** manda um recado ou as regras da mesa para cada jogador, também só para ele. |
+| **Token com moldura** | Botão **Token** no topo da ficha ou menu do ator na aba Atores. Escolha a imagem (retrato, token atual ou qualquer arquivo) e uma das 18 molduras temáticas do sistema (latão, engrenagem, tesla, radiação, runas, esteira de tanque…), arraste e dê zoom até o centro mostrar a melhor parte, e aplique: o token vira a imagem com moldura, salva em `worlds/<mundo>/tokens-a-nova-ordem`. Jogadores precisam da permissão *Enviar arquivos*. Substitui o módulo Tokenizer. |
+| **Trilha sonora** | 29 faixas curtas em `trilhasonora/`, feitas para tocar em loop: combate, chefe, perseguição, infiltração, investigação noir, mercado negro, esconderijo da Resistência, marcha imperial, laboratório, prisão, burocracia do regime, vitória e derrota. Monte as playlists na aba Playlists com os arquivos dessa pasta. |
 | **Ataque automático** | O botão de dano da arma rola a **perícia da arma** (Armas de Fogo, Brancas, Pesadas… escolhida na ficha da arma ou deduzida pelo nome), o dano já vem descontando a RD do alvo marcado (mínimo 1). Não há esquiva automática: o mestre vê os botões **Aplicar dano** e **Esquivou** e decide. Crítico dobra os dados; armas de disparo e arremesso gastam 1 de munição por ataque (Armas Brancas e Briga não gastam). Com alvo marcado, o cartão mostra quem está sendo atacado. Se o jogador não é dono do alvo, o mestre conectado aplica. |
 | **Alquímicos** | O botão de dano da técnica segue o mesmo fluxo com a perícia **Pedras de Energia**: o dano ignora metade da armadura, menos a das armaduras marcadas como *tratadas* contra aquele tipo (Calor, Frio, Elétrico, Cinético ou Químico, na ficha da armadura) e a pedra se desfaz ao usar (−1 de quantidade). Nível 4: o cartão avisa a Incapacitação do usuário e, na falha crítica, a pedra explode nele. |
 | **Feitiços e rituais** | Botão ✨ na ficha. Testa **Feitiçaria** ou **Rituais** e gasta Essência, mesmo se falhar (+2 com Humanidade em 50% ou menos). O alvo se defende com **Resistência Mental**, conforme a opção de esquiva, e o dano vai na Sanidade, sem RD e sem mostrar o número aos jogadores. Crítico dobra esse dano. Sem Essência suficiente ou em Mente Vazia, não conjura. |
@@ -153,6 +156,7 @@ Os valores abaixo são **calculados automaticamente** a partir dos itens na fich
 | **Dano e cura pelo chat** | Os botões − / + dos cartões aplicam no token selecionado (ou no alvo marcado): o − desconta a RD; o estado de Saúde e as penalidades são atualizados. |
 | **NPC / Ameaça** | Tipo de ator próprio, com ficha compacta no formato do Suplemento: Tier, função, Valor de Ameaça, Saúde em pontos (o estado é calculado pela porcentagem), RD, atributos, Grupos de Perícias e perícias em destaque com a chance já somada. Armas arrastadas para a ficha atacam com o mesmo fluxo dos personagens. |
 | **Painel do Mestre** | Botão de torre nos controles de token (só o mestre). Lista ameaças e personagens da cena com barra de Saúde, estado e RD; dano/cura rápidos, marcar alvo, ocultar token, abrir ficha e pôr todos no combate. Calcula o **orçamento de encontro** (experiência do grupo × personagens) e mostra se a cena está Fácil, Normal, Difícil ou Mortal. |
+| **Gerador de encontro** | No Painel do Mestre: escolha a dificuldade e o tema (urbano, militar, oculto, máquinas) e ele sorteia ameaças do Bestiário até o orçamento, com um líder e capangas. O resumo vai para o chat só do mestre; **Colocar na cena** importa os NPCs para a pasta *Encontros* e cria os tokens ocultos no centro da tela. |
 | **Sanidade no chat** | Toda mudança de Sanidade anuncia o Estado Mental do personagem, sem mostrar o número. Em 0, o cartão avisa que ele é considerado morto. |
 | **Iniciativa** | O Combat Tracker rola DES + 1d6 para personagens e NPCs. |
 | **Consumíveis com duração** | Elixires, injeções e drogas marcados como *Ativo* contam turnos no combate (só no turno do próprio personagem) e se desligam sozinhos. |
@@ -161,22 +165,19 @@ Os valores abaixo são **calculados automaticamente** a partir dos itens na fich
 | **Criador de Personagem** | Botão **Criador** no topo da ficha (abre sozinho quando um jogador cria um personagem). Passo a passo do manual: dados, atributos em 3d6 ×7 distribuídos à vontade e 250 pontos de perícia somados aos valores base, com nenhuma perícia acima de 50% (sem o atributo). As rolagens vão para o chat; rolar de novo só se o mestre liberar (botão no chat ou no criador). Ao concluir, Saúde e Sanidade vão a 100 e Essência a PSI × 2. |
 | **Item Piles** | Com o módulo ativo, saques, baús e lojas funcionam com o sistema: quantidade em `system.quantidade`, preço em `system.preco` e dinheiro no ¢RD da ficha. Feitiços, rituais, técnicas alquímicas e implantes não entram em pilhas. |
 | **Animações** | Efeitos e sons próprios para armas, alquímicos e consumíveis, instalados no Automated Animations por um botão (veja abaixo). |
-| **Bestiário (só o mestre)** | Compêndio com os 14 NPCs do Suplemento já montados na ficha de NPC, com ilustração, armas, perícias em destaque, Ponto Fraco e habilidades. Jogadores não veem o compêndio. Arraste para a cena ou para a aba Atores. |
+| **Bestiário (só o mestre)** | Compêndio com os 14 NPCs do Suplemento e os personagens dos exemplos dos livros (Vix, o Velho Sapador e o Guarda do Depósito) já montados na ficha de NPC, com ilustração, token visto de cima (com versões extras em `assets/npcs/tokens/variantes`), armas, perícias em destaque, Ponto Fraco e habilidades. Jogadores não veem o compêndio. Arraste para a cena ou para a aba Atores. |
 
-**Configurações do mundo** (*Configurações → Configurar Sistema*): jogadores podem ou não adicionar itens pelo Catálogo; abrir o Criador sozinho; teto de perícia na criação (padrão 50%, regra do livro; 0 = sem teto).
+**Configurações do mundo** (*Configurações → Configurar Sistema*): jogadores podem ou não adicionar itens pelo Catálogo; abrir o Criador sozinho; teto de perícia na criação (padrão 50%, regra do livro; 0 = sem teto); mensagem de boas-vindas do Manual (liga/desliga); **Mensagem do Mestre** (recado ou regras da mesa, entregue a cada jogador em particular).
 
 ### Animações
 
-O sistema traz **efeitos e sons próprios** (gerados com o NeanTools) em `assets/animacoes` e `assets/sons`: tiro, rajada, raio, jato de chamas, bola de fogo, gelo, ácido, gás, explosão, onda de choque, clarão, corte, impacto, magia, cura e estimulante. **Não é preciso o JB2A.**
+O sistema traz **efeitos e sons próprios** (gerados com o NeanTools) em `assets/animacoes` e `assets/sons`: tiros de pistola, rifle e espingarda e rajadas leve e pesada (traçante fino com clarão na boca da arma), disparo pesado com explosão (lança-granadas e canhão), raio, jato de chamas, bola de fogo, gelo, ácido, gás, explosão, onda de choque, clarão, corte, impacto, magia, cura e estimulante. **Não é preciso o JB2A.**
 
 1. Ative o **[Automated Animations](https://foundryvtt.com/packages/autoanimations)** e o **Sequencer** (e o socketlib).
 2. Abra o mundo como mestre: as animações se instalam sozinhas. Em *Configurações → Configurar Sistema → Animações do Sistema* dá para ver a prévia, ouvir os sons e atualizar.
 3. Pronto: ao atacar com uma arma, rolar um alquímico, conjurar ou ativar um consumível, a animação toca. Armas de fogo, elétricas, alquímicos de fogo, gelo e ácido e o lança-chamas saem do atacante até o alvo; as demais tocam no alvo; consumíveis tocam no próprio personagem.
 
 O Automated Animations reconhece o item quando o **nome contém o rótulo** (ex.: "Pistola" vale para Pistola Leve e Pistola Pesada). **Remover do sistema** tira só as entradas do sistema, sem mexer nas que você criou. Feito para o Automated Animations 6.6.2 e o Sequencer 3.6.11.
-
----
-
 
 ---
 
@@ -192,7 +193,7 @@ O sistema funciona sem nenhum módulo. Os abaixo foram integrados ou testados co
 | [JB2A (gratuito)](https://foundryvtt.com/packages/JB2A_DnD5e) | Animações extras para quem quiser montar as suas | Opcional: o sistema já traz os efeitos próprios |
 | [Dice So Nice!](https://foundryvtt.com/packages/dice-so-nice) | Dados 3D nas rolagens | Opcional, funciona com qualquer sistema |
 
-**Não são necessários** (o sistema já faz de forma nativa ou não são compatíveis): *Compendium Browser* (use o Catálogo), *Plutonium* (use o Criador de Personagem), *Midi-QOL* e módulos de condições do D&D 5e (só funcionam no dnd5e), *Automated Animations For All*.
+**Não são necessários** (o sistema já faz de forma nativa ou não são compatíveis): *Compendium Browser* (use o Catálogo), *Plutonium* (use o Criador de Personagem), *Tokenizer* (use o Token com moldura), *Midi-QOL* e módulos de condições do D&D 5e (só funcionam no dnd5e), *Automated Animations For All*.
 
 ---
 
@@ -219,12 +220,12 @@ Ficam na aba Compêndios, na pasta **A Nova Ordem**:
 
 | Pasta | Conteúdo |
 |-------|----------|
-| — | **Manual do Sistema** (o PDF, dentro do Foundry) |
+| — | **Livro**: o Livro Básico e o Suplemento em PDF, dentro do Foundry (o Suplemento aqui vem sem o Bestiário) |
 | Equipamento | Armas, Armaduras, Itens |
 | Cibernética | Implantes, Mechas, Veículos |
 | Alquimia | Técnicas Alquímicas, Alquimia, Ácidos, Venenos, Injeções, Elixires, Mutagênicos, Drogas |
 | Ocultismo | Feitiços, Rituais |
-| Mestre | **Bestiário** (só o mestre vê) |
+| Mestre | **Bestiário** e **Livro do Mestre** (o Bestiário em PDF), só o mestre vê |
 
 ---
 
@@ -232,13 +233,13 @@ Ficam na aba Compêndios, na pasta **A Nova Ordem**:
 
 As regras completas do sistema estão disponíveis no arquivo **`Dieselpunk - A Nova Ordem.pdf`** incluído neste repositório.
 
-O **`Suplemento - A Nova Ordem.pdf`**, também na raiz, traz a evolução de personagens, a escala de Tiers, a montagem de encontros e o bestiário completo.
+O **`Suplemento - A Nova Ordem.pdf`**, também na raiz, traz a evolução de personagens, a escala de Tiers, a montagem de encontros e o bestiário completo. Dentro do Foundry ele vem separado em dois (`assets/livros/`, gerados por `ferramentas/separar_suplemento.py`): o Suplemento sem o Bestiário, que todos leem, e o Bestiário, só para o mestre.
 
 ---
 
 ## Status do Projeto
 
-> **Versão `0.8.0` — Funcional e jogável**
+> **Versão `0.9.0` — Funcional e jogável**
 > O sistema está em desenvolvimento contínuo e pode receber melhorias. Críticas, comentários e sugestões são bem-vindos.
 
 ---

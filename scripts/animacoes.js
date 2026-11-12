@@ -12,15 +12,20 @@ const SISTEMA = "a-nova-ordem";
 const VIDEO = nome => `systems/${SISTEMA}/assets/animacoes/${nome}.webm`;
 const SOM = nome => `systems/${SISTEMA}/assets/sons/${nome}.ogg`;
 const VERSAO_MENU = 5; // formato do menu no Automated Animations 6.x
-const VERSAO_ANIMACOES = "2"; // aumente ao mudar a tabela: o mestre recebe a atualização sozinho
+const VERSAO_ANIMACOES = "3"; // aumente ao mudar a tabela: o mestre recebe a atualização sozinho
 
 /* rótulos → efeito. menu "range" = projétil até o alvo; "ontoken" = efeito no alvo
  * (consumíveis tocam no próprio personagem, ver tocarAnimacao em rolls.js) */
 const GRUPOS = [
   // Armas de fogo
-  { menu: "range", video: "tiro", som: "tiro", rotulos: ["Pistola", "Revólver", "Rifle", "Espingarda", "Luger"] },
-  { menu: "range", video: "tiro", som: "rajada", repeat: 3, repeatDelay: 120,
-    rotulos: ["Submetralhadora", "Fuzil", "Metralhadora", "Heavy Machine Gun"] },
+  // Armas de fogo: traçante fino desenhado por código (a rajada já vem no próprio vídeo)
+  { menu: "range", video: "tiro_pistola", som: "tiro", rotulos: ["Pistola", "Revólver", "Luger"] },
+  { menu: "range", video: "tiro_rifle", som: "tiro", rotulos: ["Rifle"] },
+  { menu: "range", video: "espingarda", som: "tiro", rotulos: ["Espingarda"] },
+  { menu: "range", video: "rajada", som: "rajada", rotulos: ["Submetralhadora", "Fuzil"] },
+  { menu: "range", video: "rajada_pesada", som: "rajada", rotulos: ["Metralhadora", "Heavy Machine Gun", "Gatling"] },
+  // Projétil grande até o alvo, com explosão no impacto
+  { menu: "range", video: "disparo_pesado", som: "explosao", secundario: "explosao", rotulos: ["Lança-Granadas", "Canhão"] },
   // Elétrico
   { menu: "range", video: "raio", som: "raio", rotulos: ["Taser", "Voltaic", "Tesla", "Indra", "Raijin"] },
   // Jato contínuo até o alvo (feixe)
@@ -31,7 +36,7 @@ const GRUPOS = [
   { menu: "range", video: "acido", som: "acido", rotulos: ["Corros", "Apep", "Nergal", "Descarga Cáustica"] },
   // No alvo
   { menu: "ontoken", video: "gas", som: "gas", size: 2, rotulos: ["Gás Lacrimogêneo", "Gás Mostarda", "Miasma", "Spray de Pimenta"] },
-  { menu: "ontoken", video: "explosao", som: "explosao", size: 2, rotulos: ["Granada Concussiva", "Lança-Granadas", "Hyperion", "Canhão"] },
+  { menu: "ontoken", video: "explosao", som: "explosao", size: 2, rotulos: ["Granada Concussiva", "Hyperion"] },
   { menu: "ontoken", video: "onda", som: "explosao", size: 2, rotulos: ["Impacta", "Tremor", "Atlas"] },
   { menu: "ontoken", video: "clarao", som: "clarao", size: 2, rotulos: ["Granada de Luz"] },
   { menu: "ontoken", video: "corte", som: "corte",
@@ -97,7 +102,10 @@ function entrada(rotulo, g) {
       sound: { ...somVazio(), enable: !!g.som, file: g.som ? SOM(g.som) : "", volume: 0.6 },
       video: { ...videoPadrao(dbSection), enableCustom: true, customPath: VIDEO(g.video) }
     },
-    secondary: { ...extraDesligado(), options: { ...extraDesligado().options, isRadius: true, size: 1.5 } },
+    secondary: g.secundario
+      ? { ...extraDesligado(), enable: true, options: { ...extraDesligado().options, size: 2 },
+          video: { ...videoPadrao("static"), enableCustom: true, customPath: VIDEO(g.secundario) } }
+      : { ...extraDesligado(), options: { ...extraDesligado().options, isRadius: true, size: 1.5 } },
     soundOnly: { sound: somVazio() },
     source: extraDesligado(),
     target: extraDesligado()

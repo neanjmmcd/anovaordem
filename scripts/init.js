@@ -41,6 +41,8 @@ import { registrarCombate, pedir, atacar, conjurar, config } from "./combate.js"
 import { registrarMigracoes } from "./migracao.js";
 import "./regras-itens.js";
 import { registrarListaPericias } from "./lista-pericias.js";
+import { registrarManual } from "./manual.js";
+import "./moldura-token.js";
 import { AONovaOrdemNpcModel } from "./npc-model.js";
 import { AONovaOrdemNpcSheet } from "./npc-sheet.js";
 import { AONovaOrdemPainelMestre } from "./painel-mestre.js";
@@ -200,6 +202,7 @@ Hooks.once("init", () => {
     onDown: () => { AONovaOrdemCatalogo.abrir(); return true; }
   });
   registrarListaPericias();
+  registrarManual();
 
   console.log("A Nova Ordem | Sistema inicializado");
 });

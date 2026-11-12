@@ -9,6 +9,9 @@ import { chancePericia, rolarTeste } from "./combate.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
+/** minúsculas e sem acento, para a busca */
+const normalizar = t => String(t ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+
 export class AONovaOrdemListaPericias extends HandlebarsApplicationMixin(ApplicationV2) {
   static DEFAULT_OPTIONS = {
     id: "aon-lista-pericias",
@@ -17,7 +20,7 @@ export class AONovaOrdemListaPericias extends HandlebarsApplicationMixin(Applica
     position: { width: 340, height: 560 },
     actions: { rolar: AONovaOrdemListaPericias.#rolar }
   };
-  static PARTS = { main: { template: "systems/a-nova-ordem/templates/lista-pericias.hbs", scrollable: [""] } };
+  static PARTS = { main: { template: "systems/a-nova-ordem/templates/lista-pericias.hbs", scrollable: [".aon-lista-corpo"] } };
 
   constructor(actor, options) {
     super(options);
@@ -42,14 +45,49 @@ export class AONovaOrdemListaPericias extends HandlebarsApplicationMixin(Applica
       if (!periciaLiberada(this.actor, key)) continue;
       const chance = chancePericia(this.actor, key).alvo;
       if (this.actor.type === "npc" && chance <= 0) continue;
-      (grupos[p.grupo] ??= []).push({ key, label: p.label, chance });
+      (grupos[p.grupo] ??= []).push({ key, label: p.label, chance, busca: normalizar(`${p.label} ${p.grupo}`) });
     }
     return {
+      filtro: this.filtro ?? "",
       grupos: Object.entries(grupos).map(([nome, pericias]) => ({
         nome, st: cfg.gruposSomenteTreinado.includes(nome),
         pericias: pericias.sort((a, b) => a.label.localeCompare(b.label, "pt-BR"))
       }))
     };
+  }
+
+  _onRender(context, options) {
+    const campo = this.element.querySelector(".aon-lista-filtro");
+    if (!campo) return;
+    const aplicar = () => {
+      this.filtro = campo.value;
+      const termo = normalizar(campo.value);
+      let algum = false;
+      for (const sec of this.element.querySelectorAll(".aon-lista-corpo section")) {
+        let visiveis = 0;
+        for (const li of sec.querySelectorAll("li")) {
+          const ok = !termo || li.dataset.busca.includes(termo);
+          li.hidden = !ok;
+          if (ok) visiveis++;
+        }
+        sec.hidden = !visiveis;
+        algum ||= visiveis > 0;
+      }
+      const nada = this.element.querySelector(".aon-lista-nada");
+      if (nada) nada.hidden = algum || !termo;
+    };
+    campo.addEventListener("input", aplicar);
+    campo.addEventListener("keydown", ev => {
+      if (ev.key === "Enter") {
+        ev.preventDefault();
+        this.element.querySelector(".aon-lista-corpo li:not([hidden]) a")?.click();
+      } else if (ev.key === "Escape" && campo.value) {
+        ev.preventDefault(); ev.stopPropagation();
+        campo.value = ""; aplicar();
+      }
+    });
+    aplicar();
+    if (options.isFirstRender) campo.focus();
   }
 
   static #rolar(event, alvo) {

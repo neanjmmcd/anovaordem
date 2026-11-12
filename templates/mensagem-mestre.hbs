@@ -1,0 +1,16 @@
+<div class="aon-mensagem-mestre">
+  <p class="hint">Recado ou regras da mesa para todos os jogadores. Cada um recebe no chat, só para ele: quem está online
+    recebe ao salvar, e quem entrar depois recebe ao entrar. Cada versão chega uma vez para cada jogador.
+    Deixe vazio para não mandar nada.</p>
+  <label>Título
+    <input type="text" name="titulo" value="{{titulo}}" placeholder="Recado do Mestre">
+  </label>
+  <textarea name="texto" rows="14" placeholder="Ex.: Sessões às sextas, 20h. Regra da casa: crítico só com 01.">{{texto}}</textarea>
+  <p class="hint">Linha em branco separa parágrafos. Aceita HTML simples (&lt;b&gt;, &lt;i&gt;, &lt;ul&gt;&lt;li&gt;).</p>
+  <label class="aon-mensagem-reenviar">
+    <input type="checkbox" name="reenviar"> Mandar de novo para todos, mesmo sem mudar o texto
+  </label>
+  <footer class="form-footer">
+    <button type="submit"><i class="fas fa-paper-plane"></i> Salvar</button>
+  </footer>
+</div>

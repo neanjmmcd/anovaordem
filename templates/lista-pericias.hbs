@@ -1,14 +1,18 @@
 <div class="aon-lista">
-  {{#each grupos}}
-  <section>
-    <h4>{{nome}}{{#if st}} <span class="aon-st" title="Somente treinado">ST</span>{{/if}}</h4>
-    <ul>
-      {{#each pericias}}
-      <li><a data-action="rolar" data-pericia="{{key}}"><i class="fas fa-dice-d20"></i> {{label}}</a> <b>{{chance}}%</b></li>
-      {{/each}}
-    </ul>
-  </section>
-  {{else}}
-  <p>Nenhuma perícia disponível.</p>
-  {{/each}}
+  <input type="search" class="aon-lista-filtro" placeholder="Filtrar perícia… (Enter rola a primeira)" value="{{filtro}}" autocomplete="off">
+  <div class="aon-lista-corpo">
+    {{#each grupos}}
+    <section>
+      <h4>{{nome}}{{#if st}} <span class="aon-st" title="Somente treinado">ST</span>{{/if}}</h4>
+      <ul>
+        {{#each pericias}}
+        <li data-busca="{{busca}}"><a data-action="rolar" data-pericia="{{key}}"><i class="fas fa-dice-d20"></i> {{label}}</a> <b>{{chance}}%</b></li>
+        {{/each}}
+      </ul>
+    </section>
+    {{else}}
+    <p>Nenhuma perícia disponível.</p>
+    {{/each}}
+    <p class="aon-lista-nada" hidden>Nenhuma perícia com esse nome.</p>
+  </div>
 </div>

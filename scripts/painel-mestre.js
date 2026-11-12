@@ -7,6 +7,7 @@
 
 import { pedir } from "./combate.js";
 import { status } from "./rolls.js";
+import { DIFICULDADES, TEMAS, gerarEncontro, encontroNoChat, colocarNaCena } from "./gerador-encontro.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -31,7 +32,9 @@ export class AONovaOrdemPainelMestre extends HandlebarsApplicationMixin(Applicat
       dano: AONovaOrdemPainelMestre.#danoCura,
       cura: AONovaOrdemPainelMestre.#danoCura,
       ocultar: AONovaOrdemPainelMestre.#ocultar,
-      combate: AONovaOrdemPainelMestre.#combate
+      combate: AONovaOrdemPainelMestre.#combate,
+      gerar: AONovaOrdemPainelMestre.#gerar,
+      colocar: AONovaOrdemPainelMestre.#colocar
     }
   };
 
@@ -98,7 +101,12 @@ export class AONovaOrdemPainelMestre extends HandlebarsApplicationMixin(Applicat
       pjs,
       pjsAuto: !(Number(ajustes.pjs) > 0),
       soma, orcamento, dificuldade,
-      faixas: { facil: orcamento * 0.5, normal: orcamento, dificil: orcamento * 1.5, mortal: orcamento * 2 }
+      faixas: { facil: orcamento * 0.5, normal: orcamento, dificil: orcamento * 1.5, mortal: orcamento * 2 },
+      dificuldades: Object.fromEntries(Object.entries(DIFICULDADES).map(([k, v]) => [k, v.label])),
+      dif: DIFICULDADES[ajustes.dificuldade] ? ajustes.dificuldade : "normal",
+      temas: TEMAS,
+      tema: TEMAS[ajustes.tema] ? ajustes.tema : "todos",
+      encontro: this.encontro ?? null
     };
   }
 
@@ -145,6 +153,21 @@ export class AONovaOrdemPainelMestre extends HandlebarsApplicationMixin(Applicat
   static async #ocultar(event, target) {
     const doc = this.#token(target);
     await doc?.update({ hidden: !doc.hidden });
+  }
+
+  /** Sorteia um encontro do Bestiário com o orçamento atual */
+  static async #gerar() {
+    const ctx = await this._prepareContext();
+    if (!(ctx.pjs > 0)) return ui.notifications.warn("Informe quantos personagens há no grupo.");
+    const enc = await gerarEncontro({ pjs: ctx.pjs, base: EXPERIENCIA[ctx.exp].base, exp: ctx.exp, dificuldade: ctx.dif, tema: ctx.tema });
+    if (!enc) return ui.notifications.warn("Nenhuma ameaça do Bestiário cabe nesse orçamento e tema.");
+    this.encontro = enc;
+    await encontroNoChat(enc);
+    this.render();
+  }
+
+  static async #colocar() {
+    if (this.encontro) await colocarNaCena(this.encontro);
   }
 
   /** Coloca todos os tokens da cena no combate (cria o combate se preciso) */

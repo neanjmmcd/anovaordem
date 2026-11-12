@@ -1,0 +1,35 @@
+<div class="aon-moldura">
+  <div class="aon-moldura-palco">
+    <canvas class="aon-moldura-previa" width="{{previa}}" height="{{previa}}"></canvas>
+    <p class="aon-moldura-dica">Arraste a imagem para posicionar. Roda do mouse dá zoom (Shift: mais fino).</p>
+    <label class="aon-moldura-linha">
+      <i class="fas fa-magnifying-glass"></i>
+      <input type="range" class="aon-moldura-zoom" min="25" max="400" step="1" value="100">
+    </label>
+    <div class="aon-moldura-botoes">
+      <button type="button" data-action="escolher"><i class="fas fa-folder-open"></i> Escolher imagem</button>
+      <button type="button" data-action="retrato"><i class="fas fa-user"></i> Retrato</button>
+      <button type="button" data-action="tokenAtual"><i class="fas fa-circle"></i> Token atual</button>
+      <button type="button" data-action="centralizar"><i class="fas fa-crosshairs"></i> Centralizar</button>
+    </div>
+    <label class="aon-moldura-linha">
+      <input type="checkbox" data-fundo="usar" {{checked fundo.usar}}> Fundo para imagens transparentes
+      <input type="color" data-fundo="cor" value="{{fundo.cor}}">
+    </label>
+  </div>
+
+  <div class="aon-moldura-lado">
+    <h3>Molduras</h3>
+    <div class="aon-moldura-lista">
+      {{#each molduras}}
+      <button type="button" class="aon-moldura-opcao {{#if ativa}}ativa{{/if}}" data-action="moldura" data-id="{{id}}" data-tooltip="{{nome}}">
+        {{#if arquivo}}<img src="{{arquivo}}" alt="{{nome}}">{{else}}<span class="aon-moldura-vazia"><i class="fas fa-circle"></i></span>{{/if}}
+      </button>
+      {{/each}}
+    </div>
+    {{#unless podeEnviar}}
+    <p class="aon-moldura-aviso"><i class="fas fa-triangle-exclamation"></i> Para salvar, o mestre precisa liberar "Enviar arquivos" para você em Configurar Permissões.</p>
+    {{/unless}}
+    <button type="button" class="aon-moldura-aplicar" data-action="aplicar"><i class="fas fa-check"></i> Aplicar no token</button>
+  </div>
+</div>

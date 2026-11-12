@@ -97,7 +97,11 @@ label {
 .pericia.aon-pericia-bloqueada { opacity: .4; filter: grayscale(1); }
 .pericia.aon-pericia-bloqueada .nome { cursor: not-allowed; }
 .pericia-grupo h3 .aon-st { font-size: 10px; padding: 0 4px; border: 1px solid #c9a24a; border-radius: 3px; color: #c9a24a; vertical-align: middle; }
-.aon-lista-pericias .window-content { padding: 6px 10px; }
+.aon-lista-pericias .window-content { padding: 6px 10px; overflow: hidden; display: flex; flex-direction: column; }
+.aon-lista { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.aon-lista-filtro { flex: 0 0 auto; width: 100%; margin-bottom: 4px; }
+.aon-lista-corpo { flex: 1; min-height: 0; overflow-y: auto; padding-right: 4px; }
+.aon-lista-nada { opacity: .7; font-style: italic; }
 .aon-lista h4 { margin: 8px 0 2px; border-bottom: 1px solid #7a5c2e; text-transform: uppercase; font-size: 12px; }
 .aon-lista ul { list-style: none; margin: 0; padding: 0; }
 .aon-lista li { display: flex; justify-content: space-between; padding: 2px 0; }
@@ -454,6 +458,13 @@ button.rolar-pericia {
 .aon-painel-dif { display: inline-block; margin-left: 6px; padding: 1px 6px; border: 1px solid #c9a24a; border-radius: 3px; color: #c9a24a; font-weight: bold; }
 .aon-painel-faixas { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 11px; opacity: .9; }
 .aon-painel-faixas button { flex: 0 0 auto; }
+.aon-painel-gerador { display: grid; grid-template-columns: 1fr 1.4fr auto; gap: 6px; align-items: end; margin-top: 6px; }
+.aon-painel-gerador select { background: #1f1f1f; color: #e0d8b0; border: 1px solid #7a5c2e; }
+.aon-painel-encontro { margin-top: 6px; padding: 4px 6px; border: 1px dashed #7a5c2e; border-radius: 3px; font-size: 12px; }
+.aon-painel-encontro ul { list-style: none; margin: 0; padding: 0; }
+.aon-painel-encontro li { display: flex; align-items: center; gap: 6px; }
+.aon-painel-encontro img { width: 28px; height: 28px; border: 0; object-fit: cover; }
+.aon-painel-encontro p { display: flex; justify-content: space-between; align-items: center; margin: 4px 0 0; }
 .aon-painel-lista { list-style: none; margin: 0; padding: 0; }
 .aon-painel-linha { display: grid; grid-template-columns: 40px 1fr auto; gap: 8px; align-items: center; padding: 4px 0; border-bottom: 1px solid #3d3d3d; }
 .aon-painel-linha img { width: 40px; height: 40px; object-fit: cover; border: 1px solid #7a5c2e; cursor: pointer; }
@@ -506,3 +517,59 @@ button.rolar-pericia {
 /* Cartão: efeito da técnica/feitiço e avisos */
 .aon-card .aon-card-efeito { margin-top: 6px; font-size: 12px; }
 .aon-card .aon-card-aviso { margin-top: 6px; padding: 3px 6px; border-left: 3px solid #b5502a; font-size: 12px; }
+
+/* Manual do Sistema */
+.aon-manual-janela .window-content { padding: 0; overflow: hidden; }
+.aon-manual { display: grid; grid-template-columns: 220px 1fr; height: 100%; min-height: 0; }
+.aon-manual-nav { display: flex; flex-direction: column; gap: 6px; padding: 8px; border-right: 1px solid #7a5c2e; min-height: 0; }
+.aon-manual-visao { margin: 0; font-size: 11px; color: #c9a24a; }
+.aon-manual-indice { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1; min-height: 0; }
+.aon-manual-indice li { padding: 4px 6px; cursor: pointer; border-radius: 3px; font-size: 13px; }
+.aon-manual-indice li:hover { background: rgba(201, 162, 74, .15); color: #c9a24a; }
+.aon-manual-indice li.aon-manual-gm-item { color: #e2c174; }
+.aon-manual-corpo { overflow-y: auto; padding: 8px 16px 24px; min-height: 0; line-height: 1.45; }
+.aon-manual-corpo section { margin-bottom: 18px; }
+.aon-manual-corpo h2 { border-bottom: 1px solid #7a5c2e; margin: 6px 0 8px; }
+.aon-manual-corpo section[data-gm] h2 { color: #c9a24a; }
+.aon-manual-corpo table { width: auto; margin: 4px 0 8px; font-size: 13px; }
+.aon-manual-corpo kbd { padding: 0 4px; border: 1px solid #888; border-radius: 3px; font-size: 12px; }
+.aon-manual-gm { padding: 6px 8px; border-left: 3px solid #c9a24a; background: rgba(201, 162, 74, .1); }
+.aon-manual-nada { opacity: .7; font-style: italic; }
+.aon-botao-manual { width: 100%; margin-bottom: 4px; }
+@media (max-width: 700px) { .aon-manual { grid-template-columns: 1fr; } .aon-manual-nav { border-right: 0; } }
+
+/* Token com moldura */
+.aon-moldura { display: grid; grid-template-columns: 440px 1fr; gap: 12px; }
+.aon-moldura-palco { display: flex; flex-direction: column; gap: 6px; }
+.aon-moldura-previa { width: 440px; height: 440px; cursor: grab; touch-action: none; border-radius: 6px;
+  background: repeating-conic-gradient(#2a2a2a 0 25%, #1e1e1e 0 50%) 0 0 / 20px 20px; }
+.aon-moldura-previa:active { cursor: grabbing; }
+.aon-moldura-dica { margin: 0; font-size: 11px; opacity: .75; }
+.aon-moldura-linha { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.aon-moldura-linha input[type="range"] { flex: 1; }
+.aon-moldura-linha input[type="color"] { width: 32px; height: 22px; padding: 0; border: 0; }
+.aon-moldura-botoes { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.aon-moldura-botoes button { font-size: 12px; }
+.aon-moldura-lado { display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+.aon-moldura-lado h3 { margin: 0; border-bottom: 1px solid #7a5c2e; }
+.aon-moldura-lista { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; max-height: 470px; overflow-y: auto; padding: 2px; }
+.aon-moldura-opcao { padding: 2px; aspect-ratio: 1; background: #1b1b1b; border: 2px solid transparent; border-radius: 6px; }
+.aon-moldura-opcao img { width: 100%; height: 100%; object-fit: contain; border: 0; }
+.aon-moldura-opcao.ativa { border-color: #c9a24a; box-shadow: 0 0 6px #c9a24a; }
+.aon-moldura-vazia { display: flex; align-items: center; justify-content: center; height: 100%; font-size: 40px; color: #666; }
+.aon-moldura-aviso { margin: 0; font-size: 12px; color: #e2a04a; }
+.aon-moldura-aplicar { margin-top: auto; font-weight: bold; }
+
+/* Mensagem de boas-vindas */
+.aon-boas-vindas h3 { margin: 0 0 4px; border-bottom: 1px solid #7a5c2e; }
+.aon-boas-vindas p { margin: 4px 0; }
+.aon-boas-vindas .aon-abrir-manual { width: 100%; margin: 4px 0; }
+.aon-boas-vindas-nota { font-size: 11px; opacity: .7; font-style: italic; }
+
+/* Mensagem do Mestre */
+.aon-mensagem-mestre { display: flex; flex-direction: column; gap: 6px; }
+.aon-mensagem-mestre label { display: flex; flex-direction: column; gap: 2px; }
+.aon-mensagem-mestre label.aon-mensagem-reenviar { flex-direction: row; align-items: center; gap: 6px; }
+.aon-mensagem-mestre textarea { width: 100%; min-height: 220px; resize: vertical; font-family: inherit; }
+.aon-mensagem-mestre .hint { margin: 0; font-size: 12px; opacity: .8; }
+.aon-recado-mestre h3 { color: #c9a24a; }
