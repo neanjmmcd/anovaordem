@@ -1,0 +1,236 @@
+<div class="aon-manual">
+  <nav class="aon-manual-nav">
+    <input type="search" class="aon-manual-busca" placeholder="Buscar no manual…" autocomplete="off">
+    <p class="aon-manual-visao">{{#if gm}}<i class="fas fa-crown"></i> Visão do mestre: tudo{{else}}<i class="fas fa-user"></i> Visão do jogador{{/if}}</p>
+    <ol class="aon-manual-indice"></ol>
+  </nav>
+
+  <article class="aon-manual-corpo">
+
+    <section data-secao="inicio">
+      <h2>Bem-vindo a A Nova Ordem</h2>
+      <p>Este manual explica como o sistema funciona <b>dentro do Foundry</b>: ficha, rolagens, combate, itens e atalhos.
+        As regras completas estão no <b>Livro</b> e no <b>Suplemento</b> (aba <i>Compêndios → A Nova Ordem → Livro</i>).</p>
+      <p>Abra este manual quando quiser pelo botão <i class="fas fa-book-open"></i> <b>Manual</b> nos controles de token (barra à esquerda)
+        ou em <i>Configurações</i> (aba da engrenagem) → <b>Manual do Sistema</b>.</p>
+      {{#if gm}}<p class="aon-manual-gm"><i class="fas fa-crown"></i> Você é o mestre: as seções marcadas com a coroa aparecem só para você.
+        Os jogadores abrem o mesmo manual e veem só a parte deles.</p>{{/if}}
+    </section>
+
+    <section data-secao="criar">
+      <h2>Criar o personagem</h2>
+      <ol>
+        <li>Na aba <b>Atores</b>, crie um ator do tipo <b>Personagem</b>. O <b>Criador de Personagem</b> abre sozinho
+          (ou pelo botão <b>Criador</b> no topo da ficha).</li>
+        <li>Preencha nome, conceito e origem.</li>
+        <li>Role os atributos: <b>3d6 sete vezes</b>. As rolagens vão para o chat e você distribui os valores à vontade.
+          Rolar de novo só se o mestre liberar.</li>
+        <li>Distribua os <b>250 pontos de perícia</b>. Nenhuma perícia pode passar de <b>50%</b> sem contar o atributo.</li>
+        <li>Ao concluir, Saúde e Sanidade vão a 100 e a Essência a PSI × 2.</li>
+      </ol>
+      <p><b>Perícias ST (somente treinado):</b> os grupos Mentais, Tecnológicas, Alquimia e Mágicas só podem ser testados
+        se você gastou pontos na perícia. Sem treino, a perícia fica apagada na ficha e não rola.
+        A exceção é a <b>Resistência Mental</b>, que todos podem testar.</p>
+    </section>
+
+    <section data-secao="ficha">
+      <h2>A ficha</h2>
+      <ul>
+        <li><b>Atributos:</b> clique no nome para rolar o atributo (d100 contra o valor).</li>
+        <li><b>Perícias:</b> clique para rolar. O número ao lado é o total da perícia; na rolagem soma o atributo.
+          Perícias com dois atributos perguntam qual usar.</li>
+        <li><b>Calculado sozinho:</b> RD (CON + armaduras equipadas + itens), Essência máxima, Humanidade, Deslocamento,
+          Peso e as penalidades. Ao remover o item, a ficha volta ao normal.</li>
+        <li><b>Saúde (100):</b> o estado e a penalidade em todas as perícias mudam sozinhos:</li>
+      </ul>
+      <table>
+        <tr><th>Saúde</th><th>Estado</th><th>Penalidade</th></tr>
+        <tr><td>76–100</td><td>Operacional</td><td>—</td></tr>
+        <tr><td>51–75</td><td>Ferido</td><td>−5%</td></tr>
+        <tr><td>26–50</td><td>Gravemente Ferido</td><td>−10%</td></tr>
+        <tr><td>3–25</td><td>À Beira do Colapso</td><td>−15%</td></tr>
+        <tr><td>1–2</td><td>Incapacitado</td><td>−20%</td></tr>
+        <tr><td>0</td><td>Morto</td><td>—</td></tr>
+      </table>
+      <ul>
+        <li><b>Sanidade (100):</b> não volta. O chat anuncia o seu Estado Mental sem mostrar o número; as penalidades de Mentais
+          e Sociais entram sozinhas. Em 0 (Mente Vazia), o personagem é considerado morto.</li>
+        <li><b>Essência:</b> PSI × 2 pontos. Feitiços e rituais gastam Essência; implantes tiram pontos do máximo para sempre.
+          A <b>Humanidade</b> mostra quanto da Essência original ainda resta.</li>
+      </ul>
+    </section>
+
+    <section data-secao="rolagens">
+      <h2>Rolagens e a lista rápida</h2>
+      <p>Todo teste é <b>1d100</b> contra Perícia + Atributo − penalidades.</p>
+      <table>
+        <tr><th>d100</th><th>Resultado</th></tr>
+        <tr><td>01–04</td><td><b>Sucesso Crítico</b>: dano dobrado, efeito máximo</td></tr>
+        <tr><td>≤ alvo</td><td>Sucesso</td></tr>
+        <tr><td>&gt; alvo</td><td>Falha</td></tr>
+        <tr><td>96–100</td><td><b>Falha Crítica</b></td></tr>
+      </table>
+      <p><b>Lista rápida de perícias:</b> tecla <kbd>P</kbd> ou o botão <i class="fas fa-dice-d20"></i> no HUD do token
+        (clique direito no token). Mostra só as perícias que o personagem pode rolar, com a chance de cada uma.
+        Digite no campo do topo para filtrar; <kbd>Enter</kbd> rola a primeira da lista e <kbd>Esc</kbd> limpa o filtro.</p>
+    </section>
+
+    <section data-secao="combate">
+      <h2>Combate</h2>
+      <ol>
+        <li><b>Iniciativa:</b> DES + 1d6, rolada no Combat Tracker. Age primeiro quem tirar mais.</li>
+        <li><b>Marque o alvo:</b> passe o mouse sobre o token inimigo e aperte <kbd>T</kbd>
+          (ou clique duas vezes com o botão direito).</li>
+        <li><b>Ataque:</b> na tabela de armas da ficha, clique no <b>dano</b> da arma. O sistema rola a perícia da arma;
+          acertando, rola o dano já descontando a RD do alvo (mínimo 1). O crítico dobra os dados.</li>
+        <li><b>Esquiva:</b> não é automática. O mestre decide se o alvo esquivou ou recebe o dano.</li>
+        <li><b>Munição:</b> armas de disparo e arremesso gastam 1 por ataque. Sem munição, a arma continua na ficha.</li>
+      </ol>
+      <p>Clicar no <b>nome</b> da arma mostra a ficha dela no chat. Os botões <b>−</b> e <b>+</b> dos cartões de dano aplicam
+        no token selecionado ou no alvo marcado (o − desconta a RD).</p>
+    </section>
+
+    <section data-secao="alquimia">
+      <h2>Alquimia, feitiços e rituais</h2>
+      <ul>
+        <li><b>Pedras alquímicas:</b> o botão de dano da técnica testa <b>Pedras de Energia</b>. O dano ignora metade da armadura,
+          menos a das armaduras <b>tratadas</b> contra aquele tipo (Calor, Frio, Elétrico, Cinético ou Químico, na ficha da armadura).
+          Cada uso gasta 1 pedra; a última sai da ficha. No nível 4, a falha crítica faz a pedra explodir em quem usa.</li>
+        <li><b>Feitiços e rituais:</b> botão ✨ na ficha. Testa <b>Feitiçaria</b> ou <b>Rituais</b> e gasta Essência
+          <b>mesmo se falhar</b> (+2 com Humanidade em 50% ou menos). O alvo se defende com Resistência Mental e o dano vai na
+          Sanidade, sem RD. O crítico dobra esse dano. Sem Essência suficiente, não conjura.</li>
+      </ul>
+    </section>
+
+    <section data-secao="itens">
+      <h2>Itens e o Catálogo</h2>
+      <ul>
+        <li><b>Catálogo:</b> <kbd>Ctrl</kbd>+<kbd>Espaço</kbd>, a lupa no topo da ficha ou o botão na aba Itens.
+          Busca em todos os compêndios, com filtros. Clique no nome para abrir, use os botões para mostrar no chat ou
+          adicionar à ficha, ou arraste o item.</li>
+        <li><b>Quantidade:</b> todo item tem <i>Qtd.</i>; o peso multiplica pela quantidade. Consumíveis iguais viram pilha.</li>
+        <li><b>Armaduras:</b> só contam marcadas como <i>Equipada</i>, no máximo <b>2</b>. A RD e as penalidades das duas se somam.</li>
+        <li><b>Elixires, injeções e drogas:</b> marque <i>Ativo</i> para usar: gasta 1 da quantidade e o efeito entra na ficha.
+          Com duração, conta os seus turnos no combate e desliga sozinho. O último sai da ficha quando o efeito acaba.</li>
+        <li><b>Implantes:</b> custam 2, 4, 10, 12 ou 16 pontos de Essência. Se o custo zeraria a sua Essência, o implante
+          não entra na ficha. Com a Essência zerada vem a <b>Loucura Cibernética</b>.</li>
+      </ul>
+    </section>
+
+    <section data-secao="token">
+      <h2>Token com moldura</h2>
+      <p>Monta o token do seu personagem com uma das molduras do sistema, como um tokenizador.</p>
+      <ul>
+        <li>Abra pelo botão <b>Token</b> no topo da ficha, ou clique com o botão direito no ator na aba Atores e escolha
+          <i>Token com moldura</i>.</li>
+        <li>Comece pelo <b>Retrato</b> da ficha, pelo <b>Token atual</b> ou por <b>Escolher imagem</b>.</li>
+        <li>Escolha a moldura à direita. <b>Arraste</b> a imagem e use a <b>roda do mouse</b> (ou a barra) para o zoom,
+          até o centro mostrar a melhor parte. O que fica apagado fora do círculo não entra no token.</li>
+        <li>Imagem com fundo transparente: marque <i>Fundo</i> e escolha a cor.</li>
+        <li><b>Aplicar no token</b> salva a imagem em <code>worlds/&lt;mundo&gt;/tokens-a-nova-ordem</code> e troca o token do
+          ator (e os tokens dele já na cena).</li>
+        <li>Para salvar, o jogador precisa da permissão <i>Enviar arquivos</i>, que o mestre libera em Configurar Permissões.</li>
+      </ul>
+    </section>
+
+    <section data-secao="atalhos">
+      <h2>Atalhos</h2>
+      <table>
+        <tr><th>Tecla</th><th>O que faz</th></tr>
+        <tr><td><kbd>P</kbd></td><td>Lista rápida de perícias do token selecionado (ou do seu personagem)</td></tr>
+        <tr><td><kbd>Ctrl</kbd>+<kbd>Espaço</kbd></td><td>Catálogo de Itens</td></tr>
+        <tr><td><kbd>T</kbd></td><td>Marcar/desmarcar o token sob o mouse como alvo (Foundry)</td></tr>
+      </table>
+      <p>As teclas do sistema podem ser trocadas em <i>Configurações → Configurar Controles</i>.</p>
+    </section>
+
+    {{#if gm}}
+    <section data-secao="gm-config" data-gm>
+      <h2><i class="fas fa-crown"></i> Configurações do mestre</h2>
+      <p><i>Configurações → Configurar Sistema</i>:</p>
+      <ul>
+        <li><b>Automação de Combate:</b> liga/desliga tudo e cada parte, a qualquer momento, até no meio da sessão:
+          teste de ataque; Resistência Mental contra feitiços (sem resistência / botão para o dono do alvo / automática);
+          aplicar o dano (automático ou <b>botões para o mestre</b>); munição; pedras; consumíveis; Essência; crítico; e
+          ocultar o cálculo das suas rolagens dos jogadores.</li>
+        <li><b>Animações do Sistema:</b> com o Automated Animations e o Sequencer ativos, os efeitos e sons se instalam sozinhos.
+          A janela mostra a prévia, atualiza ou remove só as entradas do sistema.</li>
+        <li><b>Jogadores adicionam itens pelo Catálogo:</b> desligado, eles só consultam e mostram no chat.</li>
+        <li><b>Abrir o Criador</b> para personagens novos, e o <b>teto de perícia na criação</b> (50% pelo livro; 0 = sem teto).</li>
+        <li><b>Mensagem de boas-vindas:</b> na primeira vez que cada usuário entra, ele recebe no chat, só para ele, onde fica
+          este manual. Desligue se não quiser.</li>
+        <li><b>Mensagem do Mestre:</b> escreva um recado ou as regras da mesa. Cada jogador recebe no chat, só para ele: quem
+          está online recebe ao salvar, quem entrar depois recebe ao entrar. Mudou o texto, todos recebem de novo; para reenviar
+          sem mudar, marque <i>Mandar de novo</i>.</li>
+      </ul>
+      <p>Na ficha do personagem, os campos <b>Ajuste RD / Ess. / Desl.</b> somam ajustes manuais seus.</p>
+    </section>
+
+    <section data-secao="gm-dano" data-gm>
+      <h2><i class="fas fa-crown"></i> Dano, esquiva e Sanidade</h2>
+      <ul>
+        <li>Com <i>Aplicar o dano: botões para o mestre</i>, cada ataque que acerta mostra só para você <b>Aplicar dano</b>
+          e <b>Esquivou</b>. Os jogadores veem só o resultado.</li>
+        <li>O dano mental de feitiços vai na Sanidade sem mostrar o número aos jogadores; o chat anuncia o Estado Mental.</li>
+        <li>Quando um jogador ataca um token que não é dele, o seu cliente aplica o dano: deixe o mestre conectado.</li>
+        <li>No Criador, a rerrolagem de atributos só acontece se você liberar (botão no chat ou no criador).</li>
+      </ul>
+    </section>
+
+    <section data-secao="gm-painel" data-gm>
+      <h2><i class="fas fa-crown"></i> Painel do Mestre e gerador de encontro</h2>
+      <p>Botão de torre <i class="fas fa-chess-rook"></i> nos controles de token.</p>
+      <ul>
+        <li>Lista ameaças e personagens da cena com Saúde, estado e RD; dano e cura rápidos, marcar alvo, ocultar,
+          abrir a ficha e <b>Tudo no combate</b>.</li>
+        <li><b>Orçamento:</b> personagens × experiência do grupo (Novatos 3, Calejados 4, Veteranos 6, Lendas 8).
+          A soma do Valor de Ameaça da cena diz se o encontro está Fácil (×0,5), Normal, Difícil (×1,5) ou Mortal (×2).</li>
+        <li><b>Gerar encontro:</b> escolha a dificuldade e o tema. O sistema sorteia um líder e capangas do Bestiário até o
+          orçamento e manda o resumo só para você. <b>Sortear de novo</b> refaz; <b>Colocar na cena</b> importa os NPCs para a
+          pasta <i>Encontros</i> e cria os tokens <b>ocultos</b> no centro da tela, para você posicionar e revelar.</li>
+      </ul>
+    </section>
+
+    <section data-secao="gm-npcs" data-gm>
+      <h2><i class="fas fa-crown"></i> NPCs e o Bestiário</h2>
+      <ul>
+        <li>O compêndio <b>Bestiário</b> (só o mestre vê) traz os 14 NPCs do Suplemento, mais Vix, o Velho Sapador e o Guarda do Depósito, prontos, com token visto de cima,
+          armas, Ponto Fraco e habilidades. Arraste para a cena ou para a aba Atores.</li>
+        <li>Outras versões dos tokens ficam em <code>systems/a-nova-ordem/assets/npcs/tokens/variantes</code>: troque na aba
+          Token da configuração do protótipo. Ou use <b>Token com moldura</b> com o retrato do NPC.</li>
+        <li><b>Vix</b> e o <b>Velho Sapador</b> são aliados (personagens dos exemplos dos livros) e não entram no gerador de
+          encontro; o <b>Guarda do Depósito de Munições</b> entra nos temas urbano e militar.</li>
+        <li>O compêndio <b>Livro do Mestre</b> (só o mestre vê) tem o <b>Bestiário</b> em PDF. O Suplemento do compêndio
+          <b>Livro</b>, que todos leem, vem sem ele. O Suplemento completo está na pasta do sistema.</li>
+        <li>A ficha de <b>NPC</b> segue o Suplemento: Tier (0 Presença, 1 Combatente, 2 Especialista, 3 Elite, 4 Excepcional),
+          Valor de Ameaça (1, 2, 4, 8, 16), Saúde em pontos, RD, Grupos de Perícias e perícias em destaque.</li>
+        <li>Armas na ficha do NPC atacam pelo mesmo fluxo dos personagens. NPCs não têm a regra ST.</li>
+        <li>Use a tecla <kbd>P</kbd> com o NPC selecionado para rolar as perícias dele.</li>
+      </ul>
+    </section>
+
+    <section data-secao="gm-trilha" data-gm>
+      <h2><i class="fas fa-crown"></i> Trilha sonora</h2>
+      <ul>
+        <li>O sistema traz 29 faixas curtas (que repetem bem em loop) em <code>systems/a-nova-ordem/trilhasonora</code>:
+          combate, chefe, perseguição, infiltração, investigação, mercado negro, esconderijo da Resistência, marcha imperial,
+          laboratório, prisão, burocracia do regime, vitória e derrota.</li>
+        <li>Para usar: aba <b>Playlists</b> → criar playlist → <b>Adicionar som</b> e escolha os arquivos dessa pasta. Marque
+          <i>Repetir</i> nas faixas de ambiente.</li>
+      </ul>
+    </section>
+
+    <section data-secao="gm-modulos" data-gm>
+      <h2><i class="fas fa-crown"></i> Módulos recomendados</h2>
+      <ul>
+        <li><b>Automated Animations</b> + <b>Sequencer</b> + <b>socketlib</b>: animações e sons próprios do sistema.</li>
+        <li><b>Item Piles:</b> saques, baús e lojas com o ¢RD da ficha.</li>
+        <li><b>Dice So Nice!</b>: dados 3D (opcional).</li>
+      </ul>
+      <p>Não precisa de Compendium Browser (use o Catálogo), Plutonium (use o Criador) nem Tokenizer (use o Token com moldura).</p>
+    </section>
+    {{/if}}
+
+    <p class="aon-manual-nada" hidden>Nada encontrado.</p>
+  </article>
+</div>

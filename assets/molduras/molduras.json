@@ -1,0 +1,110 @@
+[
+  {
+    "id": "latao",
+    "nome": "Latão rebitado",
+    "arquivo": "latao.webp",
+    "raio": 0.3114
+  },
+  {
+    "id": "ferro",
+    "nome": "Ferro rebitado",
+    "arquivo": "ferro.webp",
+    "raio": 0.3445
+  },
+  {
+    "id": "engrenagem",
+    "nome": "Engrenagem",
+    "arquivo": "engrenagem.webp",
+    "raio": 0.3101
+  },
+  {
+    "id": "cobre",
+    "nome": "Cobre e vapor",
+    "arquivo": "cobre.webp",
+    "raio": 0.3713
+  },
+  {
+    "id": "manometro",
+    "nome": "Manômetro",
+    "arquivo": "manometro.webp",
+    "raio": 0.4022
+  },
+  {
+    "id": "perigo",
+    "nome": "Perigo",
+    "arquivo": "perigo.webp",
+    "raio": 0.3229
+  },
+  {
+    "id": "radiacao",
+    "nome": "Radiação",
+    "arquivo": "radiacao.webp",
+    "raio": 0.3473
+  },
+  {
+    "id": "tesla",
+    "nome": "Tesla",
+    "arquivo": "tesla.webp",
+    "raio": 0.3644
+  },
+  {
+    "id": "oculto",
+    "nome": "Runas ocultas",
+    "arquivo": "oculto.webp",
+    "raio": 0.3121
+  },
+  {
+    "id": "imperial",
+    "nome": "Imperial",
+    "arquivo": "imperial.webp",
+    "raio": 0.3307
+  },
+  {
+    "id": "ferrugem",
+    "nome": "Ferrugem e corrente",
+    "arquivo": "ferrugem.webp",
+    "raio": 0.3359
+  },
+  {
+    "id": "aviacao",
+    "nome": "Aviação",
+    "arquivo": "aviacao.webp",
+    "raio": 0.3195
+  },
+  {
+    "id": "escotilha",
+    "nome": "Escotilha",
+    "arquivo": "escotilha.webp",
+    "raio": 0.2867
+  },
+  {
+    "id": "esteira",
+    "nome": "Esteira de tanque",
+    "arquivo": "esteira.webp",
+    "raio": 0.332
+  },
+  {
+    "id": "arame",
+    "nome": "Arame farpado",
+    "arquivo": "arame.webp",
+    "raio": 0.352
+  },
+  {
+    "id": "ciano",
+    "nome": "Blindagem ciano",
+    "arquivo": "ciano.webp",
+    "raio": 0.3412
+  },
+  {
+    "id": "alerta",
+    "nome": "Alerta vermelho",
+    "arquivo": "alerta.webp",
+    "raio": 0.3053
+  },
+  {
+    "id": "couro",
+    "nome": "Couro e fivelas",
+    "arquivo": "couro.webp",
+    "raio": 0.3284
+  }
+]

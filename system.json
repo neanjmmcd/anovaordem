@@ -2,7 +2,7 @@
   "id": "a-nova-ordem",
   "title": "A Nova Ordem",
   "description": "Sistema dieselpunk 1975 criado por Alê Gomes e programado por NeaN World",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "authors": [
     {
       "name": "Alê Gomes",
@@ -288,6 +288,19 @@
         "ASSISTANT": "OWNER"
       },
       "flags": {}
+    },
+    {
+      "name": "mestre",
+      "label": "Livro do Mestre",
+      "path": "packs/mestre",
+      "type": "JournalEntry",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "NONE",
+        "TRUSTED": "NONE",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
     }
   ],
   "languages": [
@@ -421,6 +434,7 @@
           "name": "Mestre",
           "sorting": "m",
           "packs": [
+            "mestre",
             "bestiario"
           ]
         }

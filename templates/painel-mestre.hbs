@@ -17,6 +17,20 @@
     <p class="aon-painel-faixas">Fácil até {{faixas.facil}} · Normal até {{faixas.normal}} · Difícil até {{faixas.dificil}} · Mortal até {{faixas.mortal}}
       <button type="button" data-action="combate" title="Adicionar todos os tokens da cena ao combate"><i class="fas fa-swords"></i> Tudo no combate</button>
     </p>
+    <div class="aon-painel-gerador">
+      <label>Dificuldade <select data-ajuste="dificuldade">{{selectOptions dificuldades selected=dif}}</select></label>
+      <label>Tema <select data-ajuste="tema">{{selectOptions temas selected=tema}}</select></label>
+      <button type="button" data-action="gerar" title="Sortear ameaças do Bestiário até o orçamento"><i class="fas fa-dice"></i> {{#if encontro}}Sortear de novo{{else}}Gerar encontro{{/if}}</button>
+    </div>
+    {{#if encontro}}
+    <div class="aon-painel-encontro">
+      <ul>
+        {{#each encontro.lista}}<li><img src="{{img}}"> {{qtd}}× <b>{{nome}}</b> <small>Tier {{tier}} · Ameaça {{ameaca}}</small></li>{{/each}}
+      </ul>
+      <p>Ameaça <b>{{encontro.total}}</b> de {{encontro.alvo}} · {{encontro.dificuldade}} · {{encontro.tema}}
+        <button type="button" data-action="colocar" title="Cria os tokens ocultos no centro da tela"><i class="fas fa-map-pin"></i> Colocar na cena</button></p>
+    </div>
+    {{/if}}
   </section>
 
   {{#*inline "linha"}}
