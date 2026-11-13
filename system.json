@@ -2,7 +2,7 @@
   "id": "a-nova-ordem",
   "title": "A Nova Ordem",
   "description": "Sistema dieselpunk 1975 criado por Alê Gomes e programado por NeaN World",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "authors": [
     {
       "name": "Alê Gomes",
@@ -80,6 +80,31 @@
       "system": "a-nova-ordem",
       "ownership": {
         "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "mundo",
+      "label": "O Mundo da Nova Ordem",
+      "path": "packs/mundo",
+      "type": "JournalEntry",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "name": "cenas",
+      "label": "Cenas Prontas",
+      "path": "packs/cenas",
+      "type": "Scene",
+      "system": "a-nova-ordem",
+      "ownership": {
+        "PLAYER": "NONE",
+        "TRUSTED": "NONE",
         "ASSISTANT": "OWNER"
       },
       "flags": {}
@@ -387,7 +412,8 @@
       "sorting": "m",
       "color": "#7a5c2e",
       "packs": [
-        "livro"
+        "livro",
+        "mundo"
       ],
       "folders": [
         {
@@ -435,7 +461,8 @@
           "sorting": "m",
           "packs": [
             "mestre",
-            "bestiario"
+            "bestiario",
+            "cenas"
           ]
         }
       ]

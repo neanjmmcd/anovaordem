@@ -47,6 +47,7 @@ import { AONovaOrdemNpcModel } from "./npc-model.js";
 import { AONovaOrdemNpcSheet } from "./npc-sheet.js";
 import { AONovaOrdemPainelMestre } from "./painel-mestre.js";
 import { registrarAnimacoes } from "./animacoes.js";
+import { registrarConfiguracaoInicial } from "./configuracao-inicial.js";
 import "./item-piles.js";
 
 
@@ -203,6 +204,7 @@ Hooks.once("init", () => {
   });
   registrarListaPericias();
   registrarManual();
+  registrarConfiguracaoInicial();
 
   console.log("A Nova Ordem | Sistema inicializado");
 });
