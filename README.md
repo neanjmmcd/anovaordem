@@ -1,6 +1,6 @@
 # Dieselpunk — A Nova Ordem
 
-> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.9.0` · Funcional e jogável
+> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.10.0` · Funcional e jogável
 
 Um sistema percentual de RPG ambientado em um mundo dieselpunk alternativo, onde o Eixo venceu a Segunda Guerra Mundial. O ano é 1975. Três impérios totalitários dividem o planeta — e você é um Libertário operando nas sombras, tentando mudar o curso da história.
 
@@ -221,11 +221,16 @@ Ficam na aba Compêndios, na pasta **A Nova Ordem**:
 | Pasta | Conteúdo |
 |-------|----------|
 | — | **Livro**: o Livro Básico e o Suplemento em PDF, dentro do Foundry (o Suplemento aqui vem sem o Bestiário) |
+| — | **O Mundo da Nova Ordem**: diário *Os Impérios* (os três impérios com ilustração, hierarquia e vida cotidiana) e *Retratos da Nova Ordem* (4 ilustrações do tema: cidade, guerra, oculto e ruas) |
 | Equipamento | Armas, Armaduras, Itens |
 | Cibernética | Implantes, Mechas, Veículos |
 | Alquimia | Técnicas Alquímicas, Alquimia, Ácidos, Venenos, Injeções, Elixires, Mutagênicos, Drogas |
 | Ocultismo | Feitiços, Rituais |
-| Mestre | **Bestiário** e **Livro do Mestre** (o Bestiário em PDF), só o mestre vê |
+| Mestre | **Bestiário**, **Livro do Mestre** (o Bestiário em PDF) e **Cenas Prontas** (lobby/pátio de treino para testar tokens, casa comum, boate e galpão, grade de 100 px = 1,5 m), só o mestre vê |
+
+**Mundo Pronto:** na primeira vez que o mestre abre um mundo, as Cenas Prontas e os diários do mundo são importados sozinhos (pastas *Cenas Prontas* e *O Mundo da Nova Ordem*; os diários ficam visíveis aos jogadores). Num mundo sem cenas, o Lobby vira a cena ativa. Em *Configurar Sistema* dá para desligar (**Mundo Pronto automático**) ou importar de novo o que faltar (**Mundo Pronto → Importar agora**).
+
+Os diários do mundo e as cenas são gerados por `ferramentas/mundo_cenas.mjs` a partir das imagens em `assets/imperios`, `assets/tema` e `assets/mapas`.
 
 ---
 
@@ -239,7 +244,7 @@ O **`Suplemento - A Nova Ordem.pdf`**, também na raiz, traz a evolução de per
 
 ## Status do Projeto
 
-> **Versão `0.9.0` — Funcional e jogável**
+> **Versão `0.10.0` — Funcional e jogável**
 > O sistema está em desenvolvimento contínuo e pode receber melhorias. Críticas, comentários e sugestões são bem-vindos.
 
 ---
