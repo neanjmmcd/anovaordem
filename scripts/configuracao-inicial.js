@@ -11,7 +11,7 @@
 const SISTEMA = "a-nova-ordem";
 /** Suba quando entrarem cenas ou diários novos nos compêndios: os mundos recebem só o que falta */
 const VERSAO = 2; // 2: playlists da trilha sonora
-const LOBBY = "CenaLobbyAON001";
+const LOBBY = "CenaLobbyAON0001";
 
 const PASTAS = {
   cenas: { tipo: "Scene", nome: "Cenas Prontas", cor: "#7a5c2e" },
@@ -34,22 +34,59 @@ export async function importarMundoPronto({ ativarLobby = false } = {}) {
       console.warn(`A Nova Ordem | Mundo Pronto: compêndio ${SISTEMA}.${nomePack} não encontrado.`);
       continue;
     }
-    const colecao = game.collections.get(cfg.tipo);
-    const indice = await pack.getIndex();
-    const faltam = indice.filter(e => !colecao.get(e._id));
-    if (!faltam.length) continue;
-    const destino = await pasta(cfg);
-    // Diários: jogadores leem (Observador). Cenas: só o mestre mexe.
-    const extra = cfg.tipo === "JournalEntry" ? { ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER } } : {};
-    for (const e of faltam) {
-      await colecao.importFromCompendium(pack, e._id, { folder: destino.id, ...extra }, { keepId: true });
-      novos++;
+    try {
+      const colecao = game.collections.get(cfg.tipo);
+      const destino = await pasta(cfg);
+      await removerDuplicados(colecao, destino);
+      const indice = await pack.getIndex();
+      // Já existe se tiver o mesmo id, veio deste registro do compêndio ou tem o mesmo nome
+      // (versões antigas trocavam o id na importação, então o nome é o que sobra)
+      const existe = e => colecao.get(e._id) || colecao.some(d =>
+        d._stats?.compendiumSource === e.uuid || d.name === e.name);
+      const faltam = indice.filter(e => !existe(e));
+      // Diários: jogadores leem (Observador). Cenas: só o mestre mexe.
+      const extra = cfg.tipo === "JournalEntry" ? { ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER } } : {};
+      for (const e of faltam) {
+        await colecao.importFromCompendium(pack, e._id, { folder: destino.id, ...extra }, { keepId: true });
+        novos++;
+      }
+    } catch (err) {
+      completo = false;
+      console.warn(`A Nova Ordem | Mundo Pronto: falha ao importar ${SISTEMA}.${nomePack}:`, err);
     }
   }
-  novos += await criarTrilhas();
+  try { novos += await criarTrilhas(); }
+  catch (err) { completo = false; console.warn("A Nova Ordem | Mundo Pronto: falha ao criar as playlists:", err); }
   await corrigirFundosV14();
-  if (ativarLobby) await game.scenes.get(LOBBY)?.activate();
+  if (ativarLobby) await (game.scenes.get(LOBBY) ?? game.scenes.getName("Lobby — Pátio de Treino"))?.activate();
   return { novos, completo };
+}
+
+/**
+ * Conserta mundos em que o Mundo Pronto importou a mesma cena/diário várias vezes:
+ * na pasta do sistema, fica a cópia mais antiga de cada nome; as outras só saem se
+ * estiverem intactas (sem tokens, paredes, luzes, notas, desenhos, tiles, sons ou regiões
+ * nas cenas). Fora da pasta, nada é tocado.
+ */
+async function removerDuplicados(colecao, destino) {
+  const EMBUTIDOS = ["tokens", "walls", "lights", "notes", "drawings", "tiles", "sounds", "regions"];
+  const intacta = d => d.documentName !== "Scene" || EMBUTIDOS.every(c => !(d[c]?.size));
+  const porNome = new Map();
+  for (const d of colecao.filter(d => d.folder?.id === destino.id)) {
+    if (!porNome.has(d.name)) porNome.set(d.name, []);
+    porNome.get(d.name).push(d);
+  }
+  const apagar = [];
+  for (const docs of porNome.values()) {
+    if (docs.length < 2) continue;
+    docs.sort((a, b) => (a._stats?.createdTime ?? 0) - (b._stats?.createdTime ?? 0));
+    const [, ...copias] = docs;
+    for (const d of copias) if (intacta(d) && !d.active) apagar.push(d.id);
+  }
+  if (!apagar.length) return;
+  await colecao.documentClass.deleteDocuments(apagar);
+  console.log(`A Nova Ordem | Mundo Pronto: ${apagar.length} cópia(s) repetida(s) removida(s) da pasta ${destino.name}.`);
+  ui.notifications.info(`A Nova Ordem: ${apagar.length} cópia(s) repetida(s) removida(s) da pasta "${destino.name}".`);
 }
 
 /* Trilha sonora (pasta trilhasonora/ do sistema), separada por clima */
@@ -89,13 +126,13 @@ async function criarTrilhas() {
 /* Mapa de cada Cena Pronta (mesmo que ferramentas/mundo_cenas.mjs): id, nome, arquivo.
  * O nome serve para cenas importadas à mão do compêndio, que ganham id aleatório. */
 const MAPAS = [
-  ["CenaLobbyAON001", "Lobby — Pátio de Treino", "lobby.webp"],
-  ["CenaLobbyAON002", "Lobby — Pátio de Treino (inclinado)", "lobby_inclinado.webp"],
-  ["CenaCasaAON0001", "Casa Comum", "casa.webp"],
-  ["CenaBoateAON001", "Boate", "boate.webp"],
-  ["CenaGalpaoAON01", "Galpão / Fábrica Velha", "galpao.webp"],
-  ["CenaGalpaoAON02", "Galpão / Fábrica Velha (inclinado)", "galpao_inclinado.webp"],
-  ["CenaGalpaoAON03", "Galpão / Fábrica Velha (inclinado, com terreno)", "galpao_inclinado_externo.webp"]
+  ["CenaLobbyAON0001", "Lobby — Pátio de Treino", "lobby.webp"],
+  ["CenaLobbyAON0002", "Lobby — Pátio de Treino (inclinado)", "lobby_inclinado.webp"],
+  ["CenaCasaAON00001", "Casa Comum", "casa.webp"],
+  ["CenaBoateAON0001", "Boate", "boate.webp"],
+  ["CenaGalpaoAON001", "Galpão / Fábrica Velha", "galpao.webp"],
+  ["CenaGalpaoAON002", "Galpão / Fábrica Velha (inclinado)", "galpao_inclinado.webp"],
+  ["CenaGalpaoAON003", "Galpão / Fábrica Velha (inclinado, com terreno)", "galpao_inclinado_externo.webp"]
 ];
 
 /**

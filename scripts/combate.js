@@ -17,7 +17,7 @@ export const COMBATE_PADRAO = {
   ativo: true,             // desligado = só botões de dano/cura no chat, nada automático
   rolarAtaque: true,       // rolar a perícia da arma antes do dano
   esquiva: "botao",        // só feitiços (Resistência Mental): "nenhuma" | "botao" | "automatica"
-  aplicarDano: "botao",    // "automatico" | "botao" (o mestre confirma: acertou ou esquivou)
+  aplicarDano: "automatico", // "automatico" | "botao" (o mestre confirma: acertou ou esquivou)
   consumirMunicao: true,   // −1 munição por ataque
   consumirPedras: true,    // alquímicos: a pedra se desfaz ao ser usada (−1 quantidade)
   consumirItens: true,     // elixires, injeções e drogas: −1 quantidade ao ativar

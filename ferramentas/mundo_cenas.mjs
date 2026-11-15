@@ -16,7 +16,7 @@ const lista = itens => `<ul>${itens.map(i => `<li>${i}</li>`).join('')}</ul>`;
 /* ---------- Diários ---------- */
 const imperios = [
   {
-    id: 'ImpReichAON0001', nome: 'Grande Reich da Supremacia Ariana', arq: 'imperios/reich.webp',
+    id: 'ImpReichAON00001', nome: 'Grande Reich da Supremacia Ariana', arq: 'imperios/reich.webp',
     html: `<p><em>Império totalitário. O Estado existe para purificar, preservar e expandir a herança racial por meio de repressão, propaganda e violência sistêmica.</em></p>
 ${lista(['<strong>Líder:</strong> Führer Adolph Hitler', '<strong>Capital:</strong> Berlim (núcleo: Alemanha)', '<strong>Área:</strong> ~78 milhões km² — Europa Central, Setentrional e Oriental, Canadá, América Central, grande parte da América do Norte e Groenlândia', '<strong>População:</strong> ~1,15 bilhão'])}
 <h3>Hierarquia social</h3><p>Linha Pura → Adaptados → Dependentes do Reich → Descartáveis → Inexistentes.</p>
@@ -25,7 +25,7 @@ ${lista(['<strong>Líder:</strong> Führer Adolph Hitler', '<strong>Capital:</st
 <h3>Política externa</h3><p>Expansionista e coercitiva: diplomacia baseada em ameaça e guerra indireta.</p>`
   },
   {
-    id: 'ImpAsiaAON00001', nome: 'Império da Ordem Asiática', arq: 'imperios/ordem_asiatica.webp',
+    id: 'ImpAsiaAON000001', nome: 'Império da Ordem Asiática', arq: 'imperios/ordem_asiatica.webp',
     html: `<p><em>Império totalitário liderado pelo Japão. Ordem absoluta, disciplina coletiva e isolamento extremo. O Imperador é tratado como figura divina e não é visto desde o fim da guerra.</em></p>
 ${lista(['<strong>Líder:</strong> Imperador Hirohito', '<strong>Capital:</strong> Tokyo — o Japão é inacessível, cercado pelo <em>Kyōdaina kabe</em>, uma muralha em volta de todo o país', '<strong>Área:</strong> ~44 milhões km² — Ásia Oriental, Sudeste Asiático, Sul da Ásia, Ásia Central e Oriente Médio', '<strong>População:</strong> ~2,1 bilhões'])}
 <h3>Hierarquia social</h3><p>Imperiais Japoneses → Províncias Leais → Províncias Subjugadas → Populações Militarizadas → Invisíveis.</p>
@@ -34,7 +34,7 @@ ${lista(['<strong>Líder:</strong> Imperador Hirohito', '<strong>Capital:</stron
 <h3>Política externa</h3><p>Isolamento quase total, com comércio mínimo e controlado. A Oceania é o território neutro para a diplomacia.</p>`
   },
   {
-    id: 'ImpRomaAON00001', nome: 'Império de Romanova', arq: 'imperios/romanova.webp',
+    id: 'ImpRomaAON000001', nome: 'Império de Romanova', arq: 'imperios/romanova.webp',
     html: `<p><em>Império fascista liderado pela Itália. Restaura a glória da Roma Antiga, o culto ao Estado, a expansão e o espetáculo como ferramenta de controle. O passado romano não é estudado: é encenado.</em></p>
 ${lista(['<strong>Líder:</strong> Imperatore Benito Mussolini', '<strong>Capital:</strong> Roma (núcleo: Itália)', '<strong>Área:</strong> ~52 milhões km² — Sul da Europa, América do Sul, Norte da África e Costa Oeste da África', '<strong>População:</strong> ~1,4 bilhão'])}
 <h3>Hierarquia social</h3><p>Elite Imperial → Cidadãos Plenos → Cidadãos Secundários → Povos Provinciais → Escravizados / Condenados.</p>
@@ -45,10 +45,10 @@ ${lista(['<strong>Líder:</strong> Imperatore Benito Mussolini', '<strong>Capita
 ];
 
 const tema = [
-  ['TemaCidadeAON01', 'A Cidade', 'tema/cidade.webp', 'Arranha-céus, zepelins e chuva: a vida comum continua sob a Nova Ordem.'],
-  ['TemaGuerraAON01', 'A Guerra', 'tema/guerra.webp', 'Mechas a diesel, exoesqueletos e gás: a guerra nunca acabou de verdade.'],
-  ['TemaOcultoAON01', 'O Oculto', 'tema/ocultismo.webp', 'Alquimia e rituais em bunkers escondidos: o segredo do Projeto Titã.'],
-  ['TemaRuasAON0001', 'As Ruas', 'tema/ruas.webp', 'Mercado negro, implantes e patrulhas: quem resiste vive nas sombras.']
+  ['TemaCidadeAON001', 'A Cidade', 'tema/cidade.webp', 'Arranha-céus, zepelins e chuva: a vida comum continua sob a Nova Ordem.'],
+  ['TemaGuerraAON001', 'A Guerra', 'tema/guerra.webp', 'Mechas a diesel, exoesqueletos e gás: a guerra nunca acabou de verdade.'],
+  ['TemaOcultoAON001', 'O Oculto', 'tema/ocultismo.webp', 'Alquimia e rituais em bunkers escondidos: o segredo do Projeto Titã.'],
+  ['TemaRuasAON00001', 'As Ruas', 'tema/ruas.webp', 'Mercado negro, implantes e patrulhas: quem resiste vive nas sombras.']
 ];
 
 const pagTexto = (id, nome, html, sort) => ({ _id: id, name: nome, type: 'text', sort, title: { show: true, level: 1 }, image: {}, text: { format: 1, content: html }, video: { controls: true, volume: 0.5 }, src: null, system: {}, category: null, ownership: { default: -1 }, flags: {}, _stats: stats });
@@ -56,33 +56,34 @@ const pagImagem = (id, nome, src, legenda, sort) => ({ _id: id, name: nome, type
 
 const diarios = [
   {
-    _id: 'MundoImperiosA1', name: 'Os Impérios', sort: 100000,
+    _id: 'MundoImperiosA01', name: 'Os Impérios', sort: 100000,
     pages: [
-      pagTexto('ImpIntroAON0001', '1975: o Eixo venceu', `<p>Em 30 de abril de 1945 o <strong>Projeto Titã</strong> virou a guerra. No ano seguinte, o Eixo dividiu o mundo em três partes, cada uma um Império controlado por uma das potências, num "acordo de cavalheiros". Quem não aceitou foi dizimado do mapa ou dominado à força.</p><p>Trinta anos depois, é assim que as pessoas vivem.</p>`, 100000),
+      pagTexto('ImpIntroAON00001', '1975: o Eixo venceu', `<p>Em 30 de abril de 1945 o <strong>Projeto Titã</strong> virou a guerra. No ano seguinte, o Eixo dividiu o mundo em três partes, cada uma um Império controlado por uma das potências, num "acordo de cavalheiros". Quem não aceitou foi dizimado do mapa ou dominado à força.</p><p>Trinta anos depois, é assim que as pessoas vivem.</p>`, 100000),
       ...imperios.map((e, i) => pagTexto(e.id, e.nome, img(e.arq, e.nome) + e.html, 200000 + i * 100000))
     ]
   },
   {
-    _id: 'MundoRetratosA1', name: 'Retratos da Nova Ordem', sort: 200000,
+    _id: 'MundoRetratosA01', name: 'Retratos da Nova Ordem', sort: 200000,
     pages: tema.map(([id, nome, arq, leg], i) => pagImagem(id, nome, `${SIS}/${arq}`, leg, 100000 + i * 100000))
   }
 ];
 
 /* ---------- Cenas ---------- */
 const cenas = [
-  ['CenaLobbyAON001', 'Lobby — Pátio de Treino', 'mapas/lobby.webp'],
-  ['CenaLobbyAON002', 'Lobby — Pátio de Treino (inclinado)', 'mapas/lobby_inclinado.webp'],
-  ['CenaCasaAON0001', 'Casa Comum', 'mapas/casa.webp'],
-  ['CenaBoateAON001', 'Boate', 'mapas/boate.webp'],
-  ['CenaGalpaoAON01', 'Galpão / Fábrica Velha', 'mapas/galpao.webp'],
-  ['CenaGalpaoAON02', 'Galpão / Fábrica Velha (inclinado)', 'mapas/galpao_inclinado.webp'],
-  ['CenaGalpaoAON03', 'Galpão / Fábrica Velha (inclinado, com terreno)', 'mapas/galpao_inclinado_externo.webp']
+  ['CenaLobbyAON0001', 'Lobby — Pátio de Treino', 'mapas/lobby.webp'],
+  ['CenaLobbyAON0002', 'Lobby — Pátio de Treino (inclinado)', 'mapas/lobby_inclinado.webp'],
+  ['CenaCasaAON00001', 'Casa Comum', 'mapas/casa.webp'],
+  ['CenaBoateAON0001', 'Boate', 'mapas/boate.webp'],
+  ['CenaGalpaoAON001', 'Galpão / Fábrica Velha', 'mapas/galpao.webp'],
+  ['CenaGalpaoAON002', 'Galpão / Fábrica Velha (inclinado)', 'mapas/galpao_inclinado.webp'],
+  ['CenaGalpaoAON003', 'Galpão / Fábrica Velha (inclinado, com terreno)', 'mapas/galpao_inclinado_externo.webp']
 ];
 
 async function gravar(nome, docs) {
   const destino = path.join(packs, nome);
   fs.rmSync(destino, { recursive: true, force: true });
   const db = new ClassicLevel(destino, { valueEncoding: 'json' });
+  await db.open();
   const lote = db.batch();
   for (const [k, v] of docs) lote.put(k, v);
   await lote.write();

@@ -3,7 +3,7 @@
  * Monta o token de um ator: a imagem fica por trás de uma moldura redonda,
  * o usuário arrasta e dá zoom até o centro vazado mostrar a melhor parte,
  * e ao aplicar o resultado vira um .webp salvo no mundo e usado no token.
- * Abre pelo botão "Token" no topo da ficha ou pelo menu do ator na barra lateral.
+ * Abre pelo botão "Token Ficha" no topo da ficha ou pelo menu do ator na barra lateral.
  * ========================= */
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -268,11 +268,11 @@ export class AONovaOrdemMolduraToken extends HandlebarsApplicationMixin(Applicat
   }
 }
 
-/* Botão "Token" no topo das fichas (fichas AppV1) */
+/* Botão "Token Ficha" no topo das fichas (fichas AppV1) */
 Hooks.on("getActorSheetHeaderButtons", (sheet, botoes) => {
   if (!sheet.actor?.isOwner) return;
   botoes.unshift({
-    label: "Token", class: "aon-botao-token", icon: "fas fa-circle-user",
+    label: "Token Ficha", class: "aon-botao-token", icon: "fas fa-circle-user",
     onclick: () => AONovaOrdemMolduraToken.abrir(sheet.actor, sheet.token)
   });
 });
