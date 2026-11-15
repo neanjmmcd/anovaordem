@@ -1,6 +1,6 @@
 # Dieselpunk — A Nova Ordem
 
-> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.11.1` · Funcional e jogável · Foundry 13 e 14
+> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.11.2` · Funcional e jogável · Foundry 13 e 14
 
 Um sistema percentual de RPG ambientado em um mundo dieselpunk alternativo, onde o Eixo venceu a Segunda Guerra Mundial. O ano é 1975. Três impérios totalitários dividem o planeta — e você é um Libertário operando nas sombras, tentando mudar o curso da história.
 
@@ -149,7 +149,7 @@ Os valores abaixo são **calculados automaticamente** a partir dos itens na fich
 | **Token com moldura** | Botão **Token Ficha** no topo da ficha ou menu do ator na aba Atores. Escolha a imagem (retrato, token atual ou qualquer arquivo) e uma das 18 molduras temáticas do sistema (latão, engrenagem, tesla, radiação, runas, esteira de tanque…), arraste e dê zoom até o centro mostrar a melhor parte, e aplique: o token vira a imagem com moldura, salva em `worlds/<mundo>/tokens-a-nova-ordem`. Jogadores precisam da permissão *Enviar arquivos*. Substitui o módulo Tokenizer. |
 | **Atalhos na barra** | Arraste uma arma, técnica alquímica, feitiço, ritual, consumível ou item da ficha (personagem ou NPC) para a barra de atalhos. Clicar no atalho faz o mesmo que o clique na ficha: arma e técnica atacam (teste, esquiva, dano − RD e animação), feitiço e ritual conjuram, consumível é ativado (gasta uma unidade) e os demais itens mostram o cartão no chat. Se o item não existir mais, o atalho procura um item com o mesmo nome no token selecionado. |
 | **Trilha sonora** | 29 faixas curtas em `trilhasonora/`, feitas para tocar em loop: combate, chefe, perseguição, infiltração, investigação noir, mercado negro, esconderijo da Resistência, marcha imperial, laboratório, prisão, burocracia do regime, vitória e derrota. O **Mundo Pronto** cria as playlists sozinho na aba Playlists (pasta *Trilha da Nova Ordem*: Combate, Cidade e Viagem, Tensão e Mistério, Lugares, Desfecho); cada faixa toca em loop ao ser clicada. |
-| **Ataque automático** | O botão de dano da arma rola a **perícia da arma** (Armas de Fogo, Brancas, Pesadas… escolhida na ficha da arma ou deduzida pelo nome), o dano já vem descontando a RD do alvo marcado (mínimo 1). Por padrão o dano sai **direto** da Saúde do alvo; em *Automação de Combate* o mestre pode trocar para os botões **Aplicar dano** e **Esquivou** e decidir a cada ataque. Crítico dobra os dados; armas de disparo e arremesso gastam 1 de munição por ataque (Armas Brancas e Briga não gastam). Com alvo marcado, o cartão mostra quem está sendo atacado. Se o jogador não é dono do alvo, o mestre conectado aplica. |
+| **Ataque automático** | O botão de dano da arma rola a **perícia da arma** (Armas de Fogo, Brancas, Pesadas… escolhida na ficha da arma ou deduzida pelo nome), o dano já vem descontando a RD do alvo marcado (mínimo 1). Por padrão o dano sai **direto** da Saúde do alvo; em *Automação de Combate* o mestre pode trocar para os botões **Aplicar dano** e **Esquivou** e decidir a cada ataque. Crítico dobra os dados; armas de disparo e arremesso gastam 1 de munição por ataque (Armas Brancas e Briga não gastam, a não ser armas com cargas, como o Taser de Contato). Com alvo marcado, o cartão mostra quem está sendo atacado. Se o jogador não é dono do alvo, o mestre conectado aplica. |
 | **Alquímicos** | O botão de dano da técnica segue o mesmo fluxo com a perícia **Pedras de Energia**: o dano ignora metade da armadura, menos a das armaduras marcadas como *tratadas* contra aquele tipo (Calor, Frio, Elétrico, Cinético ou Químico, na ficha da armadura) e a pedra se desfaz ao usar (−1 de quantidade). Nível 4: o cartão avisa a Incapacitação do usuário e, na falha crítica, a pedra explode nele. |
 | **Feitiços e rituais** | Botão ✨ na ficha. Testa **Feitiçaria** ou **Rituais** e gasta Essência, mesmo se falhar (+2 com Humanidade em 50% ou menos). O alvo se defende com **Resistência Mental**, conforme a opção de esquiva, e o dano vai na Sanidade, sem RD e sem mostrar o número aos jogadores. Crítico dobra esse dano. Sem Essência suficiente ou em Mente Vazia, não conjura. |
 | **Consumíveis gastam** | Marcar elixir, injeção ou droga como *Ativo* gasta 1 da quantidade; o último sai da ficha quando o efeito termina. A última pedra alquímica sai da ficha depois de usada. Armas sem munição continuam na ficha. |
@@ -172,7 +172,7 @@ Os valores abaixo são **calculados automaticamente** a partir dos itens na fich
 
 ### Animações
 
-O sistema traz **efeitos e sons próprios** (gerados com o NeanTools) em `assets/animacoes` e `assets/sons`: tiros de pistola, rifle e espingarda e rajadas leve e pesada (traçante fino com clarão na boca da arma), disparo pesado com explosão (lança-granadas e canhão), raio, jato de chamas, bola de fogo, gelo, ácido, gás, explosão, onda de choque, clarão, corte, impacto, magia, cura e estimulante. **Não é preciso o JB2A.**
+O sistema traz **efeitos e sons próprios** (gerados com o NeanTools) em `assets/animacoes` e `assets/sons`: tiros de pistola, rifle e espingarda e rajadas leve e pesada (traçante fino com clarão na boca da arma), disparo pesado com explosão (lança-granadas e canhão), raio, jato de chamas, bola de fogo, gelo, ácido, gás, explosão, onda de choque, clarão, corte, impacto, choque de contato (Taser de Contato), mordida e garras (ataques das criaturas do bestiário), magia, cura e estimulante. **Não é preciso o JB2A.**
 
 1. Ative o **[Automated Animations](https://foundryvtt.com/packages/autoanimations)** e o **Sequencer** (e o socketlib).
 2. Abra o mundo como mestre: as animações se instalam sozinhas. Em *Configurações → Configurar Sistema → Animações do Sistema* dá para ver a prévia, ouvir os sons e atualizar.
@@ -245,7 +245,7 @@ O **`Suplemento - A Nova Ordem.pdf`**, também na raiz, traz a evolução de per
 
 ## Status do Projeto
 
-> **Versão `0.11.1` — Funcional e jogável** (Foundry 13 e 14)
+> **Versão `0.11.2` — Funcional e jogável** (Foundry 13 e 14)
 > O sistema está em desenvolvimento contínuo e pode receber melhorias. Críticas, comentários e sugestões são bem-vindos.
 
 ---

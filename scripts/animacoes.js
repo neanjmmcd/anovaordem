@@ -12,7 +12,7 @@ const SISTEMA = "a-nova-ordem";
 const VIDEO = nome => `systems/${SISTEMA}/assets/animacoes/${nome}.webm`;
 const SOM = nome => `systems/${SISTEMA}/assets/sons/${nome}.ogg`;
 const VERSAO_MENU = 5; // formato do menu no Automated Animations 6.x
-const VERSAO_ANIMACOES = "3"; // aumente ao mudar a tabela: o mestre recebe a atualização sozinho
+const VERSAO_ANIMACOES = "4"; // aumente ao mudar a tabela: o mestre recebe a atualização sozinho
 
 /* rótulos → efeito. menu "range" = projétil até o alvo; "ontoken" = efeito no alvo
  * (consumíveis tocam no próprio personagem, ver tocarAnimacao em rolls.js) */
@@ -28,6 +28,8 @@ const GRUPOS = [
   { menu: "range", video: "disparo_pesado", som: "explosao", secundario: "explosao", rotulos: ["Lança-Granadas", "Canhão"] },
   // Elétrico
   { menu: "range", video: "raio", som: "raio", rotulos: ["Taser", "Voltaic", "Tesla", "Indra", "Raijin"] },
+  // Choque encostado no alvo (o rótulo mais longo vence o "Taser" de distância)
+  { menu: "ontoken", video: "choque", som: "choque", rotulos: ["Taser de Contato"] },
   // Jato contínuo até o alvo (feixe)
   { menu: "range", video: "chamas", som: "chamas", rotulos: ["Lança-chamas"] },
   // Projéteis alquímicos
@@ -40,11 +42,13 @@ const GRUPOS = [
   { menu: "ontoken", video: "onda", som: "explosao", size: 2, rotulos: ["Impacta", "Tremor", "Atlas"] },
   { menu: "ontoken", video: "clarao", som: "clarao", size: 2, rotulos: ["Granada de Luz"] },
   { menu: "ontoken", video: "corte", som: "corte",
-    rotulos: ["Lâmina", "Machado", "Lança Curta", "Picador de Gelo", "Katana", "Gládio", "Adaga", "Ferrão", "Patas Cortantes", "Açoite"] },
+    rotulos: ["Lâmina", "Machado", "Lança Curta", "Picador de Gelo", "Katana", "Gládio", "Adaga", "Ferrão", "Açoite"] },
   { menu: "ontoken", video: "impacto", som: "impacto",
-    rotulos: ["Soco", "Chute", "Encontrão", "Bastão", "Marreta", "Martelo", "Soqueira", "Golpes", "Mordida", "Mandíbula",
-              "Fauce", "Esmagamento", "Aríete", "Arremesso", "Escudo"] },
+    rotulos: ["Soco", "Chute", "Encontrão", "Bastão", "Marreta", "Martelo", "Soqueira", "Golpes", "Esmagamento", "Aríete", "Arremesso", "Escudo"] },
   { menu: "ontoken", video: "impacto", som: "raio", rotulos: ["Bastão Elétrico"] },
+  // Criaturas: mordida (presas fechando) e garras (três rasgos)
+  { menu: "ontoken", video: "mordida", som: "mordida", rotulos: ["Mordida", "Mandíbula", "Fauce", "Presas"] },
+  { menu: "ontoken", video: "garras", som: "garras", rotulos: ["Garra", "Patas Cortantes"] },
   // Feitiços (no alvo) e rituais (em quem conjura); nome exato: "Visão" não pode pegar "Visão Térmica"
   { menu: "ontoken", video: "magia", som: "magia", size: 2, exato: true,
     rotulos: ["Ebulição", "Sussurros na Escuridão", "Compreensão", "Crise Existencial", "Ecos do Exterior", "Olhar Desalinhado",

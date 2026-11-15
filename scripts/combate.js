@@ -157,8 +157,10 @@ export async function atacar(actor, item) {
   const alquimico = item.type === "alquimico" ? tipoAlquimico(item.system.tipo) : false;
   if (alquimico && cfg.ativo && cfg.rolarAtaque && !checarTreino(actor, "pedrasEnergia")) return;
 
-  // Só armas de disparo/arremesso usam munição; corpo-a-corpo (Armas Brancas, Briga) não gasta
-  if (item.type === "arma" && "ammo" in item.system && !PERICIAS_CORPO_A_CORPO.includes(periciaDaArma(item))) {
+  // Só armas de disparo/arremesso usam munição; corpo-a-corpo (Armas Brancas, Briga) não gasta,
+  // a não ser que tenha cargas contadas no dano ("10 usos", bateria), como o Taser de Contato
+  const comCargas = /\busos?\b|bateria|cargas?\b/i.test(item.system.dano ?? "");
+  if (item.type === "arma" && "ammo" in item.system && (comCargas || !PERICIAS_CORPO_A_CORPO.includes(periciaDaArma(item)))) {
     if (Number(item.system.ammo) < 1) return ui.notifications.warn("Sem munição na arma.");
     if (cfg.ativo && cfg.consumirMunicao) await item.update({ "system.ammo": Number(item.system.ammo) - 1 });
   }
@@ -501,7 +503,9 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
     });
   }
   for (const botao of html.querySelectorAll(".aon-esquivar, .aon-receber")) {
-    if (!botao.isConnected) continue;
+    // O cartão ainda não está na página quando o hook roda: "isConnected" seria sempre falso.
+    // Aqui só pula os botões que o laço acima já tirou (jogador sem permissão).
+    if (!html.contains(botao)) continue;
     const actor = fromUuidSync(botao.dataset.uuid);
     // Feitiços: o mestre e o dono do alvo decidem. Ataques: só o mestre
     const pode = game.user.isGM || (!botao.dataset.mestre && actor?.isOwner);
