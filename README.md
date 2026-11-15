@@ -1,6 +1,6 @@
 # Dieselpunk — A Nova Ordem
 
-> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.10.0` · Funcional e jogável
+> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.11.0` · Funcional e jogável · Foundry 13 e 14
 
 Um sistema percentual de RPG ambientado em um mundo dieselpunk alternativo, onde o Eixo venceu a Segunda Guerra Mundial. O ano é 1975. Três impérios totalitários dividem o planeta — e você é um Libertário operando nas sombras, tentando mudar o curso da história.
 
@@ -147,7 +147,8 @@ Os valores abaixo são **calculados automaticamente** a partir dos itens na fich
 | **Lista de perícias** | Botão 🎲 no HUD do token ou tecla **P**: abre só as perícias que aquele personagem ou NPC pode rolar, por grupo, com a chance de cada uma. O campo do topo filtra pelo nome; Enter rola a primeira. |
 | **Manual do Sistema** | Botão 📖 **Manual** nos controles de token ou em Configurações. Explica ficha, rolagens, combate, itens e atalhos dentro do Foundry. O mestre vê também as seções dele (configurações, Painel, gerador de encontro, Bestiário); os jogadores veem só a parte deles. Tem busca. Na primeira vez que cada usuário entra, recebe no chat, só para ele, uma mensagem mostrando onde fica o manual (dá para desligar). Em Configurar Sistema, a **Mensagem do Mestre** manda um recado ou as regras da mesa para cada jogador, também só para ele. |
 | **Token com moldura** | Botão **Token** no topo da ficha ou menu do ator na aba Atores. Escolha a imagem (retrato, token atual ou qualquer arquivo) e uma das 18 molduras temáticas do sistema (latão, engrenagem, tesla, radiação, runas, esteira de tanque…), arraste e dê zoom até o centro mostrar a melhor parte, e aplique: o token vira a imagem com moldura, salva em `worlds/<mundo>/tokens-a-nova-ordem`. Jogadores precisam da permissão *Enviar arquivos*. Substitui o módulo Tokenizer. |
-| **Trilha sonora** | 29 faixas curtas em `trilhasonora/`, feitas para tocar em loop: combate, chefe, perseguição, infiltração, investigação noir, mercado negro, esconderijo da Resistência, marcha imperial, laboratório, prisão, burocracia do regime, vitória e derrota. Monte as playlists na aba Playlists com os arquivos dessa pasta. |
+| **Atalhos na barra** | Arraste uma arma, técnica alquímica, feitiço, ritual, consumível ou item da ficha (personagem ou NPC) para a barra de atalhos. Clicar no atalho faz o mesmo que o clique na ficha: arma e técnica atacam (teste, esquiva, dano − RD e animação), feitiço e ritual conjuram, consumível é ativado (gasta uma unidade) e os demais itens mostram o cartão no chat. Se o item não existir mais, o atalho procura um item com o mesmo nome no token selecionado. |
+| **Trilha sonora** | 29 faixas curtas em `trilhasonora/`, feitas para tocar em loop: combate, chefe, perseguição, infiltração, investigação noir, mercado negro, esconderijo da Resistência, marcha imperial, laboratório, prisão, burocracia do regime, vitória e derrota. O **Mundo Pronto** cria as playlists sozinho na aba Playlists (pasta *Trilha da Nova Ordem*: Combate, Cidade e Viagem, Tensão e Mistério, Lugares, Desfecho); cada faixa toca em loop ao ser clicada. |
 | **Ataque automático** | O botão de dano da arma rola a **perícia da arma** (Armas de Fogo, Brancas, Pesadas… escolhida na ficha da arma ou deduzida pelo nome), o dano já vem descontando a RD do alvo marcado (mínimo 1). Não há esquiva automática: o mestre vê os botões **Aplicar dano** e **Esquivou** e decide. Crítico dobra os dados; armas de disparo e arremesso gastam 1 de munição por ataque (Armas Brancas e Briga não gastam). Com alvo marcado, o cartão mostra quem está sendo atacado. Se o jogador não é dono do alvo, o mestre conectado aplica. |
 | **Alquímicos** | O botão de dano da técnica segue o mesmo fluxo com a perícia **Pedras de Energia**: o dano ignora metade da armadura, menos a das armaduras marcadas como *tratadas* contra aquele tipo (Calor, Frio, Elétrico, Cinético ou Químico, na ficha da armadura) e a pedra se desfaz ao usar (−1 de quantidade). Nível 4: o cartão avisa a Incapacitação do usuário e, na falha crítica, a pedra explode nele. |
 | **Feitiços e rituais** | Botão ✨ na ficha. Testa **Feitiçaria** ou **Rituais** e gasta Essência, mesmo se falhar (+2 com Humanidade em 50% ou menos). O alvo se defende com **Resistência Mental**, conforme a opção de esquiva, e o dano vai na Sanidade, sem RD e sem mostrar o número aos jogadores. Crítico dobra esse dano. Sem Essência suficiente ou em Mente Vazia, não conjura. |
@@ -177,7 +178,7 @@ O sistema traz **efeitos e sons próprios** (gerados com o NeanTools) em `assets
 2. Abra o mundo como mestre: as animações se instalam sozinhas. Em *Configurações → Configurar Sistema → Animações do Sistema* dá para ver a prévia, ouvir os sons e atualizar.
 3. Pronto: ao atacar com uma arma, rolar um alquímico, conjurar ou ativar um consumível, a animação toca. Armas de fogo, elétricas, alquímicos de fogo, gelo e ácido e o lança-chamas saem do atacante até o alvo; as demais tocam no alvo; consumíveis tocam no próprio personagem.
 
-O Automated Animations reconhece o item quando o **nome contém o rótulo** (ex.: "Pistola" vale para Pistola Leve e Pistola Pesada). **Remover do sistema** tira só as entradas do sistema, sem mexer nas que você criou. Feito para o Automated Animations 6.6.2 e o Sequencer 3.6.11.
+O Automated Animations reconhece o item quando o **nome contém o rótulo** (ex.: "Pistola" vale para Pistola Leve e Pistola Pesada). **Remover do sistema** tira só as entradas do sistema, sem mexer nas que você criou. Feito para o Automated Animations 6.6.2 / Sequencer 3.6.11 (Foundry 13) e 8.0.6 / 4.3.0 (Foundry 14).
 
 ---
 
@@ -188,8 +189,8 @@ O sistema funciona sem nenhum módulo. Os abaixo foram integrados ou testados co
 | Módulo | Para quê | Situação |
 |--------|----------|----------|
 | [Item Piles](https://foundryvtt.com/packages/item-piles) | Saque, baús, lojas e troca entre jogadores usando ¢RD | Integração nativa (desde a v0.4.0) |
-| [Automated Animations](https://foundryvtt.com/packages/autoanimations) | Toca as animações de armas, alquímicos e consumíveis | Integrado; feito para a 6.6.2 |
-| [Sequencer](https://foundryvtt.com/packages/sequencer) e [socketlib](https://foundryvtt.com/packages/socketlib) | Dependências do Automated Animations | — |
+| [Automated Animations](https://foundryvtt.com/packages/autoanimations) | Toca as animações de armas, alquímicos e consumíveis | Integrado; testado na 6.6.2 (Foundry 13) e 8.0.6 (Foundry 14) |
+| [Sequencer](https://foundryvtt.com/packages/sequencer) e [socketlib](https://foundryvtt.com/packages/socketlib) | Dependências do Automated Animations | Sequencer 4.x no Foundry 14 (não precisa mais do socketlib) |
 | [JB2A (gratuito)](https://foundryvtt.com/packages/JB2A_DnD5e) | Animações extras para quem quiser montar as suas | Opcional: o sistema já traz os efeitos próprios |
 | [Dice So Nice!](https://foundryvtt.com/packages/dice-so-nice) | Dados 3D nas rolagens | Opcional, funciona com qualquer sistema |
 
@@ -228,7 +229,7 @@ Ficam na aba Compêndios, na pasta **A Nova Ordem**:
 | Ocultismo | Feitiços, Rituais |
 | Mestre | **Bestiário**, **Livro do Mestre** (o Bestiário em PDF) e **Cenas Prontas** (lobby/pátio de treino para testar tokens, casa comum, boate e galpão, grade de 100 px = 1,5 m), só o mestre vê |
 
-**Mundo Pronto:** na primeira vez que o mestre abre um mundo, as Cenas Prontas e os diários do mundo são importados sozinhos (pastas *Cenas Prontas* e *O Mundo da Nova Ordem*; os diários ficam visíveis aos jogadores). Num mundo sem cenas, o Lobby vira a cena ativa. Em *Configurar Sistema* dá para desligar (**Mundo Pronto automático**) ou importar de novo o que faltar (**Mundo Pronto → Importar agora**).
+**Mundo Pronto:** na primeira vez que o mestre abre um mundo, as Cenas Prontas, os diários do mundo e as playlists da trilha sonora são importados sozinhos (pastas *Cenas Prontas*, *O Mundo da Nova Ordem* e *Trilha da Nova Ordem*; os diários ficam visíveis aos jogadores). Num mundo sem cenas, o Lobby vira a cena ativa. Em *Configurar Sistema* dá para desligar (**Mundo Pronto automático**) ou importar de novo o que faltar (**Mundo Pronto → Importar agora**).
 
 Os diários do mundo e as cenas são gerados por `ferramentas/mundo_cenas.mjs` a partir das imagens em `assets/imperios`, `assets/tema` e `assets/mapas`.
 
@@ -244,7 +245,7 @@ O **`Suplemento - A Nova Ordem.pdf`**, também na raiz, traz a evolução de per
 
 ## Status do Projeto
 
-> **Versão `0.10.0` — Funcional e jogável**
+> **Versão `0.11.0` — Funcional e jogável** (Foundry 13 e 14)
 > O sistema está em desenvolvimento contínuo e pode receber melhorias. Críticas, comentários e sugestões são bem-vindos.
 
 ---

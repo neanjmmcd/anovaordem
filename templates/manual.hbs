@@ -97,6 +97,9 @@
         <li><b>Esquiva:</b> não é automática. O mestre decide se o alvo esquivou ou recebe o dano.</li>
         <li><b>Munição:</b> armas de disparo e arremesso gastam 1 por ataque. Sem munição, a arma continua na ficha.</li>
       </ol>
+      <p>A perícia vem da arma: pistolas, revólveres, fuzis, rifles, espingardas e submetralhadoras usam <b>Armas de Fogo</b>
+        (inclusive as pesadas); lança-chamas, lança-granadas e canhões usam <b>Armas Pesadas</b>; armas com <i>+ FOR</i> usam
+        <b>Armas Brancas</b>; soco e soqueira, <b>Briga</b>; granadas, <b>Atletismo</b>. Na ficha do item dá para escolher outra.</p>
       <p>Clicar no <b>nome</b> da arma mostra a ficha dela no chat. Os botões <b>−</b> e <b>+</b> dos cartões de dano aplicam
         no token selecionado ou no alvo marcado (o − desconta a RD).</p>
     </section>
@@ -153,6 +156,11 @@
         <tr><td><kbd>T</kbd></td><td>Marcar/desmarcar o token sob o mouse como alvo (Foundry)</td></tr>
       </table>
       <p>As teclas do sistema podem ser trocadas em <i>Configurações → Configurar Controles</i>.</p>
+      <h3>Itens na barra de atalhos</h3>
+      <p>Arraste uma linha da ficha (ou o nome do item, na ficha de NPC) para a barra de atalhos no pé da tela. Clicar no atalho
+        faz o mesmo que o clique na ficha: <b>arma</b> e <b>técnica alquímica</b> atacam o alvo marcado, <b>feitiço</b> e
+        <b>ritual</b> conjuram, <b>consumível</b> é ativado (gasta uma unidade) e os demais itens mostram o cartão no chat.
+        Se o item sair da ficha, o atalho procura um com o mesmo nome no token selecionado.</p>
     </section>
 
     {{#if gm}}
@@ -221,13 +229,15 @@
     </section>
 
     <section data-secao="gm-mundo-pronto" data-gm>
-      <h2><i class="fas fa-crown"></i> Mundo Pronto: cenas e diários</h2>
+      <h2><i class="fas fa-crown"></i> Mundo Pronto: cenas, diários e trilha</h2>
       <ul>
         <li>Na <b>primeira vez</b> que o mestre abre um mundo, o sistema importa sozinho as <b>Cenas Prontas</b> (pasta
-          <i>Cenas Prontas</i>) e os diários do mundo (pasta <i>O Mundo da Nova Ordem</i>, que os jogadores podem ler).
+          <i>Cenas Prontas</i>) e os diários do mundo (pasta <i>O Mundo da Nova Ordem</i>, que os jogadores podem ler) e cria as playlists da trilha sonora
+          (pasta <i>Trilha da Nova Ordem</i>).
           Num mundo sem nenhuma cena, o <b>Lobby — Pátio de Treino</b> já vira a cena ativa.</li>
         <li>Cenas: Lobby (pátio de treino com cobertura e alvos, bom para testar tokens), Casa Comum, Boate e Galpão / Fábrica
-          Velha, algumas em duas versões (vista reta e inclinada). Grade de 100 px = 1,5 m. As paredes e portas ficam por sua conta.</li>
+          Velha, algumas em duas versões (vista reta e inclinada). Grade de 100 px = 1,5 m. As paredes e portas ficam por sua conta.
+          No Foundry 14 o mapa fica no <b>nível</b> da cena; se uma Cena Pronta aparecer sem imagem, o sistema repõe o mapa ao abrir o mundo.</li>
         <li>Em <i>Configurar Sistema</i>: <b>Mundo Pronto automático</b> liga/desliga a importação na primeira vez, e
           <b>Mundo Pronto → Importar agora</b> importa de novo o que estiver faltando (nada é duplicado nem apagado).</li>
         <li>Tudo também fica no compêndio <b>Cenas Prontas</b> (pasta Mestre), para importar à mão.</li>
@@ -240,15 +250,17 @@
         <li>O sistema traz 29 faixas curtas (que repetem bem em loop) em <code>systems/a-nova-ordem/trilhasonora</code>:
           combate, chefe, perseguição, infiltração, investigação, mercado negro, esconderijo da Resistência, marcha imperial,
           laboratório, prisão, burocracia do regime, vitória e derrota.</li>
-        <li>Para usar: aba <b>Playlists</b> → criar playlist → <b>Adicionar som</b> e escolha os arquivos dessa pasta. Marque
-          <i>Repetir</i> nas faixas de ambiente.</li>
+        <li>O <b>Mundo Pronto</b> já cria as playlists na aba <b>Playlists</b>, pasta <i>Trilha da Nova Ordem</i>: Combate,
+          Cidade e Viagem, Tensão e Mistério, Lugares e Desfecho. Clique numa faixa e ela toca em loop; clique de novo para parar.</li>
+        <li>Se apagar alguma, <i>Configurar Sistema → Mundo Pronto → Importar agora</i> recria o que faltar.</li>
       </ul>
     </section>
 
     <section data-secao="gm-modulos" data-gm>
       <h2><i class="fas fa-crown"></i> Módulos recomendados</h2>
       <ul>
-        <li><b>Automated Animations</b> + <b>Sequencer</b> + <b>socketlib</b>: animações e sons próprios do sistema.</li>
+        <li><b>Automated Animations</b> + <b>Sequencer</b>: animações e sons próprios do sistema. No Foundry 14, instale o
+          Automated Animations pelo Foundry e aceite instalar o Sequencer junto (o socketlib só é preciso em versões antigas).</li>
         <li><b>Item Piles:</b> saques, baús e lojas com o ¢RD da ficha.</li>
         <li><b>Dice So Nice!</b>: dados 3D (opcional).</li>
       </ul>

@@ -123,12 +123,16 @@ export async function rolarTeste(actor, key) {
 /** Perícia usada pela arma: a escolhida na ficha da arma ou um palpite pelo nome/dano */
 export function periciaDaArma(item) {
   if (item.system.pericia) return item.system.pericia;
-  const t = `${item.name} ${item.system.tipo ?? ""} ${item.system.dano ?? ""}`.toLowerCase();
+  const nome = item.name.toLowerCase();
+  const t = `${nome} ${item.system.tipo ?? ""} ${item.system.dano ?? ""}`.toLowerCase();
   if (/experiment|voltaic|tesla/.test(t)) return "armasExperimentais";
-  if (/pesad|canh[aã]o|foguete|morteiro|gatling|lan[çc]a-chamas|lan[çc]a-granadas/.test(t)) return "armasPesadas";
-  if (/granada|dinamite/.test(t)) return "atletismo";
-  if (/soco|punho|soqueira/.test(t)) return "briga";
+  if (/canh[aã]o|foguete|morteiro|gatling|lan[çc]a-chamas|lan[çc]a-granadas|metralhadora pesada/.test(nome)) return "armasPesadas";
+  if (/granada|dinamite/.test(nome)) return "atletismo";
+  if (/soco|punho|soqueira/.test(nome)) return "briga";
   if (/\+\s*for\b|l[aâ]mina|faca|espada|machado|bast[aã]o|katana|adaga|porrete|cassetete/.test(t)) return "armasBrancas";
+  // "Pesada" no nome só vale para arma pesada de verdade: pistola/revólver/fuzil pesado continuam Armas de Fogo
+  // (e "armaduras pesada" no texto do dano não conta)
+  if (/pesad/.test(nome) && !/pistola|rev[oó]lver|fuzil|rifle|espingarda|submetralhadora|escopeta/.test(nome)) return "armasPesadas";
   return "armasFogo";
 }
 

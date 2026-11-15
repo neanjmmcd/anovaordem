@@ -21,7 +21,9 @@ export class AONovaOrdemActorSheet extends foundry.appv1.sheets.ActorSheet {
       classes: ["a-nova-ordem", "sheet", "actor"],
       template: "systems/a-nova-ordem/sheets/actor-sheet.html",
       width: 700,
-      height: 700
+      height: 700,
+      // Linhas de item arrastáveis (para a barra de atalhos ou outra ficha)
+      dragDrop: [{ dragSelector: "tr[data-item-id]", dropSelector: null }]
     });
   }
 

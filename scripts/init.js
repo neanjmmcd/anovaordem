@@ -38,6 +38,7 @@ import { AONovaOrdemMutagenicoSheet } from "./item-mutagenico-sheet.js";
 import { AONovaOrdemCatalogo } from "./catalogo.js";
 import { AONovaOrdemCriador } from "./criador.js";
 import { registrarCombate, pedir, atacar, conjurar, config } from "./combate.js";
+import { registrarAtalhos, usarItem } from "./atalhos.js";
 import { registrarMigracoes } from "./migracao.js";
 import "./regras-itens.js";
 import { registrarListaPericias } from "./lista-pericias.js";
@@ -80,7 +81,7 @@ Hooks.once("init", () => {
   window.rolarDano = Rolls.rolarDano;
   window.rolarAlquimico = Rolls.rolarAlquimico;
   window.tocarAnimacao = Rolls.tocarAnimacao;
-  game.aonovaordem = { catalogo: AONovaOrdemCatalogo, criador: AONovaOrdemCriador, atacar, conjurar, painel: AONovaOrdemPainelMestre };
+  game.aonovaordem = { catalogo: AONovaOrdemCatalogo, criador: AONovaOrdemCriador, atacar, conjurar, usarItem, painel: AONovaOrdemPainelMestre };
   
   //Carregaar armaduras e items
   CONFIG.Item.dataModels = {
@@ -190,6 +191,7 @@ Hooks.once("init", () => {
   });
 
   registrarCombate();
+  registrarAtalhos();
   registrarAnimacoes();
   registrarMigracoes();
   game.settings.register("a-nova-ordem", "painelMestre", {

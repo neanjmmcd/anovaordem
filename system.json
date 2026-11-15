@@ -2,7 +2,7 @@
   "id": "a-nova-ordem",
   "title": "A Nova Ordem",
   "description": "Sistema dieselpunk 1975 criado por Alê Gomes e programado por NeaN World",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "authors": [
     {
       "name": "Alê Gomes",
@@ -18,7 +18,7 @@
   "download": "https://github.com/neanjmmcd/anovaordem/archive/refs/heads/main.zip",
   "compatibility": {
     "minimum": "13",
-    "verified": "13.351"
+    "verified": "14.369"
   },
   "relationships": {
     "recommends": [
@@ -27,7 +27,7 @@
         "type": "module",
         "reason": "Saque, baús e lojas usando ¢RD (integração nativa do sistema)",
         "compatibility": {
-          "verified": "3.3.2"
+          "verified": "3.3.4"
         }
       },
       {
@@ -35,7 +35,7 @@
         "type": "module",
         "reason": "Toca as animações próprias do sistema (instale pelo menu Animações do Sistema)",
         "compatibility": {
-          "verified": "6.6.2"
+          "verified": "8.0.6"
         }
       },
       {
@@ -43,7 +43,7 @@
         "type": "module",
         "reason": "Necessário para o Automated Animations",
         "compatibility": {
-          "verified": "3.6.11"
+          "verified": "4.3.0"
         }
       },
       {

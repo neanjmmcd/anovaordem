@@ -9,7 +9,9 @@ export class AONovaOrdemNpcSheet extends foundry.appv1.sheets.ActorSheet {
       classes: ["a-nova-ordem", "sheet", "actor", "npc"],
       template: "systems/a-nova-ordem/sheets/npc-sheet.html",
       width: 620,
-      height: 720
+      height: 720,
+      // Nome do item arrastável (para a barra de atalhos)
+      dragDrop: [{ dragSelector: ".npc-abrir-item[data-item-id]", dropSelector: null }]
     });
   }
 
