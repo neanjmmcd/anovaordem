@@ -1,6 +1,6 @@
 # Dieselpunk — A Nova Ordem
 
-> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.11.2` · Funcional e jogável · Foundry 13 e 14
+> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.11.3` · Funcional e jogável · Foundry 13 e 14
 
 Um sistema percentual de RPG ambientado em um mundo dieselpunk alternativo, onde o Eixo venceu a Segunda Guerra Mundial. O ano é 1975. Três impérios totalitários dividem o planeta — e você é um Libertário operando nas sombras, tentando mudar o curso da história.
 
@@ -172,7 +172,7 @@ Os valores abaixo são **calculados automaticamente** a partir dos itens na fich
 
 ### Animações
 
-O sistema traz **efeitos e sons próprios** (gerados com o NeanTools) em `assets/animacoes` e `assets/sons`: tiros de pistola, rifle e espingarda e rajadas leve e pesada (traçante fino com clarão na boca da arma), disparo pesado com explosão (lança-granadas e canhão), raio, jato de chamas, bola de fogo, gelo, ácido, gás, explosão, onda de choque, clarão, corte, impacto, choque de contato (Taser de Contato), mordida e garras (ataques das criaturas do bestiário), magia, cura e estimulante. **Não é preciso o JB2A.**
+O sistema traz **efeitos e sons próprios** (gerados com o NeanTools) em `assets/animacoes` e `assets/sons`: tiros de pistola, rifle e espingarda e rajadas leve e pesada (traçante fino com clarão na boca da arma), disparo pesado com explosão (lança-granadas e canhão), raio, jato de chamas, bola de fogo, gelo, ácido, gás, explosão, onda de choque, clarão, corte, soco (braço fantasma com estouro nos nós dos dedos), impacto estilo "POW" (demais golpes físicos), choque de contato (Taser de Contato e Bastão Elétrico), mordida e garras (ataques das criaturas do bestiário), magia, cura e estimulante. Armas elétricas à distância deixam o alvo **eletrificado** e lança-chamas e pedras de fogo deixam o alvo **em chamas** (efeito no token depois do disparo). Choque, eletrificado, chamas, garras e mordida são desenhados por código no NeanTools (`--fx-codigo`); soco e impacto, por `ferramentas/efeitos/soco_impacto.py` (a partir de figuras de referência); gás, gás tóxico, cura e estimulante, por `ferramentas/efeitos/gas_cura_estimulante.py`. **Não é preciso o JB2A.**
 
 1. Ative o **[Automated Animations](https://foundryvtt.com/packages/autoanimations)** e o **Sequencer** (e o socketlib).
 2. Abra o mundo como mestre: as animações se instalam sozinhas. Em *Configurações → Configurar Sistema → Animações do Sistema* dá para ver a prévia, ouvir os sons e atualizar.
@@ -193,6 +193,7 @@ O sistema funciona sem nenhum módulo. Os abaixo foram integrados ou testados co
 | [Sequencer](https://foundryvtt.com/packages/sequencer) e [socketlib](https://foundryvtt.com/packages/socketlib) | Dependências do Automated Animations | Sequencer 4.x no Foundry 14 (não precisa mais do socketlib) |
 | [JB2A (gratuito)](https://foundryvtt.com/packages/JB2A_DnD5e) | Animações extras para quem quiser montar as suas | Opcional: o sistema já traz os efeitos próprios |
 | [Dice So Nice!](https://foundryvtt.com/packages/dice-so-nice) | Dados 3D nas rolagens | Opcional, funciona com qualquer sistema |
+| [Nean Direcional](https://github.com/neanjmmcd/nean-direcional) | O token troca de imagem pela direção em que anda ou gira (4 poses a 45°), com poses de furtivo, arma em punho e caído; combina com as variações de token do NeanTools | Opcional, módulo próprio da NeaN World, funciona com qualquer sistema. Manifesto: `https://raw.githubusercontent.com/neanjmmcd/nean-direcional/main/module.json` |
 
 **Não são necessários** (o sistema já faz de forma nativa ou não são compatíveis): *Compendium Browser* (use o Catálogo), *Plutonium* (use o Criador de Personagem), *Tokenizer* (use o Token com moldura), *Midi-QOL* e módulos de condições do D&D 5e (só funcionam no dnd5e), *Automated Animations For All*.
 
@@ -245,7 +246,7 @@ O **`Suplemento - A Nova Ordem.pdf`**, também na raiz, traz a evolução de per
 
 ## Status do Projeto
 
-> **Versão `0.11.2` — Funcional e jogável** (Foundry 13 e 14)
+> **Versão `0.11.3` — Funcional e jogável** (Foundry 13 e 14)
 > O sistema está em desenvolvimento contínuo e pode receber melhorias. Críticas, comentários e sugestões são bem-vindos.
 
 ---

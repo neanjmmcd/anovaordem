@@ -2,7 +2,7 @@
   "id": "a-nova-ordem",
   "title": "A Nova Ordem",
   "description": "Sistema dieselpunk 1975 criado por Alê Gomes e programado por NeaN World",
-  "version": "0.11.2",
+  "version": "0.11.3",
   "authors": [
     {
       "name": "Alê Gomes",
@@ -60,6 +60,15 @@
         "id": "dice-so-nice",
         "type": "module",
         "reason": "Dados 3D nas rolagens (opcional)"
+      },
+      {
+        "id": "nean-direcional",
+        "type": "module",
+        "manifest": "https://raw.githubusercontent.com/neanjmmcd/nean-direcional/main/module.json",
+        "reason": "Opcional: o token troca de imagem pela direção, com poses de furtivo, arma em punho e caído",
+        "compatibility": {
+          "verified": "0.2.1"
+        }
       }
     ]
   },

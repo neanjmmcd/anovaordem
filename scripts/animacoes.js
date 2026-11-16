@@ -12,7 +12,7 @@ const SISTEMA = "a-nova-ordem";
 const VIDEO = nome => `systems/${SISTEMA}/assets/animacoes/${nome}.webm`;
 const SOM = nome => `systems/${SISTEMA}/assets/sons/${nome}.ogg`;
 const VERSAO_MENU = 5; // formato do menu no Automated Animations 6.x
-const VERSAO_ANIMACOES = "4"; // aumente ao mudar a tabela: o mestre recebe a atualização sozinho
+const VERSAO_ANIMACOES = "5"; // aumente ao mudar a tabela: o mestre recebe a atualização sozinho
 
 /* rótulos → efeito. menu "range" = projétil até o alvo; "ontoken" = efeito no alvo
  * (consumíveis tocam no próprio personagem, ver tocarAnimacao em rolls.js) */
@@ -26,26 +26,33 @@ const GRUPOS = [
   { menu: "range", video: "rajada_pesada", som: "rajada", rotulos: ["Metralhadora", "Heavy Machine Gun", "Gatling"] },
   // Projétil grande até o alvo, com explosão no impacto
   { menu: "range", video: "disparo_pesado", som: "explosao", secundario: "explosao", rotulos: ["Lança-Granadas", "Canhão"] },
+  // secundario = efeito que fica no alvo depois do projétil (secTamanho em relação ao token)
   // Elétrico
-  { menu: "range", video: "raio", som: "raio", rotulos: ["Taser", "Voltaic", "Tesla", "Indra", "Raijin"] },
-  // Choque encostado no alvo (o rótulo mais longo vence o "Taser" de distância)
-  { menu: "ontoken", video: "choque", som: "choque", rotulos: ["Taser de Contato"] },
+  // Elétrico à distância: o raio chega e o alvo fica com raios pelo corpo
+  { menu: "range", video: "raio", som: "raio", secundario: "eletrificado", secTamanho: 1.6,
+    rotulos: ["Taser", "Voltaic", "Tesla", "Indra", "Raijin"] },
+  // Choque encostado no alvo: arcos que saltam do ponto de contato (o rótulo mais longo vence o "Taser")
+  { menu: "ontoken", video: "choque", som: "choque", size: 1.6, rotulos: ["Taser de Contato", "Bastão Elétrico"] },
   // Jato contínuo até o alvo (feixe)
-  { menu: "range", video: "chamas", som: "chamas", rotulos: ["Lança-chamas"] },
+  { menu: "range", video: "chamas", som: "chamas", secundario: "em_chamas", secTamanho: 1.6, rotulos: ["Lança-chamas"] },
   // Projéteis alquímicos
-  { menu: "range", video: "bola_fogo", som: "chamas", rotulos: ["Cinderita", "Braserita", "Surtr", "Agni"] },
+  { menu: "range", video: "bola_fogo", som: "chamas", secundario: "em_chamas", secTamanho: 1.6, rotulos: ["Cinderita", "Braserita", "Surtr", "Agni"] },
   { menu: "range", video: "gelo", som: "gelo", rotulos: ["Glacium", "Boreal", "Skadi", "Niflheim"] },
   { menu: "range", video: "acido", som: "acido", rotulos: ["Corros", "Apep", "Nergal", "Descarga Cáustica"] },
   // No alvo
-  { menu: "ontoken", video: "gas", som: "gas", size: 2, rotulos: ["Gás Lacrimogêneo", "Gás Mostarda", "Miasma", "Spray de Pimenta"] },
-  { menu: "ontoken", video: "explosao", som: "explosao", size: 2, rotulos: ["Granada Concussiva", "Hyperion"] },
+  // Gás: nuvem translúcida que se espalha e se desfaz (o token continua visível)
+  { menu: "ontoken", video: "gas", som: "gas", size: 2, rotulos: ["Gás Lacrimogêneo", "Spray de Pimenta"] },
+  { menu: "ontoken", video: "gas_toxico", som: "gas", size: 2, rotulos: ["Gás Mostarda", "Miasma"] },
+  { menu: "ontoken", video: "explosao", som: "explosao", size: 2, rotulos: ["Granada Concussiva", "Hyperion", "Dinamite"] },
   { menu: "ontoken", video: "onda", som: "explosao", size: 2, rotulos: ["Impacta", "Tremor", "Atlas"] },
   { menu: "ontoken", video: "clarao", som: "clarao", size: 2, rotulos: ["Granada de Luz"] },
   { menu: "ontoken", video: "corte", som: "corte",
     rotulos: ["Lâmina", "Machado", "Lança Curta", "Picador de Gelo", "Katana", "Gládio", "Adaga", "Ferrão", "Açoite"] },
-  { menu: "ontoken", video: "impacto", som: "impacto",
-    rotulos: ["Soco", "Chute", "Encontrão", "Bastão", "Marreta", "Martelo", "Soqueira", "Golpes", "Esmagamento", "Aríete", "Arremesso", "Escudo"] },
-  { menu: "ontoken", video: "impacto", som: "raio", rotulos: ["Bastão Elétrico"] },
+  // Soco: braço fantasma que entra e estoura nos nós dos dedos
+  { menu: "ontoken", video: "soco", som: "impacto", size: 1.5, rotulos: ["Soco", "Soqueira"] },
+  // Demais golpes físicos: estrela de impacto estilo "POW"
+  { menu: "ontoken", video: "impacto", som: "impacto", size: 1.2,
+    rotulos: ["Chute", "Encontrão", "Bastão", "Marreta", "Martelo", "Golpes", "Esmagamento", "Aríete", "Arremesso", "Escudo"] },
   // Criaturas: mordida (presas fechando) e garras (três rasgos)
   { menu: "ontoken", video: "mordida", som: "mordida", rotulos: ["Mordida", "Mandíbula", "Fauce", "Presas"] },
   { menu: "ontoken", video: "garras", som: "garras", rotulos: ["Garra", "Patas Cortantes"] },
@@ -107,7 +114,7 @@ function entrada(rotulo, g) {
       video: { ...videoPadrao(dbSection), enableCustom: true, customPath: VIDEO(g.video) }
     },
     secondary: g.secundario
-      ? { ...extraDesligado(), enable: true, options: { ...extraDesligado().options, size: 2 },
+      ? { ...extraDesligado(), enable: true, options: { ...extraDesligado().options, size: g.secTamanho ?? 2 },
           video: { ...videoPadrao("static"), enableCustom: true, customPath: VIDEO(g.secundario) } }
       : { ...extraDesligado(), options: { ...extraDesligado().options, isRadius: true, size: 1.5 } },
     soundOnly: { sound: somVazio() },
