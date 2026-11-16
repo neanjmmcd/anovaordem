@@ -1,6 +1,6 @@
 # Dieselpunk — A Nova Ordem
 
-> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.11.3` · Funcional e jogável · Foundry 13 e 14
+> Sistema de RPG para [FoundryVTT](https://foundryvtt.com/) · Versão `0.11.4` · Funcional e jogável · Foundry 13 e 14
 
 Um sistema percentual de RPG ambientado em um mundo dieselpunk alternativo, onde o Eixo venceu a Segunda Guerra Mundial. O ano é 1975. Três impérios totalitários dividem o planeta — e você é um Libertário operando nas sombras, tentando mudar o curso da história.
 
@@ -246,7 +246,7 @@ O **`Suplemento - A Nova Ordem.pdf`**, também na raiz, traz a evolução de per
 
 ## Status do Projeto
 
-> **Versão `0.11.3` — Funcional e jogável** (Foundry 13 e 14)
+> **Versão `0.11.4` — Funcional e jogável** (Foundry 13 e 14)
 > O sistema está em desenvolvimento contínuo e pode receber melhorias. Críticas, comentários e sugestões são bem-vindos.
 
 ---
